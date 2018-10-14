@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>deep.learning.human</groupId>
+    <artifactId>human</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <ode4j.bnd-maven-plugin.version>3.5.0</ode4j.bnd-maven-plugin.version>
+        <ode4j.build-helper-maven-plugin.version>3.0.0</ode4j.build-helper-maven-plugin.version>
+        <ode4j.maven-clean-plugin.version>3.0.0</ode4j.maven-clean-plugin.version>
+        <ode4j.maven-compiler-plugin.version>3.7.0</ode4j.maven-compiler-plugin.version>
+        <ode4j.maven-deploy-plugin.version>2.8.2</ode4j.maven-deploy-plugin.version>
+        <ode4j.maven-enforcer-plugin.version>3.0.0-M1</ode4j.maven-enforcer-plugin.version>
+        <ode4j.maven-gpg-plugin.version>1.6</ode4j.maven-gpg-plugin.version>
+        <ode4j.maven-install-plugin.version>2.5.2</ode4j.maven-install-plugin.version>
+        <ode4j.maven-jar-plugin.version>3.1.0</ode4j.maven-jar-plugin.version>
+        <ode4j.maven-javadoc-plugin.version>3.0.0-M1</ode4j.maven-javadoc-plugin.version>
+        <ode4j.maven-nativedependencies-plugin.version>0.0.7</ode4j.maven-nativedependencies-plugin.version>
+        <ode4j.maven-plugin-plugin.version>3.2</ode4j.maven-plugin-plugin.version>
+        <ode4j.maven-resources-plugin.version>3.0.0</ode4j.maven-resources-plugin.version>
+        <ode4j.maven-source-plugin.version>3.0.1</ode4j.maven-source-plugin.version>
+        <ode4j.maven-surefire-plugin.version>2.19.1</ode4j.maven-surefire-plugin.version>
+        <ode4j.nexus-staging-maven-plugin.version>1.6.8</ode4j.nexus-staging-maven-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.lwjgl.lwjgl</groupId>
+            <artifactId>lwjgl_util</artifactId>
+            <version>2.9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- mvn nativedependencies:copy -->
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>${ode4j.maven-nativedependencies-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
