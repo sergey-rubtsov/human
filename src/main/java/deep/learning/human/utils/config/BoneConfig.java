@@ -1,14 +1,14 @@
 package deep.learning.human.utils.config;
 
-import deep.learning.human.BoneType;
 import org.ode4j.math.DVector3;
-import org.ode4j.ode.DBody;
+
+import deep.learning.human.BoneType;
 
 public class BoneConfig {
 
     private BoneType type;
 
-    private double density;
+    private Double density;
 
     private String name;
 
@@ -16,11 +16,11 @@ public class BoneConfig {
 
     private DVector3 p2;
 
-    private double radius;
+    private Double radius;
 
-    private int faces;
+    private Integer faces;
 
-    private int vertexes;
+    private Integer vertexes;
 
     private double[] points;
 
@@ -31,6 +31,13 @@ public class BoneConfig {
     public BoneConfig() {
     }
 
+    public BoneConfig(String name, DVector3 p1, DVector3 p2) {
+        this.name = name;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.type = BoneType.LONG;
+    }
+
     public BoneType getType() {
         return type;
     }
@@ -39,11 +46,11 @@ public class BoneConfig {
         this.type = type;
     }
 
-    public double getDensity() {
+    public Double getDensity() {
         return density;
     }
 
-    public void setDensity(double density) {
+    public void setDensity(Double density) {
         this.density = density;
     }
 
@@ -71,27 +78,27 @@ public class BoneConfig {
         this.p2 = p2;
     }
 
-    public double getRadius() {
+    public Double getRadius() {
         return radius;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(Double radius) {
         this.radius = radius;
     }
 
-    public int getFaces() {
+    public Integer getFaces() {
         return faces;
     }
 
-    public void setFaces(int faces) {
+    public void setFaces(Integer faces) {
         this.faces = faces;
     }
 
-    public int getVertexes() {
+    public Integer getVertexes() {
         return vertexes;
     }
 
-    public void setVertexes(int vertexes) {
+    public void setVertexes(Integer vertexes) {
         this.vertexes = vertexes;
     }
 
@@ -117,11 +124,5 @@ public class BoneConfig {
 
     public void setPlanes(double[] planes) {
         this.planes = planes;
-    }
-
-    public BoneConfig(String name, DVector3 p1, DVector3 p2) {
-        this.name = name;
-        this.p1 = p1;
-        this.p2 = p2;
     }
 }

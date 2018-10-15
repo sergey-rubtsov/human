@@ -1,7 +1,8 @@
 package deep.learning.human.utils.config;
 
-import deep.learning.human.JointType;
 import org.ode4j.math.DVector3;
+
+import deep.learning.human.JointType;
 
 public class JointConfig {
 
@@ -11,15 +12,15 @@ public class JointConfig {
     private String child;
     private DVector3 axis1;
     private DVector3 axis2;
-    private double loStop1;
-    private double hiStop1;
-    private double loStop2;
-    private double hiStop2;
+    private Double loStop1;
+    private Double hiStop1;
+    private Double loStop2;
+    private Double hiStop2;
     private DVector3 anchor;
     private DVector3 flexAxis;
     private DVector3 twistAxis;
-    private double flexLimit;
-    private double twistLimit;
+    private Double flexLimit;
+    private Double twistLimit;
 
     public JointConfig() {
     }
@@ -28,22 +29,7 @@ public class JointConfig {
         this.name = name;
         this.parent = parent;
         this.child = child;
-    }
-
-    public String getParent() {
-        return parent;
-    }
-
-    public void setParent(String parent) {
-        this.parent = parent;
-    }
-
-    public String getChild() {
-        return child;
-    }
-
-    public void setChild(String child) {
-        this.child = child;
+        this.type = JointType.FIXED;
     }
 
     public String getName() {
@@ -62,6 +48,22 @@ public class JointConfig {
         this.type = type;
     }
 
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public String getChild() {
+        return child;
+    }
+
+    public void setChild(String child) {
+        this.child = child;
+    }
+
     public DVector3 getAxis1() {
         return axis1;
     }
@@ -78,35 +80,35 @@ public class JointConfig {
         this.axis2 = axis2;
     }
 
-    public double getLoStop1() {
+    public Double getLoStop1() {
         return loStop1;
     }
 
-    public void setLoStop1(double loStop1) {
+    public void setLoStop1(Double loStop1) {
         this.loStop1 = loStop1;
     }
 
-    public double getHiStop1() {
+    public Double getHiStop1() {
         return hiStop1;
     }
 
-    public void setHiStop1(double hiStop1) {
+    public void setHiStop1(Double hiStop1) {
         this.hiStop1 = hiStop1;
     }
 
-    public double getLoStop2() {
+    public Double getLoStop2() {
         return loStop2;
     }
 
-    public void setLoStop2(double loStop2) {
+    public void setLoStop2(Double loStop2) {
         this.loStop2 = loStop2;
     }
 
-    public double getHiStop2() {
+    public Double getHiStop2() {
         return hiStop2;
     }
 
-    public void setHiStop2(double hiStop2) {
+    public void setHiStop2(Double hiStop2) {
         this.hiStop2 = hiStop2;
     }
 
@@ -134,19 +136,19 @@ public class JointConfig {
         this.twistAxis = twistAxis;
     }
 
-    public double getFlexLimit() {
+    public Double getFlexLimit() {
         return flexLimit;
     }
 
-    public void setFlexLimit(double flexLimit) {
+    public void setFlexLimit(Double flexLimit) {
         this.flexLimit = flexLimit;
     }
 
-    public double getTwistLimit() {
+    public Double getTwistLimit() {
         return twistLimit;
     }
 
-    public void setTwistLimit(double twistLimit) {
+    public void setTwistLimit(Double twistLimit) {
         this.twistLimit = twistLimit;
     }
 }
