@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.ode4j.math.DVector3;
 import org.ode4j.math.DVector4;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 public class UtilsTest {
 

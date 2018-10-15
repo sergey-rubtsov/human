@@ -1,0 +1,1108 @@
+{
+  "bones": {
+    "RightArm": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightArm",
+      "p1": {
+        "1": 15.866672999999999,
+        "2": 0.22303400000000007,
+        "0": -0.227733
+      },
+      "p2": {
+        "1": 15.570032,
+        "2": 0.17928800000000006,
+        "0": -1.854387
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LowerBack,__RHipJoint,__LHipJoint": {
+      "type": null,
+      "density": 0.0,
+      "name": "LowerBack,__RHipJoint,__LHipJoint",
+      "p1": {
+        "1": 11.021761,
+        "2": 0.036999,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 11.891034,
+        "2": -0.286296,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "Spine": {
+      "type": null,
+      "density": 0.0,
+      "name": "Spine",
+      "p1": {
+        "1": 11.891034,
+        "2": -0.286296,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 13.195825,
+        "2": -0.272559,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "__LThumb,LeftFingerBase": {
+      "type": null,
+      "density": 0.0,
+      "name": "__LThumb,LeftFingerBase",
+      "p1": {
+        "1": 12.393562,
+        "2": 2.060656,
+        "0": 4.847015
+      },
+      "p2": {
+        "1": 12.230946,
+        "2": 2.354284,
+        "0": 4.9633899999999995
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightHandFinger1": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightHandFinger1",
+      "p1": {
+        "1": 12.230946,
+        "2": 2.354284,
+        "0": -4.9633899999999995
+      },
+      "p2": {
+        "1": 11.986846,
+        "2": 3.10653,
+        "0": -5.147129
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightForeArm": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightForeArm",
+      "p1": {
+        "1": 15.570032,
+        "2": 0.17928800000000006,
+        "0": -1.854387
+      },
+      "p2": {
+        "1": 13.677506,
+        "2": 0.15926100000000007,
+        "0": -3.508723
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RHipJoint,LHipJoint": {
+      "type": null,
+      "density": 0.0,
+      "name": "RHipJoint,LHipJoint",
+      "p1": {
+        "1": 11.891034,
+        "2": -0.286296,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 11.021761,
+        "2": 0.036999000000000004,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RThumb": {
+      "type": null,
+      "density": 0.0,
+      "name": "RThumb",
+      "p1": {
+        "1": 12.230946,
+        "2": 2.354284,
+        "0": -4.9633899999999995
+      },
+      "p2": {
+        "1": 12.326454,
+        "2": 2.544682,
+        "0": -4.858458
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftToeBase": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftToeBase",
+      "p1": {
+        "1": 2.5274719999999995,
+        "2": 0.156889,
+        "0": 1.966622
+      },
+      "p2": {
+        "1": 2.0808529999999994,
+        "2": 1.552889,
+        "0": 2.11204
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightUpLeg": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightUpLeg",
+      "p1": {
+        "1": 11.021761,
+        "2": 0.036999000000000004,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 10.96991,
+        "2": -0.068261,
+        "0": -1.080429
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftLeg": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftLeg",
+      "p1": {
+        "1": 10.96991,
+        "2": -0.068261,
+        "0": 1.080429
+      },
+      "p2": {
+        "1": 6.845193,
+        "2": 0.275551,
+        "0": 1.507459
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "Head": {
+      "type": null,
+      "density": 0.0,
+      "name": "Head",
+      "p1": {
+        "1": 17.093861,
+        "2": 0.2926930000000001,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 17.578398,
+        "2": 0.4740360000000001,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightToeBase": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightToeBase",
+      "p1": {
+        "1": 2.5274719999999995,
+        "2": 0.156889,
+        "0": -1.966622
+      },
+      "p2": {
+        "1": 2.0808529999999994,
+        "2": 1.552889,
+        "0": -2.11204
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftForeArm": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftForeArm",
+      "p1": {
+        "1": 15.570032,
+        "2": 0.17928800000000006,
+        "0": 1.854387
+      },
+      "p2": {
+        "1": 13.677506,
+        "2": 0.15926100000000007,
+        "0": 3.508723
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftHandFinger1": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftHandFinger1",
+      "p1": {
+        "1": 12.230946,
+        "2": 2.354284,
+        "0": 4.9633899999999995
+      },
+      "p2": {
+        "1": 11.986846,
+        "2": 3.10653,
+        "0": 5.147129
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "Neck1": {
+      "type": null,
+      "density": 0.0,
+      "name": "Neck1",
+      "p1": {
+        "1": 16.609323,
+        "2": 0.11135000000000006,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 17.093861,
+        "2": 0.2926930000000001,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LThumb": {
+      "type": null,
+      "density": 0.0,
+      "name": "LThumb",
+      "p1": {
+        "1": 12.230946,
+        "2": 2.354284,
+        "0": 4.9633899999999995
+      },
+      "p2": {
+        "1": 12.326454,
+        "2": 2.544682,
+        "0": 4.858458
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "__RThumb,RightFingerBase": {
+      "type": null,
+      "density": 0.0,
+      "name": "__RThumb,RightFingerBase",
+      "p1": {
+        "1": 12.393562,
+        "2": 2.060656,
+        "0": -4.847015
+      },
+      "p2": {
+        "1": 12.230946,
+        "2": 2.354284,
+        "0": -4.9633899999999995
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightFoot": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightFoot",
+      "p1": {
+        "1": 6.845193,
+        "2": 0.275551,
+        "0": -1.507459
+      },
+      "p2": {
+        "1": 2.5274719999999995,
+        "2": 0.156889,
+        "0": -1.966622
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightHand": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightHand",
+      "p1": {
+        "1": 13.677506,
+        "2": 0.15926100000000007,
+        "0": -3.508723
+      },
+      "p2": {
+        "1": 12.393562,
+        "2": 2.060656,
+        "0": -4.847015
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightLeg": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightLeg",
+      "p1": {
+        "1": 10.96991,
+        "2": -0.068261,
+        "0": -1.080429
+      },
+      "p2": {
+        "1": 6.845193,
+        "2": 0.275551,
+        "0": -1.507459
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftArm": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftArm",
+      "p1": {
+        "1": 15.866672999999999,
+        "2": 0.22303400000000007,
+        "0": 0.227733
+      },
+      "p2": {
+        "1": 15.570032,
+        "2": 0.17928800000000006,
+        "0": 1.854387
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "Spine1": {
+      "type": null,
+      "density": 0.0,
+      "name": "Spine1",
+      "p1": {
+        "1": 13.195825,
+        "2": -0.272559,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 14.556509,
+        "2": -0.481371,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftFoot": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftFoot",
+      "p1": {
+        "1": 6.845193,
+        "2": 0.275551,
+        "0": 1.507459
+      },
+      "p2": {
+        "1": 2.5274719999999995,
+        "2": 0.156889,
+        "0": 1.966622
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftShoulder": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftShoulder",
+      "p1": {
+        "1": 16.609323,
+        "2": 0.11135000000000006,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 15.866672999999999,
+        "2": 0.22303400000000007,
+        "0": 0.227733
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "__LeftShoulder,Neck,__RightShoulder": {
+      "type": null,
+      "density": 0.0,
+      "name": "__LeftShoulder,Neck,__RightShoulder",
+      "p1": {
+        "1": 14.556509,
+        "2": -0.481371,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 16.609323,
+        "2": 0.11135000000000006,
+        "0": 0.0
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftHand": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftHand",
+      "p1": {
+        "1": 13.677506,
+        "2": 0.15926100000000007,
+        "0": 3.508723
+      },
+      "p2": {
+        "1": 12.393562,
+        "2": 2.060656,
+        "0": 4.847015
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "LeftUpLeg": {
+      "type": null,
+      "density": 0.0,
+      "name": "LeftUpLeg",
+      "p1": {
+        "1": 11.021761,
+        "2": 0.036999000000000004,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 10.96991,
+        "2": -0.068261,
+        "0": 1.080429
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    },
+    "RightShoulder": {
+      "type": null,
+      "density": 0.0,
+      "name": "RightShoulder",
+      "p1": {
+        "1": 16.609323,
+        "2": 0.11135000000000006,
+        "0": 0.0
+      },
+      "p2": {
+        "1": 15.866672999999999,
+        "2": 0.22303400000000007,
+        "0": -0.227733
+      },
+      "radius": 0.0,
+      "faces": 0,
+      "vertexes": 0,
+      "points": null,
+      "polygons": null,
+      "planes": null
+    }
+  },
+  "joints": {
+    "RightArm": {
+      "name": "RightArm",
+      "type": null,
+      "parent": "RightShoulder",
+      "child": "RightArm",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LowerBack,__RHipJoint,__LHipJoint": {
+      "name": "LowerBack,__RHipJoint,__LHipJoint",
+      "type": null,
+      "parent": "LowerBack,__RHipJoint,__LHipJoint",
+      "child": "LowerBack,__RHipJoint,__LHipJoint",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "Spine": {
+      "name": "Spine",
+      "type": null,
+      "parent": "LowerBack,__RHipJoint,__LHipJoint",
+      "child": "Spine",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "__LThumb,LeftFingerBase": {
+      "name": "__LThumb,LeftFingerBase",
+      "type": null,
+      "parent": "LeftHand",
+      "child": "__LThumb,LeftFingerBase",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightHandFinger1": {
+      "name": "RightHandFinger1",
+      "type": null,
+      "parent": "__RThumb,RightFingerBase",
+      "child": "RightHandFinger1",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightForeArm": {
+      "name": "RightForeArm",
+      "type": null,
+      "parent": "RightArm",
+      "child": "RightForeArm",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RHipJoint,LHipJoint": {
+      "name": "RHipJoint,LHipJoint",
+      "type": null,
+      "parent": "LowerBack,__RHipJoint,__LHipJoint",
+      "child": "RHipJoint,LHipJoint",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RThumb": {
+      "name": "RThumb",
+      "type": null,
+      "parent": "__RThumb,RightFingerBase",
+      "child": "RThumb",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftToeBase": {
+      "name": "LeftToeBase",
+      "type": null,
+      "parent": "LeftFoot",
+      "child": "LeftToeBase",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightUpLeg": {
+      "name": "RightUpLeg",
+      "type": null,
+      "parent": "RHipJoint,LHipJoint",
+      "child": "RightUpLeg",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftLeg": {
+      "name": "LeftLeg",
+      "type": null,
+      "parent": "LeftUpLeg",
+      "child": "LeftLeg",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "Head": {
+      "name": "Head",
+      "type": null,
+      "parent": "Neck1",
+      "child": "Head",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightToeBase": {
+      "name": "RightToeBase",
+      "type": null,
+      "parent": "RightFoot",
+      "child": "RightToeBase",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftForeArm": {
+      "name": "LeftForeArm",
+      "type": null,
+      "parent": "LeftArm",
+      "child": "LeftForeArm",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftHandFinger1": {
+      "name": "LeftHandFinger1",
+      "type": null,
+      "parent": "__LThumb,LeftFingerBase",
+      "child": "LeftHandFinger1",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "Neck1": {
+      "name": "Neck1",
+      "type": null,
+      "parent": "__LeftShoulder,Neck,__RightShoulder",
+      "child": "Neck1",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LThumb": {
+      "name": "LThumb",
+      "type": null,
+      "parent": "__LThumb,LeftFingerBase",
+      "child": "LThumb",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "__RThumb,RightFingerBase": {
+      "name": "__RThumb,RightFingerBase",
+      "type": null,
+      "parent": "RightHand",
+      "child": "__RThumb,RightFingerBase",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightFoot": {
+      "name": "RightFoot",
+      "type": null,
+      "parent": "RightLeg",
+      "child": "RightFoot",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightHand": {
+      "name": "RightHand",
+      "type": null,
+      "parent": "RightForeArm",
+      "child": "RightHand",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightLeg": {
+      "name": "RightLeg",
+      "type": null,
+      "parent": "RightUpLeg",
+      "child": "RightLeg",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftArm": {
+      "name": "LeftArm",
+      "type": null,
+      "parent": "LeftShoulder",
+      "child": "LeftArm",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "Spine1": {
+      "name": "Spine1",
+      "type": null,
+      "parent": "Spine",
+      "child": "Spine1",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftFoot": {
+      "name": "LeftFoot",
+      "type": null,
+      "parent": "LeftLeg",
+      "child": "LeftFoot",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftShoulder": {
+      "name": "LeftShoulder",
+      "type": null,
+      "parent": "__LeftShoulder,Neck,__RightShoulder",
+      "child": "LeftShoulder",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "__LeftShoulder,Neck,__RightShoulder": {
+      "name": "__LeftShoulder,Neck,__RightShoulder",
+      "type": null,
+      "parent": "Spine1",
+      "child": "__LeftShoulder,Neck,__RightShoulder",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftHand": {
+      "name": "LeftHand",
+      "type": null,
+      "parent": "LeftForeArm",
+      "child": "LeftHand",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "LeftUpLeg": {
+      "name": "LeftUpLeg",
+      "type": null,
+      "parent": "RHipJoint,LHipJoint",
+      "child": "LeftUpLeg",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    },
+    "RightShoulder": {
+      "name": "RightShoulder",
+      "type": null,
+      "parent": "__LeftShoulder,Neck,__RightShoulder",
+      "child": "RightShoulder",
+      "axis1": null,
+      "axis2": null,
+      "loStop1": 0.0,
+      "hiStop1": 0.0,
+      "loStop2": 0.0,
+      "hiStop2": 0.0,
+      "anchor": null,
+      "flexAxis": null,
+      "twistAxis": null,
+      "flexLimit": 0.0,
+      "twistLimit": 0.0
+    }
+  }
+}

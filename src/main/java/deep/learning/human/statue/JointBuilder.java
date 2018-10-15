@@ -14,7 +14,9 @@ import org.ode4j.ode.internal.joints.DxJointConstrainedBall;
 
 public class JointBuilder {
 
-    public static HumanJoint buildJoint(HumanBone parent, HumanBone child, DWorld world) {
+    public static HumanJoint buildJoint(HumanBone parent,
+                                        HumanBone child,
+                                        DWorld world) {
         DJoint joint = JointBuilder.buildFixedJoint(parent, child, world);
         return new JointImpl(parent.getName() + child.getName(),
                 JointType.FIXED,
@@ -23,7 +25,9 @@ public class JointBuilder {
                 joint);
     }
 
-    public static DJoint buildFixedJoint(HumanBone body1, HumanBone body2, DWorld world) {
+    public static DJoint buildFixedJoint(HumanBone body1,
+                                         HumanBone body2,
+                                         DWorld world) {
         DFixedJoint joint = OdeHelper.createFixedJoint(world);
         joint.attach(body1.getBody(), body2.getBody());
         joint.setFixed();

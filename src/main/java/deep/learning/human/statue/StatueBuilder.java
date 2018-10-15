@@ -1,5 +1,8 @@
 package deep.learning.human.statue;
 
+import deep.learning.human.utils.config.BoneConfig;
+import deep.learning.human.utils.config.HumanConfig;
+import deep.learning.human.utils.config.JointConfig;
 import org.ode4j.ode.DSpace;
 import org.ode4j.ode.DWorld;
 
@@ -16,6 +19,19 @@ import deep.learning.human.bvh.Skeleton;
 import deep.learning.human.utils.Utils;
 
 public class StatueBuilder {
+
+    public static HumanConfig build(String file) {
+        Skeleton skeleton = new Skeleton(file);
+        skeleton.setPose(0);
+        Node root = skeleton.getRootNode();
+        processDuplications(root);
+        processDuplications(root);
+        Map<String, BoneConfig> bones = new HashMap<>();
+        Map<String, JointConfig> joints = new HashMap<>();
+        processBones(root, bones);
+        processJoints(root, bones, joints);
+        return new HumanConfig(bones, joints);
+    }
 
     public static Human build(DWorld world, DSpace space, double height) {
         Skeleton skeleton = new Skeleton("1.bvh");
@@ -63,6 +79,16 @@ public class StatueBuilder {
         node.getChildren().removeIf(child -> child.getChildren().isEmpty() && child.getType() != Node.Type.END);
     }
 
+    private static void processBones(Node node, Map<String, BoneConfig> bones) {
+        node.getChildren().forEach(child -> processBones(child, bones));
+        if(node.getType() == Node.Type.END || node.getType() == Node.Type.ROOT) {
+            return;
+        }
+        Node begin = node.getParent();
+        bones.put(node.getName(), new BoneConfig(node.getName(), Utils.translate(begin.getPosition()),
+                Utils.translate(node.getPosition())));
+    }
+
     private static void processBones(DWorld world, DSpace space, Node node, Map<String, HumanBone> bones) {
         node.getChildren().forEach(child -> processBones(world, space, child, bones));
         if(node.getType() == Node.Type.END || node.getType() == Node.Type.ROOT) {
@@ -81,6 +107,25 @@ public class StatueBuilder {
                 Utils.translate(begin.getPosition()),
                 Utils.translate(end.getPosition()),
                 0.2, world, space);
+    }
+
+    private static void processJoints(Node node, Map<String, BoneConfig> bones, Map<String, JointConfig> joints) {
+        node.getChildren().forEach(child -> processJoints(child, bones, joints));
+        if(node.getType() == Node.Type.END || node.getType() == Node.Type.ROOT) {
+            return;
+        }
+        if(node.getParent().getType() == Node.Type.ROOT) {
+            node.getParent().getChildren().forEach(child -> {
+                BoneConfig begin = bones.get(node.getName());
+                BoneConfig end = bones.get(child.getName());
+                JointConfig joint = new JointConfig(child.getName(), begin.getName(), end.getName());
+                joints.put(joint.getName(), joint);
+            });
+            return;
+        }
+        Node begin = node.getParent();
+        JointConfig joint = new JointConfig(node.getName(), begin.getName(), node.getName());
+        joints.put(joint.getName(), joint);
     }
 
     private static void processJoints(DWorld world, Node node, Map<String, HumanBone> bones, Map<String, HumanJoint> joints) {

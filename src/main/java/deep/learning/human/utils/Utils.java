@@ -1,8 +1,8 @@
 package deep.learning.human.utils;
 
-import deep.learning.human.Human;
-import deep.learning.human.HumanBone;
-import deep.learning.human.bvh.Vec4;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.ode4j.math.DMatrix3;
 import org.ode4j.math.DVector3;
 import org.ode4j.math.DVector4;
@@ -17,9 +17,15 @@ import org.ode4j.ode.DMass;
 import org.ode4j.ode.DWorld;
 import org.ode4j.ode.OdeHelper;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import deep.learning.human.Human;
+import deep.learning.human.HumanBone;
+import deep.learning.human.bvh.Vec4;
+import deep.learning.human.utils.config.HumanConfig;
 
 import static org.ode4j.ode.OdeConstants.dContactBounce;
 import static org.ode4j.ode.OdeConstants.dContactSoftCFM;
@@ -96,11 +102,6 @@ public class Utils {
      * Nx = UyVz - UzVy
      * Ny = UzVx - UxVz
      * Nz = UxVy - UyVx
-     *
-     * @param p1
-     * @param p2
-     * @param p3
-     * @return
      */
     public static DVector3 calculateNormal(DVector3 p1, DVector3 p2, DVector3 p3) {
         //Get the UV data
@@ -194,6 +195,13 @@ public class Utils {
             normals.add(calculateNormalAndDistance(p1, p2, p3));
         }
         return normals;
+    }
+
+    public static HumanConfig readHumanConfig(String fileName) throws IOException {
+        ClassLoader classLoader = Utils.class.getClassLoader();
+        return new ObjectMapper().readValue(classLoader.getResourceAsStream(fileName),
+                new TypeReference<HumanConfig>() {
+                });
     }
 
 }

@@ -16,7 +16,7 @@ public class BoneBuilder {
 
     private final String file;
 
-    private static final double DENSITY = (5.0);        // density of all objects
+    private static final double DENSITY = 5.0;        // density of all objects
 
     public BoneBuilder(String file) {
         this.file = file;

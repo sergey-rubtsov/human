@@ -6,6 +6,8 @@ public interface HumanBone {
 
     String getName();
 
+    BoneType getType();
+
     double getRadius();
 
     double getLength();

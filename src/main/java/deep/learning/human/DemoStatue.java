@@ -185,7 +185,7 @@ public class DemoStatue extends dsFunctions {
         // create world
         OdeHelper.initODE();
         // run demo
-        dsSimulationLoop(args, 800, 600, this);
+        dsSimulationLoop(args, 300, 150, this);
         OdeHelper.closeODE();
     }
 

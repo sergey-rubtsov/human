@@ -1,5 +1,6 @@
 package deep.learning.human.statue;
 
+import deep.learning.human.BoneType;
 import org.ode4j.ode.DSpace;
 import org.ode4j.ode.internal.DxConvex;
 
@@ -90,6 +91,11 @@ public class BoneImpl extends DxConvex implements HumanBone {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public BoneType getType() {
+        return BoneType.LONG;
     }
 
     @Override
