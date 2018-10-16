@@ -132,8 +132,8 @@ public abstract class DxGeom extends DBase implements DGeom {
      * For the first element, it is a pointer to (container.first).
      */
 //	private final Ref<dxGeom> tome = new Ref<dxGeom>();
-    private DxGeom _next = null;// next geom in linked list of geoms
-    private DxGeom _prev = null;
+    private DxGeom _next;// next geom in linked list of geoms
+    private DxGeom _prev;
     //dxGeom tome;	// linked list backpointer
     private DxGeom _next_ex;    // next geom in extra linked list of geoms (for higher level structures)
     //private DxGeom _tome_ex;	// extra linked list backpointer (for higher level structures)
@@ -351,7 +351,6 @@ public abstract class DxGeom extends DBase implements DGeom {
         return parent_space != null ? parent_space.tls_kind : DxSpace.dSPACE_TLS_KIND_INIT_VALUE;
     }
 
-
     /**
      * test whether the given AABB object intersects with this object, return
      * 1=yes, 0=no. this is used as an early-exit test in the space collision
@@ -441,7 +440,6 @@ public abstract class DxGeom extends DBase implements DGeom {
     boolean checkControlValueSizeValidity(Ref<?> dataValue, RefInt dataSize,
                                           int iRequiresSize) {
         // Here it is the intent to return true for 0 required size in any case
-        //return (*dataSize == iRequiresSize && dataValue != 0) ? true : !(*dataSize = iRequiresSize);
         if (dataSize.get() == iRequiresSize && dataValue.get() != null) {
             return true;
         }
@@ -480,8 +478,6 @@ public abstract class DxGeom extends DBase implements DGeom {
         return _data;
     }
 
-
-    //	public void dGeomSetBody (dxGeom g, dxBody b)
     public void dGeomSetBody(DxBody b) {
         dUASSERT(b == null || (_gflags & GEOM_PLACEABLE) != 0,
                 "geom must be placeable");

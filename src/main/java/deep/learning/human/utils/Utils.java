@@ -2,7 +2,11 @@ package deep.learning.human.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import deep.learning.human.Human;
+import deep.learning.human.HumanBone;
+import deep.learning.human.bvh.Node;
+import deep.learning.human.bvh.Vec4;
+import deep.learning.human.utils.config.HumanConfig;
 import org.ode4j.math.DMatrix3;
 import org.ode4j.math.DVector3;
 import org.ode4j.math.DVector4;
@@ -18,14 +22,11 @@ import org.ode4j.ode.DWorld;
 import org.ode4j.ode.OdeHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-
-import deep.learning.human.Human;
-import deep.learning.human.HumanBone;
-import deep.learning.human.bvh.Vec4;
-import deep.learning.human.utils.config.HumanConfig;
 
 import static org.ode4j.ode.OdeConstants.dContactBounce;
 import static org.ode4j.ode.OdeConstants.dContactSoftCFM;
@@ -197,11 +198,72 @@ public class Utils {
         return normals;
     }
 
-    public static HumanConfig readHumanConfig(String fileName) throws IOException {
-        ClassLoader classLoader = Utils.class.getClassLoader();
-        return new ObjectMapper().readValue(classLoader.getResourceAsStream(fileName),
-                new TypeReference<HumanConfig>() {
-                });
+    public static double[] octahedronPoints(double length, double radius) {
+        //coordinates of vertexes
+        return new double[]{
+                -radius, -radius, 0, //0
+                radius, -radius, 0,  //1
+                radius, radius, 0,   //2
+                -radius, radius, 0,  //3
+                0, 0, -length / 2,       //4
+                0, 0, length / 2         //5
+        };
+    }
+
+    public static int[] octahedronPolygons() {
+        //first number in row is count of vertexes on face
+        //count of rows is count of faces
+        return new int[]{
+                3, 1, 5, 0,
+                3, 2, 5, 1,
+                3, 3, 5, 2,
+                3, 0, 5, 3,
+                3, 4, 3, 2,
+                3, 4, 2, 1,
+                3, 4, 1, 0,
+                3, 4, 0, 3
+        };
+    }
+
+    public static HumanConfig readHumanConfig(String fileName) {
+        try {
+            ClassLoader classLoader = Utils.class.getClassLoader();
+            return new ObjectMapper().readValue(classLoader.getResourceAsStream(fileName),
+                    new TypeReference<HumanConfig>() {
+                    });
+        } catch (IOException iox) {
+            throw new UnsupportedOperationException(iox);
+        }
+    }
+
+    public static void processDuplications(Node node) {
+        node.getChildren().forEach(Utils::processDuplications);
+        if (node.getType() == Node.Type.END) {
+            return;
+        }
+        for (int i = 0; i < node.getChildren().size(); i++) {
+            for (int k = i + 1; k < node.getChildren().size(); k++) {
+                Node left = node.getChildren().get(i);
+                Node right = node.getChildren().get(k);
+                if (left.getType() == Node.Type.END ||
+                        right.getType() == Node.Type.END) {
+                    continue;
+                }
+                if (left.getPosition().equals(right.getPosition())) {
+                    List<Node> collector = new ArrayList<>();
+                    collector.addAll(left.getChildren());
+                    collector.addAll(right.getChildren());
+                    collector.forEach(child -> child.setParent(left));
+                    right.getChildren().clear();
+                    left.getChildren().clear();
+                    left.setChildren(collector);
+                    left.getNames().add(left.getName());
+                    left.getNames().add(right.getName());
+                }
+            }
+        }
+        node.getChildren().forEach(Node::resetName);
+        node.getChildren().removeIf(child -> child.getChildren().isEmpty() && child.getType() != Node.Type.END);
     }
 
 }

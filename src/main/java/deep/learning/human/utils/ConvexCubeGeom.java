@@ -1,6 +1,6 @@
-package deep.learning.human;
+package deep.learning.human.utils;
 
-class ConvexCubeGeom {
+public class ConvexCubeGeom {
     static final double[] planes = // planes for a cube
 
             {

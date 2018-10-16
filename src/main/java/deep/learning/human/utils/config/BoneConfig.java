@@ -1,8 +1,7 @@
 package deep.learning.human.utils.config;
 
-import org.ode4j.math.DVector3;
-
 import deep.learning.human.BoneType;
+import org.ode4j.math.DVector3;
 
 public class BoneConfig {
 
@@ -36,6 +35,8 @@ public class BoneConfig {
         this.p1 = p1;
         this.p2 = p2;
         this.type = BoneType.LONG;
+        this.radius = 0.2;
+        this.density = 5.0;
     }
 
     public BoneType getType() {

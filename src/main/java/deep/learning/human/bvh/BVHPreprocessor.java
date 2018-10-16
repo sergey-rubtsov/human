@@ -7,14 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import deep.learning.human.statue.StatueBuilder;
+import deep.learning.human.humanoid.HumanoidBuilder;
 import deep.learning.human.utils.config.HumanConfig;
 
 public class BVHPreprocessor {
 
     public static void main(String[] args) throws IOException {
-        HumanConfig preprocessed = StatueBuilder.build("1.bvh");
-        File targetFile = new File("src/main/resources/bvh/" + "humanoid.json");
+        HumanConfig preprocessed = HumanoidBuilder.build("1.bvh");
+        File targetFile = new File("src/main/resources/bvh/" + "preprocessed.json");
         OutputStream outStream = new FileOutputStream(targetFile);
         new ObjectMapper().writeValue(outStream, preprocessed);
     }

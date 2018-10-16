@@ -301,7 +301,7 @@ public class CollisionLibccd {
             maxdot = -CCD_REAL_MAX;
             curp = c.convex.getPoints();
             int curpI = 0;
-            for (i = 0; i < c.convex.getPointcount(); i++, curpI += 3) {
+            for (i = 0; i < c.convex.getPointCount(); i++, curpI += 3) {
                 ccdVec3Set(p, curp[curpI + 0], curp[curpI + 1], curp[curpI + 2]);
                 dot = ccdVec3Dot(dir, p);
                 if (dot > maxdot) {

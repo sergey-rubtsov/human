@@ -103,7 +103,6 @@ public class OdeJointsFactoryImpl extends OdeHelper {
         return createJoint(new DxJointHinge2((DxWorld) w), group);
     }
 
-
     public DxJointUniversal dJointCreateUniversal(DWorld w, DJointGroup group) {
         dAASSERT(w);
         return createJoint(new DxJointUniversal((DxWorld) w), group);

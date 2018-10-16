@@ -14,4 +14,5 @@ public interface HumanBone {
 
     DBody getBody();
 
+    void setBody(DBody body);
 }

@@ -58,6 +58,8 @@ import static org.ode4j.ode.internal.cpp4j.Cstdio.stdout;
  */
 public class DxConvex extends DxGeom implements DConvex {
 
+    private double[] planes;
+
     /**
      * An array of planes in the form:
      * normal X, normal Y, normal Z, Distance
@@ -80,17 +82,17 @@ public class DxConvex extends DxGeom implements DConvex {
     /**
      * Amount of planes in planes.
      */
-    private int planecount;
+    private int planeCount;
 
     /**
      * Amount of points in points.
      */
-    private int pointcount;
+    private int pointCount;
 
     /**
      * Amount of edges in convex.
      */
-    private int edgecount;
+    private int edgeCount;
 
     private static class Edge {
         int first;
@@ -105,15 +107,13 @@ public class DxConvex extends DxGeom implements DConvex {
      * @param dir [IN] direction to find the Support Point for
      * @return the index of the support vertex.
      */
-    //inline unsigned int SupportIndex(dVector3 dir)
     private int SupportIndex(DVector3 dir) {
         DVector3 rdir = new DVector3();
-        //unsigned
         int index = 0;
         dMultiply1_331(rdir, final_posr().R(), dir);
         double max = dCalcVectorDot3(points, 0, rdir);
         double tmp;
-        for (int i = 1; i < pointcount; ++i) {
+        for (int i = 1; i < pointCount; ++i) {
             tmp = dCalcVectorDot3(points, (i * 3), rdir);
             if (tmp > max) {
                 index = i;
@@ -141,25 +141,26 @@ public class DxConvex extends DxGeom implements DConvex {
 
     public DxConvex(DSpace space,
                     double[] planes,
-                    int planecount,
+                    int planeCount,
                     double[] points,
-                    int pointcount,
+                    int pointCount,
                     int[] polygons) {
         super(space, true);
         dAASSERT(planes != null);
         dAASSERT(points != null);
         dAASSERT(polygons != null);
+        this.planes = planes;
         type = dConvexClass;
-        planesV = new DVector3[planecount];
-        planesD = new double[planecount];
-        for (int i = 0; i < planecount; i++) {
+        planesV = new DVector3[planeCount];
+        planesD = new double[planeCount];
+        for (int i = 0; i < planeCount; i++) {
             planesV[i] = new DVector3(planes[i * 4], planes[i * 4 + 1], planes[i * 4 + 2]);
             planesD[i] = planes[i * 4 + 3];
         }
-        this.planecount = planecount;
+        this.planeCount = planeCount;
         // we need points as well
         this.points = points;
-        this.pointcount = pointcount;
+        this.pointCount = pointCount;
         this.polygons = polygons;
         edges = null;
         FillEdges();
@@ -174,7 +175,7 @@ public class DxConvex extends DxGeom implements DConvex {
         int points_in_polyPos = 0;
         int indexPos = 1;
 
-        for (int i = 0; i < this.planecount; ++i) {
+        for (int i = 0; i < this.planeCount; ++i) {
             dAASSERT(this.polygons[points_in_polyPos] > 2);
             int index03 = this.polygons[indexPos] * 3;
             int index13 = this.polygons[indexPos + 1] * 3;
@@ -203,7 +204,7 @@ public class DxConvex extends DxGeom implements DConvex {
         _aabb.setMin(final_posr().pos());
         _aabb.setMax(final_posr().pos());
         _aabb.shiftPos(point);
-        for (int i = 3; i < (pointcount * 3); i += 3) {
+        for (int i = 3; i < (pointCount * 3); i += 3) {
             dMultiply0_331(point, final_posr().R(), points, i);
             DVector3 tmp = new DVector3();
             tmp.eqSum(point, final_posr().pos());
@@ -219,30 +220,30 @@ public class DxConvex extends DxGeom implements DConvex {
         int points_in_polyPos = 0;
         int indexPos = 1;
         if (edges != null) edges = null;
-        edgecount = 0;
+        edgeCount = 0;
         Edge e = new Edge();
         boolean isinset;
-        for (int i = 0; i < planecount; ++i) {
+        for (int i = 0; i < planeCount; ++i) {
             for (int j = 0; j < polygons[points_in_polyPos]; ++j) {
                 e.first = dMIN(polygons[indexPos + j], polygons[indexPos + (j + 1) % polygons[points_in_polyPos]]);
                 e.second = dMAX(polygons[indexPos + j], polygons[indexPos + (j + 1) % polygons[points_in_polyPos]]);
                 isinset = false;
-                for (int k = 0; k < edgecount; ++k) {
+                for (int k = 0; k < edgeCount; ++k) {
                     if ((edges[k].first == e.first) && (edges[k].second == e.second)) {
                         isinset = true;
                         break;
                     }
                 }
                 if (!isinset) {
-                    Edge[] tmp = new Edge[edgecount + 1];
-                    if (edgecount != 0) {
+                    Edge[] tmp = new Edge[edgeCount + 1];
+                    if (edgeCount != 0) {
                         for (int ii = 0; ii < edges.length; ii++) tmp[ii] = edges[ii];
                     }
-                    tmp[edgecount] = new Edge();
-                    tmp[edgecount].first = e.first;
-                    tmp[edgecount].second = e.second;
+                    tmp[edgeCount] = new Edge();
+                    tmp[edgeCount].first = e.first;
+                    tmp[edgeCount].second = e.second;
                     edges = tmp;
-                    ++edgecount;
+                    ++edgeCount;
                 }
             }
             points_in_polyPos += polygons[points_in_polyPos] + 1;
@@ -266,9 +267,9 @@ public class DxConvex extends DxGeom implements DConvex {
             planesV[i] = new DVector3(planes[i * 4], planes[i * 4 + 1], planes[i * 4 + 2]);
             planesD[i] = planes[i * 4 + 3];
         }
-        this.planecount = planecount;
+        this.planeCount = planecount;
         this.points = points;
-        this.pointcount = pointcount;
+        this.pointCount = pointcount;
         this.polygons = polygons;
     }
 
@@ -472,7 +473,7 @@ public class DxConvex extends DxGeom implements DConvex {
     //  tmp[1] = p[1] - convex->final_posr->pos[1];
     //  tmp[2] = p[2] - convex->final_posr->pos[2];
     //  dMULTIPLY1_331 (lp,convex->final_posr->R,tmp);
-    //  for(unsigned int i=0;i<convex->planecount;++i)
+    //  for(unsigned int i=0;i<convex->planeCount;++i)
     //  {
     //    if((
     //	  ((convex->planes+(i*4))[0]*lp[0])+
@@ -515,7 +516,7 @@ public class DxConvex extends DxGeom implements DConvex {
 
         int pointcount = polygonA[0 + polyPos];
         Common.dIASSERT(pointcount != 0);
-        polyPos++;//skip past pointcount
+        polyPos++;//skip past pointCount
 
         dMultiply0_331(b, convex.final_posr().R(),
                 convex.points, (polygonA[polyPos + pointcount - 1] * 3));
@@ -561,7 +562,7 @@ public class DxConvex extends DxGeom implements DConvex {
             final int GTEQ_ZERO = 0x20000000;
             final int BOTH_SIGNS = (LTEQ_ZERO | GTEQ_ZERO);
             int totalsign = 0;
-            for (int i = 0; i < Convex.pointcount; ++i) {
+            for (int i = 0; i < Convex.pointCount; ++i) {
                 dMultiply0_331(v2, Convex.final_posr().R(), Convex.points, i * 3);
                 v2.add(Convex.final_posr().pos());
                 int distance2sign = GTEQ_ZERO;
@@ -619,7 +620,7 @@ public class DxConvex extends DxGeom implements DConvex {
             if a collision is found then check if the contact point
             is within the polygon*/
             offsetpos.eqDiff(sphere.final_posr().pos(), convex.final_posr().pos());
-            for (int i = 0; i < convex.planecount; ++i) {
+            for (int i = 0; i < convex.planeCount; ++i) {
                 // apply rotation to the plane
                 dMultiply0_331(planeV, convex.final_posr().R(), convex.planesV[i]);//convex.planes[(i*4)]);
                 planeD = convex.planesD[i];//(convex.planes[(i*4)])[3];
@@ -741,7 +742,7 @@ public class DxConvex extends DxGeom implements DConvex {
         point.add(cvx.final_posr().pos());
         min.set(dCalcVectorDot3(point, axis) - axisD);
         max.set(min.get());
-        for (int i = 1; i < cvx.pointcount; ++i) {
+        for (int i = 1; i < cvx.pointCount; ++i) {
             dMultiply0_331(point, cvx.final_posr().R(), cvx.points, (i * 3));
             point.add(cvx.final_posr().pos());
             value = dCalcVectorDot3(point, axis) - axisD;
@@ -765,7 +766,7 @@ public class DxConvex extends DxGeom implements DConvex {
         DVector3 planeV = new DVector3(), depthplaneV = new DVector3();
         double planeD, depthplaneD;
         RefDouble t = new RefDouble();  //TZ TODO Why?
-        for (int i = 0; i < cvx1.edgecount; ++i) {
+        for (int i = 0; i < cvx1.edgeCount; ++i) {
             // Rotate
             dMultiply0_331(e1, cvx1.final_posr().R(), cvx1.points, (cvx1.edges[i].first * 3));
             // translate
@@ -776,7 +777,7 @@ public class DxConvex extends DxGeom implements DConvex {
             e2.add(cvx1.final_posr().pos());
             int[] pPolyV = cvx2.polygons;
             int pPolyPos = 0;
-            for (int j = 0; j < cvx2.planecount; ++j) {
+            for (int j = 0; j < cvx2.planeCount; ++j) {
                 // Rotate
                 dMultiply0_331(planeV, cvx2.final_posr().R(), cvx2.planesV[i]);//+(j*4));
                 dNormalize3(planeV);
@@ -793,7 +794,7 @@ public class DxConvex extends DxGeom implements DConvex {
                 if (IntersectSegmentPlane(e1, e2, planeV, planeD, t, target.pos)) {
                     if (IsPointInPolygon(target.pos, pPolyV, pPolyPos, planeV, cvx2, q)) {
                         target.depth = dInfinity;
-                        for (int k = 0; k < cvx2.planecount; ++k) {
+                        for (int k = 0; k < cvx2.planeCount; ++k) {
                             if (k == j) continue; // we're already at 0 depth on this plane
                             // Rotate
                             dMultiply0_331(depthplaneV, cvx2.final_posr().R(), cvx2.planesV[k]);
@@ -850,7 +851,7 @@ Helper struct
         //dVector4 plane;
         DVector3 planeV = new DVector3();
         double planeD;
-        for (int i = 0; i < cvx1.planecount; ++i) {
+        for (int i = 0; i < cvx1.planeCount; ++i) {
             // -- Apply Transforms --
             // Rotate
             dMultiply0_331(planeV, cvx1.final_posr().R(), cvx1.planesV[i]);
@@ -907,14 +908,14 @@ Helper struct
         // invert direction
         dist.scale(-1);
         int s2 = cvx2.SupportIndex(dist);
-        for (int i = 0; i < cvx1.edgecount; ++i) {
+        for (int i = 0; i < cvx1.edgeCount; ++i) {
             // Skip edge if it doesn't contain the extremal vertex
             if ((cvx1.edges[i].first != s1) && (cvx1.edges[i].second != s1)) continue;
             // we only need to apply rotation here
             dMultiply0_331(e1a, cvx1.final_posr().R(), cvx1.points, (cvx1.edges[i].first * 3));
             dMultiply0_331(e1b, cvx1.final_posr().R(), cvx1.points, (cvx1.edges[i].second * 3));
             e1.eqDiff(e1b, e1a);
-            for (int j = 0; j < cvx2.edgecount; ++j) {
+            for (int j = 0; j < cvx2.edgeCount; ++j) {
                 // Skip edge if it doesn't contain the extremal vertex
                 if ((cvx2.edges[j].first != s2) && (cvx2.edges[j].second != s2)) continue;
                 // we only need to apply rotation here
@@ -967,7 +968,7 @@ Helper struct
     //  //  will look into that)
     //  dMULTIPLY1_331(nis,ccso.g2.final_posr.R,ccso.plane);
     //  SavedDot = dDOT(nis,ccso.g2.planes);
-    //  for(unsigned int i=1;i<ccso.g2.planecount;++i)
+    //  for(unsigned int i=1;i<ccso.g2.planeCount;++i)
     //  {
     //    Dot = dDOT(nis,ccso.g2.planes+(i*4));
     //    if(Dot>SavedDot)
@@ -992,7 +993,7 @@ Helper struct
         dNormalize3(tmp);
         dMultiply1_331(dics, cvx.final_posr().R(), tmp);
         SavedDot = dics.dot(cvx.planesV[0]);
-        for (int i = 1; i < cvx.planecount; ++i) {
+        for (int i = 1; i < cvx.planeCount; ++i) {
             Dot = dCalcVectorDot3(dics, cvx.planesV[i]);//+(i*4));
             if (Dot > SavedDot) {
                 SavedDot = Dot;
@@ -1093,7 +1094,7 @@ Helper struct
                 tmp.set(r2);
                 dMultiply1_331(r2, cvx1.final_posr().R(), tmp);
                 outside = false;
-                for (int j = 0; j < cvx1.planecount; ++j) {
+                for (int j = 0; j < cvx1.planeCount; ++j) {
                     planeV.set(cvx1.planesV[j]);
                     planeD = cvx1.planesD[j];
                     // Get the distance from the points to the plane
@@ -1104,7 +1105,7 @@ Helper struct
                         IntersectSegmentPlane(r1, r2, planeV, planeD, t, p);
                         // Check the resulting point again to make sure it is inside the reference convex
                         out = false;
-                        for (int k = 0; k < cvx1.planecount; ++k) {
+                        for (int k = 0; k < cvx1.planeCount; ++k) {
                             d = p.dot(cvx1.planesV[k]) - cvx1.planesD[k];
                             if (d > 0) {
                                 out = true;
@@ -1180,7 +1181,7 @@ Helper struct
                 dMultiply1_331(r1, cvx2.final_posr().R(), tmp);
                 // Check if it is outside the incident convex
                 out = false;
-                for (int j = 0; j < cvx2.planecount; ++j) {
+                for (int j = 0; j < cvx2.planeCount; ++j) {
                     d = r1.dot(cvx2.planesV[j]) - cvx2.planesD[j];
                     if (d >= 0) {
                         out = true;
@@ -1301,7 +1302,7 @@ Helper struct
     //  destination[0]+=origin[0];
     //  destination[1]+=origin[1];
     //  destination[2]+=origin[2];
-    //  for(int i=0;i<convex->planecount;++i)
+    //  for(int i=0;i<convex->planeCount;++i)
     //    {
     //      // Rotate
     //      dMULTIPLY0_331(plane,convex->final_posr->R,convex->planes+(i*4));
@@ -1359,7 +1360,7 @@ Helper struct
             //
             flag = false;    // Assume start point is behind all planes.
 
-            for (int i = 0; i < convex.planecount; ++i) {
+            for (int i = 0; i < convex.planeCount; ++i) {
                 // Alias this plane.
                 int planePos = i;
                 // If alpha >= 0 then start point is outside of plane.
@@ -1380,7 +1381,7 @@ Helper struct
             // Assume no contacts.
             contact.depth = dInfinity;
 
-            for (int i = 0; i < convex.planecount; ++i) {
+            for (int i = 0; i < convex.planeCount; ++i) {
                 // Alias this plane.
                 int planePos = i;
                 // If alpha >= 0 then point is outside of plane.
@@ -1401,7 +1402,7 @@ Helper struct
                     flag = false;
 
                     // For all _other_ planes.
-                    for (int j = 0; j < convex.planecount; ++j) {
+                    for (int j = 0; j < convex.planeCount; ++j) {
                         if (i == j)
                             continue;    // Skip self.
 
@@ -1460,7 +1461,19 @@ Helper struct
         return points;
     }
 
-    public int getPointcount() {
-        return pointcount;
+    public int getPointCount() {
+        return pointCount;
+    }
+
+    public int[] getPolygons() {
+        return polygons;
+    }
+
+    public int getPlaneCount() {
+        return planeCount;
+    }
+
+    public double[] getPlanes() {
+        return planes;
     }
 }

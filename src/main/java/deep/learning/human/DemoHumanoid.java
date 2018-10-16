@@ -41,10 +41,12 @@ import org.ode4j.ode.DSphere;
 import org.ode4j.ode.DWorld;
 import org.ode4j.ode.OdeHelper;
 import org.ode4j.ode.OdeMath;
+import org.ode4j.ode.internal.DxConvex;
 import org.ode4j.ode.internal.Rotation;
 
-import deep.learning.human.statue.BoneImpl;
-import deep.learning.human.statue.StatueBuilder;
+import java.util.Random;
+
+import deep.learning.human.humanoid.HumanoidBuilder;
 import deep.learning.human.utils.Utils;
 
 import static deep.learning.human.internal.DrawStuff.dsDrawBox;
@@ -57,7 +59,7 @@ import static deep.learning.human.internal.DrawStuff.dsSetColorAlpha;
 import static deep.learning.human.internal.DrawStuff.dsSetViewpoint;
 import static deep.learning.human.internal.DrawStuff.dsSimulationLoop;
 
-public class DemoStatue extends dsFunctions {
+public class DemoHumanoid extends dsFunctions {
 
     private DWorld world;
     private DSpace space;
@@ -77,14 +79,11 @@ public class DemoStatue extends dsFunctions {
         space = OdeHelper.createSimpleSpace();
         contactGroup = OdeHelper.createJointGroup();
         OdeHelper.createPlane(space, 0, 0, 1, 0);
-        double height = 180;
-        human = StatueBuilder.build(world, space, height);
-
+        human = HumanoidBuilder.build(world, space, "bvh/edited.json");
         DQuaternion q = new DQuaternion(1, 0, 0, 0);
         Rotation.dQFromAxisAndAngle(q, new DVector3(1, 0, 0), -0.5 * Math.PI);
         for (int i = 0; i < human.getBones().size(); i++) {
             HumanBone bone = human.getBones().get(i);
-            //DGeom g = OdeHelper.createCapsule(space, bone.getRadius(), bone.getLength());
             DBody body = bone.getBody();
             DQuaternion qq = new DQuaternion();
             OdeMath.dQMultiply1(qq, q, body.getQuaternion());
@@ -94,7 +93,6 @@ public class DemoStatue extends dsFunctions {
             DVector3 v = new DVector3();
             OdeMath.dMultiply0_133(v, body.getPosition(), R);
             body.setPosition(v.get0(), v.get1(), v.get2());
-            //g.setBody(body);
         }
         // initial camera position
         dsSetViewpoint(xyz, hpr);
@@ -111,16 +109,19 @@ public class DemoStatue extends dsFunctions {
     private void drawGeom(DGeom g) {
         if (g instanceof DCapsule) {
             DCapsule cap = (DCapsule) g;
-            dsDrawCapsule(g.getPosition(), g.getRotation(), cap.getLength(), cap.getRadius());
-        } else if (g instanceof BoneImpl) {
+            dsDrawCapsule(g.getPosition(),
+                    g.getRotation(),
+                    cap.getLength(),
+                    cap.getRadius());
+        } else if (g instanceof DxConvex) {
             dsDrawConvex(
-            g.getPosition(),
-            g.getRotation(),
-            ((BoneImpl) g).getPlanes(),
-                    ((BoneImpl) g).getPlanesNumber(),
-                    ((BoneImpl) g).getPoints(),
-                    ((BoneImpl) g).getPointsNumber(),
-                    ((BoneImpl) g).getPolygons());
+                    g.getPosition(),
+                    g.getRotation(),
+                    ((DxConvex) g).getPlanes(),
+                    ((DxConvex) g).getPlaneCount(),
+                    ((DxConvex) g).getPoints(),
+                    ((DxConvex) g).getPointCount(),
+                    ((DxConvex) g).getPolygons());
         }
     }
 
@@ -143,8 +144,6 @@ public class DemoStatue extends dsFunctions {
             double length = ((DCapsule) g).getLength();
             dsDrawCapsule(pos, R, length, radius);
         }
-
-
         if (show_aabb) {
             // draw the bounding box for this geom
             DAABBC aabb = g.getAABB();
@@ -178,14 +177,14 @@ public class DemoStatue extends dsFunctions {
     }
 
     public static void main(String[] args) {
-        new DemoStatue().demo(args);
+        new DemoHumanoid().demo(args);
     }
 
     private void demo(String[] args) {
         // create world
         OdeHelper.initODE();
         // run demo
-        dsSimulationLoop(args, 300, 150, this);
+        dsSimulationLoop(args, 600, 300, this);
         OdeHelper.closeODE();
     }
 
@@ -193,6 +192,9 @@ public class DemoStatue extends dsFunctions {
     public void command(char cmd) {
         cmd = Character.toLowerCase(cmd);
         if (cmd == ' ') {
+            Random r = new Random();
+            int bone = r.nextInt(human.getBones().size());
+            human.getBones().get(bone).getBody().setLinearVel(0, 0, 80);
             //human.getBones().get(DHumanImpl.PELVIS).getBody().setLinearVel(0, 0, 80);
             //human.getBones().get(DHumanImpl.PELVIS).getBody().addForce(0, 0, 8000);
         }

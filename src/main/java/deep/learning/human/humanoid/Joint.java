@@ -1,11 +1,11 @@
-package deep.learning.human.statue;
+package deep.learning.human.humanoid;
 
 import deep.learning.human.HumanBone;
 import deep.learning.human.HumanJoint;
 import deep.learning.human.JointType;
 import org.ode4j.ode.DJoint;
 
-public class JointImpl implements HumanJoint {
+public class Joint implements HumanJoint {
 
     private final String name;
     private final JointType type;
@@ -13,11 +13,11 @@ public class JointImpl implements HumanJoint {
     private final HumanBone child;
     private final DJoint joint;
 
-    public JointImpl(String name,
-                     JointType type,
-                     HumanBone parent,
-                     HumanBone child,
-                     DJoint joint) {
+    public Joint(String name,
+                 JointType type,
+                 HumanBone parent,
+                 HumanBone child,
+                 DJoint joint) {
         this.name = name;
         this.type = type;
         this.parent = parent;
@@ -47,6 +47,6 @@ public class JointImpl implements HumanJoint {
 
     @Override
     public DJoint getJoint() {
-        return null;
+        return joint;
     }
 }

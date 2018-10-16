@@ -496,7 +496,6 @@ public abstract class DxJoint extends DObject implements DJoint, Cloneable {
             qerr.set3(-qerr.get3());
         }
         //TZ:
-//		dMULTIPLY0_331( e, joint.node[0].body.posr.R, qerr + 1 );  // @@@ bad SIMD padding!
         DVector3 qerr2 = new DVector3();
         qerr2.set0(qerr.get1());
         qerr2.set1(qerr.get2());
@@ -510,46 +509,27 @@ public abstract class DxJoint extends DObject implements DJoint, Cloneable {
 
 
     // compute anchor points relative to bodies
-
-    //	void setAnchors( dxJoint j, double x, double y, double z,
-//	dVector3 anchor1, dVector3 anchor2 )
     final void setAnchors(DVector3C xyz,
                           DVector3 anchor1, DVector3 anchor2) {
         DxBody b0 = node[0].body;
         if (b0 != null) {
-            /// double[] q = new double[4];
             DVector3 q = new DVector3();
-//			q.v[0] = x - node[0].body._posr.pos.v[0];
-//			q.v[1] = y - node[0].body._posr.pos.v[1];
-//			q.v[2] = z - node[0].body._posr.pos.v[2];
-//			q.v[3] = 0;
             q.eqDiff(xyz, b0.posr().pos());
             dMultiply1_331(anchor1, b0.posr().R(), q);
             DxBody b1 = node[1].body;
             if (b1 != null) {
-//				q.v[0] = x - node[1].body._posr.pos.v[0];
-//				q.v[1] = y - node[1].body._posr.pos.v[1];
-//				q.v[2] = z - node[1].body._posr.pos.v[2];
-//				q.v[3] = 0;
                 q.eqDiff(xyz, b1.posr().pos());
                 dMultiply1_331(anchor2, b1.posr().R(), q);
             } else {
-//				anchor2.v[0] = x;
-//				anchor2.v[1] = y;
-//				anchor2.v[2] = z;
                 anchor2.set(xyz);
             }
         }
-//		anchor1.v[3] = 0;
-//		anchor2.v[3] = 0;
     }
-
 
     /**
      * compute axes relative to bodies. either axis1 or axis2 can be 0.
      */
 
-//	void setAxes( dxJoint j, double x, double y, double z,
     void setAxes(double x, double y, double z,
                  DVector3 axis1, DVector3 axis2) {
         DxBody b0 = node[0].body;

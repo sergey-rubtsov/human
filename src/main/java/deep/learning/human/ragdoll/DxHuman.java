@@ -259,8 +259,8 @@ public class DxHuman {
             bone.qBuffer[autoDisableBufferIndex].set(bone.body.getQuaternion());
             if (autoDisabled) {
                 bone.body.disable();
-                bone.body.setLinearVel(0, 0, 0);
                 bone.body.setAngularVel(0, 0, 0);
+                bone.body.setLinearVel(0, 0, 0);
                 bone.body.setPosition(bone.position);
                 bone.body.setQuaternion(bone.quaternion);
             } else {

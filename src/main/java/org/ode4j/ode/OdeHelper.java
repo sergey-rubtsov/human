@@ -456,7 +456,6 @@ public abstract class OdeHelper {
         return ODE.dJointCreateUniversal(world, null);
     }
 
-
     // World
 
     /**

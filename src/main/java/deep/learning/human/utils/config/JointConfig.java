@@ -1,8 +1,7 @@
 package deep.learning.human.utils.config;
 
-import org.ode4j.math.DVector3;
-
 import deep.learning.human.JointType;
+import org.ode4j.math.DVector3;
 
 public class JointConfig {
 
@@ -10,6 +9,7 @@ public class JointConfig {
     private JointType type;
     private String parent;
     private String child;
+    private DVector3 axis;
     private DVector3 axis1;
     private DVector3 axis2;
     private Double loStop1;
@@ -62,6 +62,14 @@ public class JointConfig {
 
     public void setChild(String child) {
         this.child = child;
+    }
+
+    public DVector3 getAxis() {
+        return axis;
+    }
+
+    public void setAxis(DVector3 axis) {
+        this.axis = axis;
     }
 
     public DVector3 getAxis1() {
