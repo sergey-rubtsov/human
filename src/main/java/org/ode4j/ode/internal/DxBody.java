@@ -73,22 +73,6 @@ import static org.ode4j.ode.internal.Rotation.dRfromQ;
  */
 public class DxBody extends DObject implements DBody, Cloneable {
 
-    // some body flags
-
-    //	enum Body {
-    //	  dxBodyFlagFiniteRotation     	(1),	// use finite rotations
-    //	  dxBodyFlagFiniteRotationAxis 	(2),	// use finite rotations only along axis
-    //	  dxBodyDisabled				(4),	// body is disabled
-    //	  dxBodyNoGravity				(8),	// body is not influenced by gravity
-    //	  dxBodyAutoDisable 			(16),	// enable auto-disable on body
-    //	  dxBodyLinearDamping 			(32),   // using linear damping
-    //	  dxBodyAngularDamping 			(64),   // using angular damping
-    //	  dxBodyMaxAngularSpeed			(128);  // using maximum angular speed
-    //	  private final int _i;
-    //	  Body(int i) {
-    //		  _i = i;
-    //	  }
-    //	};
     private static final int dxBodyFlagFiniteRotation = 1;    // use finite rotations
     private static final int dxBodyFlagFiniteRotationAxis = 2;    // use finite rotations only along axis
     static final int dxBodyDisabled = 4;        // body is disabled

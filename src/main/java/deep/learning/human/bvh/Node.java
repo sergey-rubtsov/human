@@ -1,6 +1,7 @@
 package deep.learning.human.bvh;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -115,7 +116,7 @@ public class Node {
     }
 
     public void resetName() {
-        this.name = String.join(",", names);
+        this.name = names.stream().min(Comparator.comparing(String::length)).orElse(name + name.hashCode());
     }
 
     public void setChildren(List<Node> children) {

@@ -24,6 +24,7 @@
  *************************************************************************/
 package deep.learning.human;
 
+import deep.learning.human.utils.config.HumanConfig;
 import org.ode4j.math.DMatrix3;
 import org.ode4j.math.DMatrix3C;
 import org.ode4j.math.DQuaternion;
@@ -58,6 +59,7 @@ import static deep.learning.human.internal.DrawStuff.dsFunctions;
 import static deep.learning.human.internal.DrawStuff.dsSetColorAlpha;
 import static deep.learning.human.internal.DrawStuff.dsSetViewpoint;
 import static deep.learning.human.internal.DrawStuff.dsSimulationLoop;
+import static org.ode4j.ode.OdeHelper.areConnectedExcluding;
 
 public class DemoHumanoid extends dsFunctions {
 
@@ -79,6 +81,18 @@ public class DemoHumanoid extends dsFunctions {
         space = OdeHelper.createSimpleSpace();
         contactGroup = OdeHelper.createJointGroup();
         OdeHelper.createPlane(space, 0, 0, 1, 0);
+        HumanConfig preprocessed = HumanoidBuilder.build("1.bvh",
+                //, "-__LThumb", "-__RThumb"
+                //"+Neck1"
+                //"+Spine1"//,
+                "+__LeftShoulder",
+                "+__RightShoulder",
+                "!2"
+                //"+RightForeArm",
+                //"+LeftForeArm",
+                //"-Neck"
+        );
+        //human = HumanoidBuilder.build(world, space, preprocessed);
         human = HumanoidBuilder.build(world, space, "bvh/edited.json");
         DQuaternion q = new DQuaternion(1, 0, 0, 0);
         Rotation.dQFromAxisAndAngle(q, new DVector3(1, 0, 0), -0.5 * Math.PI);
@@ -96,6 +110,7 @@ public class DemoHumanoid extends dsFunctions {
         }
         // initial camera position
         dsSetViewpoint(xyz, hpr);
+        Utils.postProcessSelfColliding(space, world, contactGroup);
     }
 
     @Override
@@ -157,7 +172,6 @@ public class DemoHumanoid extends dsFunctions {
     }
 
     private DGeom.DNearCallback nearCallback = new DGeom.DNearCallback() {
-
         public void call(Object data, DGeom o1, DGeom o2) {
             Utils.nearCallback(data, o1, o2, world, contactGroup);
         }
@@ -184,7 +198,7 @@ public class DemoHumanoid extends dsFunctions {
         // create world
         OdeHelper.initODE();
         // run demo
-        dsSimulationLoop(args, 600, 300, this);
+        dsSimulationLoop(args, 300, 150, this);
         OdeHelper.closeODE();
     }
 

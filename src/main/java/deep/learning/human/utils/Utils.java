@@ -2,6 +2,7 @@ package deep.learning.human.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import deep.learning.human.DemoHumanoid;
 import deep.learning.human.Human;
 import deep.learning.human.HumanBone;
 import deep.learning.human.bvh.Node;
@@ -14,15 +15,18 @@ import org.ode4j.ode.DBody;
 import org.ode4j.ode.DContact;
 import org.ode4j.ode.DContactBuffer;
 import org.ode4j.ode.DContactJoint;
+import org.ode4j.ode.DFixedJoint;
 import org.ode4j.ode.DGeom;
 import org.ode4j.ode.DJoint;
 import org.ode4j.ode.DJointGroup;
 import org.ode4j.ode.DMass;
+import org.ode4j.ode.DSpace;
 import org.ode4j.ode.DWorld;
 import org.ode4j.ode.OdeHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -87,7 +91,7 @@ public class Utils {
     }
 
     public static DVector3 translate(Vec4 nodeBegin) {
-        return new DVector3(nodeBegin.getX(), nodeBegin.getY() + 10, nodeBegin.getZ());
+        return new DVector3(nodeBegin.getX() + 5, nodeBegin.getY() + 20, nodeBegin.getZ());
     }
 
     /**
@@ -266,4 +270,77 @@ public class Utils {
         node.getChildren().removeIf(child -> child.getChildren().isEmpty() && child.getType() != Node.Type.END);
     }
 
+    public static void moveFromRoot(Node node, String bone) {
+        List<Node> nodes = new ArrayList<>();
+        selectBone(node, bone, nodes);
+        nodes.forEach(found -> {
+            Node parent = found.getParent();
+            List<Node> siblings = parent.getChildren();
+            siblings.forEach(sibling -> {
+                if (!sibling.getName().equals(found.getName())) {
+                    sibling.setParent(found);
+                    found.getChildren().add(sibling);
+                }
+            });
+            parent.getChildren().removeIf(child -> !child.getName().equals(found.getName()));
+        });
+    }
+
+    public static void moveToRoot(Node node, String bone) {
+        List<Node> nodes = new ArrayList<>();
+        selectBone(node, bone, nodes);
+        nodes.forEach(found -> {
+            Node parent = found.getParent();
+            found.getChildren().forEach(child -> child.setParent(parent));
+            parent.getChildren().addAll(found.getChildren());
+            String foundName = found.getName();
+            parent.getChildren().removeIf(child -> child.getName().equals(foundName));
+        });
+    }
+
+    public static void preProcessBones(Node node, String... bones) {
+        Arrays.asList(bones).forEach(bone -> {
+            if (bone == null || "".equals(bone)) {
+                return;
+            } else if (bone.toCharArray()[0] == '+') {
+                moveToRoot(node, bone.substring(1));
+            } else if (bone.toCharArray()[0] == '-') {
+                moveFromRoot(node, bone.substring(1));
+            } else if (bone.toCharArray()[0] == '!') {
+                int times = bone.toCharArray()[1];
+                for (int i = times; i > 0; i--) {
+                    processDuplications(node);
+                }
+            }
+        });
+    }
+
+    public static void selectBone(Node node, String bone, List<Node> nodes) {
+        node.getChildren().forEach(child -> {
+            if (Node.Type.ROOT != child.getType() &&
+                    child.getType() != Node.Type.END &&
+                    child.getName().equals(bone)) {
+                nodes.add(child);
+            }
+            selectBone(child, bone, nodes);
+        });
+    }
+
+    public static void postProcessSelfColliding(DSpace space, DWorld world, DJointGroup contactGroup) {
+        DGeom.DNearCallback nearCallback = (data, o1, o2) -> {
+            // exit without doing anything if the two bodies are connected by a joint
+            DBody b1 = o1.getBody();
+            DBody b2 = o2.getBody();
+            if (b1 != null && b2 != null && areConnectedExcluding(b1, b2, DContactJoint.class)) {
+                return;
+            } else {
+                DFixedJoint joint = OdeHelper.createFixedJoint(world);
+                joint.attach(b1, b2);
+                joint.setFixed();
+            }
+        };
+        space.collide(null, nearCallback);
+        world.quickStep(0.01);
+        contactGroup.empty();
+    }
 }

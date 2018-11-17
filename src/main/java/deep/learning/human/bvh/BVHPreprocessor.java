@@ -13,7 +13,17 @@ import deep.learning.human.utils.config.HumanConfig;
 public class BVHPreprocessor {
 
     public static void main(String[] args) throws IOException {
-        HumanConfig preprocessed = HumanoidBuilder.build("1.bvh");
+        HumanConfig preprocessed = HumanoidBuilder.build("1.bvh",
+                "+__LeftShoulder",
+                "+__RightShoulder",
+                "!2"
+/*                "+Neck1",
+                "+Spine1",
+                "+__LeftShoulder",
+                "+__RightShoulder",
+                "+RightUpLeg",
+                "+LeftUpLeg",
+                "-Neck"*/);
         File targetFile = new File("src/main/resources/bvh/" + "preprocessed.json");
         OutputStream outStream = new FileOutputStream(targetFile);
         new ObjectMapper().writeValue(outStream, preprocessed);
