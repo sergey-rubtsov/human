@@ -27,11 +27,21 @@ public class Humanoid implements Human {
         return mass;
     }
 
-    public List<HumanBone> getBones() {
+    @Override
+    public Map<String, HumanBone> getBones() {
+        return bones;
+    }
+
+    @Override
+    public Map<String, HumanJoint> getJoints() {
+        return joints;
+    }
+
+    public List<HumanBone> getBonesList() {
         return new ArrayList<>(bones.values());
     }
 
-    public List<HumanJoint> getJoints() {
+    public List<HumanJoint> getJointsList() {
         return new ArrayList<>(joints.values());
     }
 

@@ -12,6 +12,7 @@ import deep.learning.human.HumanBone;
 import deep.learning.human.HumanJoint;
 import deep.learning.human.bvh.Node;
 import deep.learning.human.bvh.Skeleton;
+import deep.learning.human.humanoid.joints.JointBuilder;
 import deep.learning.human.utils.Utils;
 import deep.learning.human.utils.config.BoneConfig;
 import deep.learning.human.utils.config.HumanConfig;

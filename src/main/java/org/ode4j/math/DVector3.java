@@ -664,6 +664,18 @@ public class DVector3 implements DVector3I, DVector3C {
     }
 
     /**
+     * @param b
+     * @param c
+     * @return b x c vector.
+     */
+    public static DVector3C cross(DVector3C b, DVector3C c) {
+        return new DVector3(
+                b.get1() * c.get2() - b.get2() * c.get1(),
+                b.get2() * c.get0() - b.get0() * c.get2(),
+                b.get0() * c.get1() - b.get1() * c.get0());
+    }
+
+    /**
      * Calculates the ordinary matrix product for a 3x3 Matrix and a 3-Vector.
      * <pre>
      * a0 = m00*v0 + m01*v1 + m02*v2

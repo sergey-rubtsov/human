@@ -1,25 +1,23 @@
-package deep.learning.human.humanoid;
+package deep.learning.human.humanoid.joints;
 
 import deep.learning.human.HumanBone;
 import deep.learning.human.HumanJoint;
 import deep.learning.human.JointType;
+import org.ode4j.ode.DHingeJoint;
 import org.ode4j.ode.DJoint;
 
-public class Joint implements HumanJoint {
+public abstract class Joint implements HumanJoint {
 
     private final String name;
-    private final JointType type;
     private final HumanBone parent;
     private final HumanBone child;
     private final DJoint joint;
 
     public Joint(String name,
-                 JointType type,
                  HumanBone parent,
                  HumanBone child,
                  DJoint joint) {
         this.name = name;
-        this.type = type;
         this.parent = parent;
         this.child = child;
         this.joint = joint;
@@ -31,9 +29,7 @@ public class Joint implements HumanJoint {
     }
 
     @Override
-    public JointType getType() {
-        return type;
-    }
+    public abstract JointType getType();
 
     @Override
     public HumanBone getParent() {
@@ -49,4 +45,5 @@ public class Joint implements HumanJoint {
     public DJoint getJoint() {
         return joint;
     }
+
 }

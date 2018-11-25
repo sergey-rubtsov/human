@@ -37,8 +37,6 @@ public class Csetjmp extends Cstdarg {
         int _ret = 0;
     }
 
-    ;
-
     /**
      * @param jump_buffer
      * @param i

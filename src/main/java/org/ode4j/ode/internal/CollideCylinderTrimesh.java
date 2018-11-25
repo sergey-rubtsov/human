@@ -68,19 +68,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
         return dCollideCylinderTrimesh((DxCylinder) o1, (DxGimpact) o2, flags, contacts, 1);
     }
 
-
-//
-//	#include <ode/collision.h>
-//	#include <ode/matrix.h>
-//	#include <ode/rotation.h>
-//	#include <ode/odemath.h>
-//	#include "collision_util.h"
-//	#include "collision_trimesh_internal.h"
-//	#include "util.h"
-//
-//	#if dTRIMESH_ENABLED
-
-    //#define MAX_REAL	dInfinity
     private static final double MAX_REAL = Common.dInfinity;
     private static final int nCYLINDER_AXIS = 2;
     private static final int nCYLINDER_CIRCLE_SEGMENTS = 8;
@@ -98,37 +85,12 @@ public class CollideCylinderTrimesh implements DColliderFn {
         int nFlags; // 0 = filtered out, 1 = OK
     }
 
-    ;//sLocalContactData;
-
     private static class sCylinderTrimeshColliderData {
-        //sCylinderTrimeshColliderData(int flags, int skip):
-        //m_iFlags(flags), m_iSkip(skip), m_nContacts(0), m_gLocalContacts(NULL) {}
         sCylinderTrimeshColliderData(int flags, int skip) {
             m_iFlags = flags;
-//			m_iSkip = skip;
             m_nContacts = 0;
             m_gLocalContacts = null;
         }
-
-////	#ifdef OPTIMIZE_CONTACTS
-//		void _OptimizeLocalContacts();
-////	#endif
-//		void _InitCylinderTrimeshData(dxGeom *Cylinder, dxTriMesh *Trimesh);
-//		int	_ProcessLocalContacts(dContactGeom *contact, dxGeom *Cylinder, dxTriMesh *Trimesh);
-//
-//		bool _cldTestAxis(const dVector3 &v0, const dVector3 &v1, const dVector3 &v2, 
-//			dVector3& vAxis, int iAxis, bool bNoFlip = false);
-//		bool _cldTestCircleToEdgeAxis(
-//			const dVector3 &v0, const dVector3 &v1, const dVector3 &v2,
-//			const dVector3 &vCenterPoint, const dVector3 &vCylinderAxis1,
-//			const dVector3 &vVx0, const dVector3 &vVx1, int iAxis);
-//		bool _cldTestSeparatingAxes(const dVector3 &v0, const dVector3 &v1, const dVector3 &v2);
-//		bool _cldClipCylinderEdgeToTriangle(const dVector3 &v0, const dVector3 &v1, const dVector3 &v2);
-//		void _cldClipCylinderToTriangle(const dVector3 &v0, const dVector3 &v1, const dVector3 &v2);
-//		void TestOneTriangleVsCylinder(const dVector3 &v0, const dVector3 &v1, const dVector3 &v2, 
-//			const bool bDoubleSided);
-//		int TestCollisionForSingleTriangle(int ctContacts0, int Triint, dVector3 dv[3], 
-//			bool &bOutFinishSearching);
 
         // cylinder data
         private final DMatrix3 m_mCylinderRot = new DMatrix3();
@@ -166,14 +128,10 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
         // ODE stuff
         int m_iFlags;
-        //TZ		int					m_iSkip;
-        int m_nContacts;// = 0;
-        //sLocalContactData*	m_gLocalContacts;
+
+        int m_nContacts;
+
         sLocalContactData[] m_gLocalContacts;
-        //};
-
-
-//	#ifdef OPTIMIZE_CONTACTS
 
         // Use to classify contacts to be "near" in position
         private static final double fSameContactPositionEpsilon = (0.0001); // 1e-4
@@ -235,18 +193,13 @@ public class CollideCylinderTrimesh implements DColliderFn {
                 }
             }
         }
-//	#endif // OPTIMIZE_CONTACTS
 
-        //	int	sCylinderTrimeshColliderData::_ProcessLocalContacts(dContactGeom *contact,
-//		dxGeom *Cylinder, dxTriMesh *Trimesh)
         int _ProcessLocalContacts(DContactGeomBuffer contacts,
                                   DxCylinder Cylinder, DxTriMesh Trimesh) {
-//	#ifdef OPTIMIZE_CONTACTS
             if (m_nContacts > 1 && !((m_iFlags & OdeConstants.CONTACTS_UNIMPORTANT) != 0)) {
                 // Can be optimized...
                 _OptimizeLocalContacts();
             }
-//	#endif		
 
             int iContact = 0;
             DContactGeom Contact = null;
@@ -255,40 +208,22 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
             for (iContact = 0; iContact < m_nContacts; iContact++) {
                 if (1 == m_gLocalContacts[iContact].nFlags) {
-                    //getSAFECONTACT(m_iFlags, contact, nFinalContact, m_iSkip);
                     Contact = contacts.getSafe(m_iFlags, nFinalContact);
                     Contact.depth = m_gLocalContacts[iContact].fDepth;
-                    //dVector3Copy(m_gLocalContacts[iContact].vNormal,Contact.normal);
                     Contact.normal.set(m_gLocalContacts[iContact].vNormal);
-                    //dVector3Copy(m_gLocalContacts[iContact].vPos,Contact.pos);
                     Contact.pos.set(m_gLocalContacts[iContact].vPos);
                     Contact.g1 = Cylinder;
                     Contact.g2 = Trimesh;
                     Contact.side1 = -1;
                     Contact.side2 = m_gLocalContacts[iContact].triIndex;
-                    //dVector3Inv(Contact.normal);
                     Contact.normal.scale(-1);
 
                     nFinalContact++;
                 }
             }
-            // debug
-            //if (nFinalContact != m_nContacts)
-            //{
-            //	printf("[Info] %d contacts generated,%d  filtered.\n",m_nContacts,m_nContacts-nFinalContact);
-            //}
-
             return nFinalContact;
         }
 
-
-        //	bool sCylinderTrimeshColliderData::_cldTestAxis(
-//					  const dVector3 &v0,
-//					  const dVector3 &v1,
-//					  const dVector3 &v2, 
-//	                  dVector3& vAxis, 
-//					  int iAxis,
-//					  bool bNoFlip/* = false*/)
         boolean _cldTestAxis(
                 final DVector3C v0,
                 final DVector3C v1,
@@ -306,9 +241,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             }
 
             // otherwise normalize it
-//		vAxis[0] /= fL;
-//		vAxis[1] /= fL;
-//		vAxis[2] /= fL;
             vAxis.scale(1. / fL);
 
             double fdot1 = m_vCylinderAxis.dot(vAxis);//dVector3Dot(m_vCylinderAxis,vAxis);
@@ -316,7 +248,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             double frc;
 
             if (Math.abs(fdot1) > (1.0)) {
-//			fdot1 = REAL(1.0);
                 frc = Math.abs(m_fCylinderSize * (0.5));
             } else {
                 frc = Math.abs((m_fCylinderSize * (0.5)) * fdot1)
@@ -385,10 +316,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
         }
 
         // intersection test between edge and circle
-//	bool sCylinderTrimeshColliderData::_cldTestCircleToEdgeAxis(
-//		const dVector3 &v0, const dVector3 &v1, const dVector3 &v2,
-//		const dVector3 &vCenterPoint, const dVector3 &vCylinderAxis1,
-//		const dVector3 &vVx0, const dVector3 &vVx1, int iAxis) 
         boolean _cldTestCircleToEdgeAxis(
                 final DVector3C v0, final DVector3C v1, final DVector3C v2,
                 final DVector3C vCenterPoint, final DVector3C vCylinderAxis1,
@@ -414,10 +341,7 @@ public class CollideCylinderTrimesh implements DColliderFn {
             DVector3 vTemp = new DVector3();
             dVector3Subtract(vCenterPoint, vol, vTemp);
             double fdot1 = vTemp.dot(vCylinderAxis1);
-            DVector3 vpnt = new DVector3();// = vol + vkl * (fdot1/fdot2);
-//		vpnt[0] = vol[0] + vkl[0] * fdot1/fdot2;
-//		vpnt[1] = vol[1] + vkl[1] * fdot1/fdot2;
-//		vpnt[2] = vol[2] + vkl[2] * fdot1/fdot2;
+            DVector3 vpnt = new DVector3();
             vpnt.eqSum(vol, vkl, fdot1 / fdot2);
 
             // find tangent vector on circle with same center (vCenterPoint) that touches point of intersection (vpnt)
@@ -434,11 +358,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
         }
 
         // helper for less key strokes
-        // r = ( (v1 - v2) cross v3 ) cross v3
-//	inline void _CalculateAxis(const dVector3& v1,
-//							   const dVector3& v2,
-//							   const dVector3& v3,
-//							   dVector3& r)
         private static final void _CalculateAxis(final DVector3C v1,
                                                  final DVector3C v2,
                                                  final DVector3C v3,
@@ -451,10 +370,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             OdeMath.dCalcVectorCross3(r, t2, v3);//dVector3Cross(t2,v3,r);
         }
 
-        //	boolean sCylinderTrimeshColliderData::_cldTestSeparatingAxes(
-//								const dVector3 &v0,
-//								const dVector3 &v1,
-//								const dVector3 &v2) 
         boolean _cldTestSeparatingAxes(
                 final DVector3C v0,
                 final DVector3C v1,
@@ -467,49 +382,31 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
             // calculate caps centers in absolute space
             DVector3 vCp0 = new DVector3();
-//		vCp0[0] = m_vCylinderPos[0] + m_vCylinderAxis[0]*(m_fCylinderSize* REAL(0.5));
-//		vCp0[1] = m_vCylinderPos[1] + m_vCylinderAxis[1]*(m_fCylinderSize* REAL(0.5));
-//		vCp0[2] = m_vCylinderPos[2] + m_vCylinderAxis[2]*(m_fCylinderSize* REAL(0.5));
             vCp0.eqSum(m_vCylinderPos, m_vCylinderAxis, m_fCylinderSize * 0.5);
-
-//	#if 0
-//		DVector3 vCp1 = new DVector3();
-////		vCp1[0] = m_vCylinderPos[0] - m_vCylinderAxis[0]*(m_fCylinderSize* REAL(0.5));
-////		vCp1[1] = m_vCylinderPos[1] - m_vCylinderAxis[1]*(m_fCylinderSize* REAL(0.5));
-////		vCp1[2] = m_vCylinderPos[2] - m_vCylinderAxis[2]*(m_fCylinderSize* REAL(0.5));
-//		vCp1.eqSum( m_vCylinderPos, m_vCylinderAxis, -m_fCylinderSize* 0.5);
-//	#endif
 
             // reset best axis
             m_iBestAxis = 0;
             DVector3 vAxis = new DVector3();
 
             // axis m_vNormal
-            //vAxis = -m_vNormal;
-//		vAxis[0] = -m_vNormal[0];
-//		vAxis[1] = -m_vNormal[1];
-//		vAxis[2] = -m_vNormal[2];
             vAxis.set(m_vNormal).scale(-1);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 1, true)) {
                 return false;
             }
 
             // axis CxE0
-            // vAxis = ( m_vCylinderAxis cross m_vE0 );
             dVector3Cross(m_vCylinderAxis, m_vE0, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 2, false)) {
                 return false;
             }
 
             // axis CxE1
-            // vAxis = ( m_vCylinderAxis cross m_vE1 );
             dVector3Cross(m_vCylinderAxis, m_vE1, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 3, false)) {
                 return false;
             }
 
             // axis CxE2
-            // vAxis = ( m_vCylinderAxis cross m_vE2 );
             dVector3Cross(m_vCylinderAxis, m_vE2, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 4, false)) {
                 return false;
@@ -517,7 +414,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
             // first vertex on triangle
             // axis ((V0-Cp0) x C) x C
-            //vAxis = ( ( v0-vCp0 ) cross m_vCylinderAxis ) cross m_vCylinderAxis;
             _CalculateAxis(v0, vCp0, m_vCylinderAxis, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 11, false)) {
                 return false;
@@ -525,7 +421,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
             // second vertex on triangle
             // axis ((V1-Cp0) x C) x C
-            // vAxis = ( ( v1-vCp0 ) cross m_vCylinderAxis ) cross m_vCylinderAxis;
             _CalculateAxis(v1, vCp0, m_vCylinderAxis, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 12, false)) {
                 return false;
@@ -533,14 +428,12 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
             // third vertex on triangle
             // axis ((V2-Cp0) x C) x C
-            //vAxis = ( ( v2-vCp0 ) cross m_vCylinderAxis ) cross m_vCylinderAxis;
             _CalculateAxis(v2, vCp0, m_vCylinderAxis, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 13, false)) {
                 return false;
             }
 
             // test cylinder axis
-            // vAxis = m_vCylinderAxis;
             dVector3Copy(m_vCylinderAxis, vAxis);
             if (!_cldTestAxis(v0, v1, v2, vAxis, 14, false)) {
                 return false;
@@ -548,17 +441,10 @@ public class CollideCylinderTrimesh implements DColliderFn {
 
             // Test top and bottom circle ring of cylinder for separation
             DVector3 vccATop = new DVector3();
-//		vccATop[0] = m_vCylinderPos[0] + m_vCylinderAxis[0]*(m_fCylinderSize * (0.5));
-//		vccATop[1] = m_vCylinderPos[1] + m_vCylinderAxis[1]*(m_fCylinderSize * (0.5));
-//		vccATop[2] = m_vCylinderPos[2] + m_vCylinderAxis[2]*(m_fCylinderSize * (0.5));
             vccATop.eqSum(m_vCylinderPos, m_vCylinderAxis, m_fCylinderSize * 0.5);
 
             DVector3 vccABottom = new DVector3();
-//		vccABottom[0] = m_vCylinderPos[0] - m_vCylinderAxis[0]*(m_fCylinderSize * (0.5));
-//		vccABottom[1] = m_vCylinderPos[1] - m_vCylinderAxis[1]*(m_fCylinderSize * (0.5));
-//		vccABottom[2] = m_vCylinderPos[2] - m_vCylinderAxis[2]*(m_fCylinderSize * (0.5));
             vccABottom.eqSum(m_vCylinderPos, m_vCylinderAxis, -m_fCylinderSize * (0.5));
-
 
             if (!_cldTestCircleToEdgeAxis(v0, v1, v2, vccATop, m_vCylinderAxis, v0, v1, 15)) {
                 return false;
@@ -587,68 +473,40 @@ public class CollideCylinderTrimesh implements DColliderFn {
             return true;
         }
 
-        //	bool sCylinderTrimeshColliderData::_cldClipCylinderEdgeToTriangle(
-//		const dVector3 &v0, const dVector3 &v1, const dVector3 &v2)
         boolean _cldClipCylinderEdgeToTriangle(
                 final DVector3C v0, final DVector3C v1, final DVector3C v2) {
             // translate cylinder
-            double fTemp = m_vCylinderAxis.dot(m_vContactNormal);//dVector3Dot(m_vCylinderAxis , m_vContactNormal);
+            double fTemp = m_vCylinderAxis.dot(m_vContactNormal);
             DVector3 vN2 = new DVector3();
-//		vN2[0] = m_vContactNormal[0] - m_vCylinderAxis[0]*fTemp;
-//		vN2[1] = m_vContactNormal[1] - m_vCylinderAxis[1]*fTemp;
-//		vN2[2] = m_vContactNormal[2] - m_vCylinderAxis[2]*fTemp;
             vN2.eqSum(m_vContactNormal, m_vCylinderAxis, -fTemp);
 
-
-            fTemp = vN2.length();//dVector3Length(vN2);
+            fTemp = vN2.length();
             if (fTemp < (1e-5)) {
                 return false;
             }
 
             // Normalize it
-//		vN2[0] /= fTemp;
-//		vN2[1] /= fTemp;
-//		vN2[2] /= fTemp;
             vN2.scale(1. / fTemp);
 
             // calculate caps centers in absolute space
             DVector3 vCposTrans = new DVector3();
-//		vCposTrans[0] = m_vCylinderPos[0] + vN2[0]*m_fCylinderRadius;
-//		vCposTrans[1] = m_vCylinderPos[1] + vN2[1]*m_fCylinderRadius;
-//		vCposTrans[2] = m_vCylinderPos[2] + vN2[2]*m_fCylinderRadius;
             vCposTrans.eqSum(m_vCylinderPos, vN2, m_fCylinderRadius);
 
             DVector3 vCEdgePoint0 = new DVector3();
-//		vCEdgePoint0[0]  = vCposTrans[0] + m_vCylinderAxis[0] * (m_fCylinderSize* (0.5));
-//		vCEdgePoint0[1]  = vCposTrans[1] + m_vCylinderAxis[1] * (m_fCylinderSize* (0.5));
-//		vCEdgePoint0[2]  = vCposTrans[2] + m_vCylinderAxis[2] * (m_fCylinderSize* (0.5));
             vCEdgePoint0.eqSum(vCposTrans, m_vCylinderAxis, m_fCylinderSize * (0.5));
 
             DVector3 vCEdgePoint1 = new DVector3();
-//		vCEdgePoint1[0]  = vCposTrans[0] - m_vCylinderAxis[0] * (m_fCylinderSize* REAL(0.5));
-//		vCEdgePoint1[1]  = vCposTrans[1] - m_vCylinderAxis[1] * (m_fCylinderSize* REAL(0.5));
-//		vCEdgePoint1[2]  = vCposTrans[2] - m_vCylinderAxis[2] * (m_fCylinderSize* REAL(0.5));
             vCEdgePoint1.eqSum(vCposTrans, m_vCylinderAxis, -m_fCylinderSize * 0.5);
 
             // transform cylinder edge points into triangle space
-//		vCEdgePoint0[0] -= v0[0];
-//		vCEdgePoint0[1] -= v0[1];
-//		vCEdgePoint0[2] -= v0[2];
             vCEdgePoint0.sub(v0);
 
-//		vCEdgePoint1[0] -= v0[0];
-//		vCEdgePoint1[1] -= v0[1];
-//		vCEdgePoint1[2] -= v0[2];
             vCEdgePoint1.sub(v0);
 
             DVector4 plPlane = new DVector4();
             DVector3 vPlaneNormal = new DVector3();
 
             // triangle plane
-            //plPlane = Plane4f( -m_vNormal, 0);
-//		vPlaneNormal[0] = -m_vNormal[0];
-//		vPlaneNormal[1] = -m_vNormal[1];
-//		vPlaneNormal[2] = -m_vNormal[2];
             vPlaneNormal.set(m_vNormal).scale(-1);
             dConstructPlane(vPlaneNormal, (0.0), plPlane);
             if (!dClipEdgeToPlane(vCEdgePoint0, vCEdgePoint1, plPlane)) {
@@ -656,7 +514,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             }
 
             // plane with edge 0
-            //plPlane = Plane4f( ( m_vNormal cross m_vE0 ), REAL(1e-5));
             dVector3Cross(m_vNormal, m_vE0, vPlaneNormal);
             dConstructPlane(vPlaneNormal, (1e-5), plPlane);
             if (!dClipEdgeToPlane(vCEdgePoint0, vCEdgePoint1, plPlane)) {
@@ -664,7 +521,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             }
 
             // plane with edge 1
-            //dVector3 vTemp = ( m_vNormal cross m_vE1 );
             dVector3Cross(m_vNormal, m_vE1, vPlaneNormal);
             fTemp = m_vE0.dot(vPlaneNormal) - (1e-5);
             //plPlane = Plane4f( vTemp, -(( m_vE0 dot vTemp )-REAL(1e-5)));
@@ -674,7 +530,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             }
 
             // plane with edge 2
-            // plPlane = Plane4f( ( m_vNormal cross m_vE2 ), REAL(1e-5));
             dVector3Cross(m_vNormal, m_vE2, vPlaneNormal);
             dConstructPlane(vPlaneNormal, (1e-5), plPlane);
             if (!dClipEdgeToPlane(vCEdgePoint0, vCEdgePoint1, plPlane)) {
@@ -682,14 +537,8 @@ public class CollideCylinderTrimesh implements DColliderFn {
             }
 
             // return capsule edge points into absolute space
-//		vCEdgePoint0[0] += v0[0];
-//		vCEdgePoint0[1] += v0[1];
-//		vCEdgePoint0[2] += v0[2];
             vCEdgePoint0.add(v0);
 
-//		vCEdgePoint1[0] += v0[0];
-//		vCEdgePoint1[1] += v0[1];
-//		vCEdgePoint1[2] += v0[2];
             vCEdgePoint1.add(v0);
 
             // calculate depths for both contact points
@@ -737,17 +586,12 @@ public class CollideCylinderTrimesh implements DColliderFn {
             return true;
         }
 
-        //	void sCylinderTrimeshColliderData::_cldClipCylinderToTriangle(
-//		const dVector3 &v0, const dVector3 &v1, const dVector3 &v2)
         void _cldClipCylinderToTriangle(
                 final DVector3C v0, final DVector3C v1, final DVector3C v2) {
             int i = 0;
             DVector3[] avPoints = {new DVector3(), new DVector3(), new DVector3()};//[3];
             DVector3[] avTempArray1 = DVector3.newArray(nMAX_CYLINDER_TRIANGLE_CLIP_POINTS);
             DVector3[] avTempArray2 = DVector3.newArray(nMAX_CYLINDER_TRIANGLE_CLIP_POINTS);
-
-//		dSetZero(avTempArray1[0][0],nMAX_CYLINDER_TRIANGLE_CLIP_POINTS * 4);
-//		dSetZero(avTempArray2[0][0],nMAX_CYLINDER_TRIANGLE_CLIP_POINTS * 4);
 
             // setup array of triangle vertices
             dVector3Copy(v0, avPoints[0]);
@@ -759,17 +603,11 @@ public class CollideCylinderTrimesh implements DColliderFn {
             // check which circle from cylinder we take for clipping
             if (m_vCylinderAxis.dot(m_vContactNormal) > (0.0)) {
                 // get top circle
-//			vCylinderCirclePos[0] = m_vCylinderPos[0] + m_vCylinderAxis[0]*(m_fCylinderSize*(0.5));
-//			vCylinderCirclePos[1] = m_vCylinderPos[1] + m_vCylinderAxis[1]*(m_fCylinderSize*(0.5));
-//			vCylinderCirclePos[2] = m_vCylinderPos[2] + m_vCylinderAxis[2]*(m_fCylinderSize*(0.5));
                 vCylinderCirclePos.eqSum(m_vCylinderPos, m_vCylinderAxis, m_fCylinderSize * 0.5);
 
                 vCylinderCircleNormal_Rel.set(nCYLINDER_AXIS, -1.0);
             } else {
                 // get bottom circle
-//			vCylinderCirclePos[0] = m_vCylinderPos[0] - m_vCylinderAxis[0]*(m_fCylinderSize*(0.5));
-//			vCylinderCirclePos[1] = m_vCylinderPos[1] - m_vCylinderAxis[1]*(m_fCylinderSize*(0.5));
-//			vCylinderCirclePos[2] = m_vCylinderPos[2] - m_vCylinderAxis[2]*(m_fCylinderSize*(0.5));
                 vCylinderCirclePos.eqSum(m_vCylinderPos, m_vCylinderAxis, -m_fCylinderSize * 0.5);
 
                 vCylinderCircleNormal_Rel.set(nCYLINDER_AXIS, 1.0);
@@ -788,7 +626,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             DVector4 plPlane = new DVector4();
 
             // plane of cylinder that contains circle for intersection
-            //plPlane = Plane4f( vCylinderCircleNormal_Rel, 0.0f );
             dConstructPlane(vCylinderCircleNormal_Rel, (0.0), plPlane);
             iTmpCounter1 = dClipPolyToPlane(avPoints, 3, avTempArray1, plPlane);
 
@@ -815,9 +652,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             if (nCircleSegment % 2 != 0) {
                 for (i = 0; i < iTmpCounter2; i++) {
                     dQuatTransform(m_qCylinderRot, avTempArray2[i], vPoint);
-//				vPoint[0] += vCylinderCirclePos[0];
-//				vPoint[1] += vCylinderCirclePos[1];
-//				vPoint[2] += vCylinderCirclePos[2];
                     vPoint.add(vCylinderCirclePos);
 
                     dVector3Subtract(vPoint, m_vCylinderPos, vTemp);
@@ -838,9 +672,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             } else {
                 for (i = 0; i < iTmpCounter1; i++) {
                     dQuatTransform(m_qCylinderRot, avTempArray1[i], vPoint);
-//				vPoint[0] += vCylinderCirclePos[0];
-//				vPoint[1] += vCylinderCirclePos[1];
-//				vPoint[2] += vCylinderCirclePos[2];
                     vPoint.add(vCylinderCirclePos);
 
                     dVector3Subtract(vPoint, m_vCylinderPos, vTemp);
@@ -861,11 +692,6 @@ public class CollideCylinderTrimesh implements DColliderFn {
             }
         }
 
-        //	void sCylinderTrimeshColliderData::TestOneTriangleVsCylinder(
-//									  const dVector3 &v0, 
-//	                                  const dVector3 &v1, 
-//	                                  const dVector3 &v2, 
-//	                                  const bool bDoubleSided)
         void TestOneTriangleVsCylinder(
                 final DVector3C v0,
                 final DVector3C v1,

@@ -38,13 +38,7 @@ public class Objects_H {
 
     static final double dWORLD_DEFAULT_GLOBAL_ERP = 0.2;
 
-    //	#if defined(dSINGLE)
-//	#define dWORLD_DEFAULT_GLOBAL_CFM REAL(1e-5)
-//	#elif defined(dDOUBLE)
     static final double dWORLD_DEFAULT_GLOBAL_CFM = Common.dDOUBLE ? 1e-10 : 1e-5;
-//	#else
-//	#error dSINGLE or dDOUBLE must be defined
-//	#endif
 
     /**
      * auto disable parameters.
@@ -76,7 +70,6 @@ public class Objects_H {
         }
     }
 
-
     /**
      * damping parameters.
      */
@@ -104,7 +97,6 @@ public class Objects_H {
         }
     }
 
-
     /**
      * quick-step parameters.
      */
@@ -123,7 +115,6 @@ public class Objects_H {
             w = 1.3;
         }
     }
-
 
     /**
      * contact generation parameters.

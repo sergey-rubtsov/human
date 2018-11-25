@@ -138,4 +138,19 @@ public class DxJointConstrainedBall extends DxJointBall {
         limotTwist.set(PARAM.dParamHiStop, twistLimit);
     }
 
+    public DVector3 getBaseAxis() {
+        return baseAxis;
+    }
+
+    public DVector3 getBody2Axis() {
+        return body2Axis;
+    }
+
+    public DVector3 getAxis1() {
+        return axis1;
+    }
+
+    public DVector3 getAxis2() {
+        return axis2;
+    }
 }

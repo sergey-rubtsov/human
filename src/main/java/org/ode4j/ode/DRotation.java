@@ -56,18 +56,10 @@ public class DRotation extends DMatrix {
         Rotation.dRFromEulerAngles(R, phi, theta, psi);
     }
 
-    //    public static void dRFrom2Axes (dMatrix3 R, dReal ax, dReal ay, dReal az,
-//              dReal bx, dReal by, dReal bz);
-//
-//    public static void dRFromZAxis (DMatrix3 R, double ax, double ay, double az) {
-//        Rotation.dRFromZAxis(R, ax, ay, az);
-//    }
     public static void dRFromZAxis(DMatrix3 R, DVector3C a) {
         Rotation.dRFromZAxis(R, a);
     }
 
-    //    public static void dQSetIdentity (dQuaternion q);
-//
     public static void dQFromAxisAndAngle(DQuaternion q, double ax, double ay,
                                           double az, double angle) {
         Rotation.dQFromAxisAndAngle(q, ax, ay, az, angle);

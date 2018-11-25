@@ -71,46 +71,31 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
         info.setCfm(0, this.cfm);
 
         DVector3 globalA1 = new DVector3(), globalA2 = new DVector3();
-        //dBodyGetRelPointPos(node[0].body, anchor1[0], anchor1[1], anchor1[2], globalA1);
         node[0].body.getRelPointPos(anchor1, globalA1);
         if (node[1].body != null)
-            //dBodyGetRelPointPos(node[1].body, anchor2[0], anchor2[1], anchor2[2], globalA2);
             node[1].body.getRelPointPos(anchor2, globalA2);
         else
-            //dCopyVector3(globalA2, anchor2);
             globalA2.set(anchor2);
 
         DVector3 q = new DVector3();
-        //dSubtractVectors3(q, globalA1, globalA2);
         q.eqDiff(globalA1, globalA2);
 
-        //    #ifdef dSINGLE
-        //        const dReal MIN_LENGTH = REAL(1e-7);
-        //    #else
         final double MIN_LENGTH = 1e-12;
-        //    #endif
 
         if (q.length() < MIN_LENGTH) {
             // too small, let's choose an arbitrary direction
             // heuristic: difference in velocities at anchors
             DVector3 v1 = new DVector3(), v2 = new DVector3();
-            //dBodyGetPointVel(node[0].body, globalA1[0], globalA1[1], globalA1[2], v1);
             node[0].body.getPointVel(globalA1, v1);
             if (node[1].body != null) {
-                //dBodyGetPointVel(node[1].body, globalA2[0], globalA2[1], globalA2[2], v2);
                 node[1].body.getPointVel(globalA2, v2);
             } else {
-                //dSetZero(v2, 3);
                 v2.setZero();
             }
-            //dSubtractVectors3(q, v1, v2);
             q.eqDiff(v1, v2);
 
             if (q.length() < MIN_LENGTH) {
                 // this direction is as good as any
-                //                q[0] = 1;
-                //                q[1] = 0;
-                //                q[2] = 0;
                 q.set(1, 0, 0);
             }
         }
@@ -119,79 +104,56 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
         info.setJ1l(0, q);
 
         DVector3 relA1 = new DVector3();
-        //        dBodyVectorToWorld(node[0].body,
-        //                           anchor1[0], anchor1[1], anchor1[2],
-        //                           relA1);
+
         node[0].body.vectorToWorld(anchor1, relA1);
 
         DMatrix3 a1m = new DMatrix3();
-        //dSetZero(a1m, 12);
-        dSetCrossMatrixMinus(a1m, relA1);//, 4);
+
+        dSetCrossMatrixMinus(a1m, relA1);
         DVector3 v = new DVector3();
         dMultiply1_331(v, a1m, q);
         info.setJ1a(0, v);
 
         if (node[1].body != null) {
             info.setJ2lNegated(0, q);
-
             DVector3 relA2 = new DVector3();
-            //            dBodyVectorToWorld(node[1].body,
-            //                               anchor2[0], anchor2[1], anchor2[2],
-            //                               relA2);
             node[1].body.vectorToWorld(anchor2, relA2);
             DMatrix3 a2m = new DMatrix3();
-            //dSetZero(a2m, 12);
-            dSetCrossMatrixPlus(a2m, relA2);//, 4);
+            dSetCrossMatrixPlus(a2m, relA2);
             dMultiply1_331(v, a2m, q);
             info.setJ2a(0, v);
         }
-
         final double k = worldFPS * this.erp;
-        //info.c[0] = k * (targetDistance - dCalcPointsDistance3(globalA1, globalA2));
         info.setC(0, k * (targetDistance - globalA1.distance(globalA2)));
     }
 
-
-    void
-    updateTargetDistance() {
+    void updateTargetDistance() {
         DVector3 p1 = new DVector3(), p2 = new DVector3();
 
         if (node[0].body != null)
-            //dBodyGetRelPointPos(node[0].body, anchor1[0], anchor1[1], anchor1[2], p1);
             node[0].body.getRelPointPos(anchor1, p1);
         else
-            //dCopyVector3(p1, anchor1);
             p1.set(anchor1);
         if (node[1].body != null)
-            //dBodyGetRelPointPos(node[1].body, anchor2[0], anchor2[1], anchor2[2], p2);
             node[1].body.getRelPointPos(anchor2, p2);
         else
-            //dCopyVector3(p2, anchor2);
             p2.set(anchor2);
 
-        targetDistance = p1.distance(p2);//dCalcPointsDistance3(p1, p2);
+        targetDistance = p1.distance(p2);
     }
-
 
     void dJointSetDBallAnchor1(DVector3C xyz) {
         if ((flags & dJOINT_REVERSE) != 0) {
             if (node[1].body != null)
-                //dBodyGetPosRelPoint(node[1].body, xyz, anchor2);
+
                 node[1].body.getPosRelPoint(xyz, anchor2);
             else {
-                //                anchor2[0] = x;
-                //                anchor2[1] = y;
-                //                anchor2[2] = z;
                 anchor2.set(xyz);
             }
         } else {
             if (node[0].body != null)
-                //dBodyGetPosRelPoint(node[0].body, x, y, z, anchor1);
                 node[0].body.getPosRelPoint(xyz, anchor1);
             else {
-                //                anchor1[0] = x;
-                //                anchor1[1] = y;
-                //                anchor1[2] = z;
                 anchor1.set(xyz);
             }
         }
@@ -199,26 +161,17 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
         updateTargetDistance();
     }
 
-
     void dJointSetDBallAnchor2(DVector3C xyz) {
         if ((flags & dJOINT_REVERSE) != 0) {
             if (node[0].body != null)
-                //dBodyGetPosRelPoint(node[0].body, x, y, z, anchor1);
                 node[0].body.getPosRelPoint(xyz, anchor1);
             else {
-                //                anchor1[0] = x;
-                //                anchor1[1] = y;
-                //                anchor1[2] = z;
                 anchor1.set(xyz);
             }
         } else {
             if (node[1].body != null)
-                //dBodyGetPosRelPoint(node[1].body, x, y, z, anchor2);
                 node[1].body.getPosRelPoint(xyz, anchor2);
             else {
-                //                anchor2[0] = x;
-                //                anchor2[1] = y;
-                //                anchor2[2] = z;
                 anchor2.set(xyz);
             }
         }
@@ -230,27 +183,21 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
         return targetDistance;
     }
 
-
     void dJointGetDBallAnchor1(DVector3 result) {
         dUASSERT(result, "bad result argument");
 
         if ((flags & dJOINT_REVERSE) != 0) {
             if (node[1].body != null)
-                //dBodyGetRelPointPos(node[1].body, anchor2[0], anchor2[1], anchor2[2], result);
                 node[1].body.getRelPointPos(anchor2, result);
             else
-                //dCopyVector3(result, anchor2);
                 result.set(anchor2);
         } else {
             if (node[0].body != null)
-                //dBodyGetRelPointPos(node[0].body, anchor1[0], anchor1[1], anchor1[2], result);
                 node[0].body.getRelPointPos(anchor1, result);
             else
-                //dCopyVector3(result, anchor1);
                 result.set(anchor1);
         }
     }
-
 
     void dJointGetDBallAnchor2(DVector3 result) {
         dUASSERT(result, "bad result argument");
@@ -259,14 +206,11 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
             if (node[0].body != null)
                 node[0].body.getRelPointPos(anchor1, result);
             else
-                //dCopyVector3(result, anchor1);
                 result.set(anchor1);
         } else {
             if (node[1].body != null)
-                //dBodyGetRelPointPos(node[1].body, anchor2[0], anchor2[1], anchor2[2], result);
                 node[1].body.getRelPointPos(anchor2, result);
             else
-                //dCopyVector3(result, anchor2);
                 result.set(anchor2);
         }
     }
@@ -285,7 +229,6 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
         }
     }
 
-
     double dJointGetDBallParam(DJoint.PARAM parameter) {
         switch (parameter) {
             case dParamCFM:
@@ -296,7 +239,6 @@ public class DxJointDBall extends DxJoint implements DDoubleBallJoint {
                 return 0;
         }
     }
-
 
     @Override
     void

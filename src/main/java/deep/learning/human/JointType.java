@@ -1,5 +1,5 @@
 package deep.learning.human;
 
 public enum JointType {
-    FIXED, HINGE, UNIVERSAL, CONSTRAINED_BALL
+    FIXED, HINGE, HINGE_2, UNIVERSAL, CONSTRAINED_BALL
 }

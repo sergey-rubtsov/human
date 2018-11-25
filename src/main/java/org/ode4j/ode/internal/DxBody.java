@@ -73,50 +73,44 @@ import static org.ode4j.ode.internal.Rotation.dRfromQ;
  */
 public class DxBody extends DObject implements DBody, Cloneable {
 
-    private static final int dxBodyFlagFiniteRotation = 1;    // use finite rotations
-    private static final int dxBodyFlagFiniteRotationAxis = 2;    // use finite rotations only along axis
-    static final int dxBodyDisabled = 4;        // body is disabled
-    static final int dxBodyNoGravity = 8;        // body is not influenced by gravity
-    static final int dxBodyAutoDisable = 16;    // enable auto-disable on body
-    static final int dxBodyLinearDamping = 32;    // using linear damping
-    static final int dxBodyAngularDamping = 64;    // use angular damping
-    static final int dxBodyMaxAngularSpeed = 128;    // use maximum angular speed
-    private static final int dxBodyGyroscopic = 256;    // use gyroscopic term
+    private static final int dxBodyFlagFiniteRotation = 1;          // use finite rotations
+    private static final int dxBodyFlagFiniteRotationAxis = 2;      // use finite rotations only along axis
+    static final int dxBodyDisabled = 4;                            // body is disabled
+    static final int dxBodyNoGravity = 8;                           // body is not influenced by gravity
+    static final int dxBodyAutoDisable = 16;                        // enable auto-disable on body
+    static final int dxBodyLinearDamping = 32;                      // using linear damping
+    static final int dxBodyAngularDamping = 64;                     // use angular damping
+    static final int dxBodyMaxAngularSpeed = 128;                   // use maximum angular speed
+    private static final int dxBodyGyroscopic = 256;                // use gyroscopic term
 
+    public final Ref<DxJointNode> firstjoint = new Ref<>();         // list of attached joints
 
-    //	  public dxJointNode firstjoint;	// list of attached joints
-    //TODO
-    public final Ref<DxJointNode> firstjoint = new Ref<DxJointNode>();    // list of attached joints
-    //unsigned
-    int flags;            // some dxBodyFlagXXX flags
-    //  public dGeom geom;			// first collision geom associated with body
-    public DxGeom geom;            // first collision geom associated with body
-    DxMass mass;            // mass parameters about POR
-    DMatrix3 invI;        // inverse of mass.I
-    public double invMass;        // 1 / mass.mass
-    public DxPosR _posr;            // position and orientation of point of reference
-    public DQuaternion _q;        // orientation quaternion
-    public DVector3 lvel;        // linear and angular velocity of POR
+    int flags;                              // some dxBodyFlagXXX flags
+    public DxGeom geom;                     // first collision geom associated with body
+    DxMass mass;                            // mass parameters about POR
+    DMatrix3 invI;                          // inverse of mass.I
+    public double invMass;                  // 1 / mass.mass
+    public DxPosR _posr;                    // position and orientation of point of reference
+    public DQuaternion _q;                  // orientation quaternion
+    public DVector3 lvel;                   // linear and angular velocity of POR
     public DVector3 avel;
-    DVector3 facc, tacc;        // force and torque accumulators
-    DVector3 finite_rot_axis;    // finite rotation axis, unit length or 0=none
+    DVector3 facc, tacc;                    // force and torque accumulators
+    DVector3 finite_rot_axis;               // finite rotation axis, unit length or 0=none
 
     // auto-disable information
-    dxAutoDisable adis;        // auto-disable parameters
-    double adis_timeleft;        // time left to be idle
-    int adis_stepsleft;        // steps left to be idle
-    //  dVector3* average_lvel_buffer;      // buffer for the linear average velocity calculation
-    //  dVector3* average_avel_buffer;      // buffer for the angular average velocity calculation
-    //  unsigned int average_counter;      // counter/index to fill the average-buffers
-    DVector3[] average_lvel_buffer;      // buffer for the linear average velocity calculation
-    DVector3[] average_avel_buffer;      // buffer for the angular average velocity calculation
-    //unsigned
-    int average_counter;      // counter/index to fill the average-buffers
-    int average_ready;            // indicates ( with = 1 ), if the Body's buffers are ready for average-calculations
+    dxAutoDisable adis;                     // auto-disable parameters
+    double adis_timeleft;                   // time left to be idle
+    int adis_stepsleft;                     // steps left to be idle
 
-    BodyMoveCallBack moved_callback; // let the user know the body moved
-    private dxDampingParameters dampingp; // damping parameters, depends on flags
-    double max_angular_speed;      // limit the angular velocity to this magnitude
+    DVector3[] average_lvel_buffer;         // buffer for the linear average velocity calculation
+    DVector3[] average_avel_buffer;         // buffer for the angular average velocity calculation
+    //unsigned
+    int average_counter;                    // counter/index to fill the average-buffers
+    int average_ready;                      // indicates ( with = 1 ), if the Body's buffers are ready for average-calculations
+
+    BodyMoveCallBack moved_callback;        // let the user know the body moved
+    private dxDampingParameters dampingp;   // damping parameters, depends on flags
+    double max_angular_speed;               // limit the angular velocity to this magnitude
 
     protected DxBody(DxWorld w) {
         super(w);
@@ -139,28 +133,27 @@ public class DxBody extends DObject implements DBody, Cloneable {
         b.mass = new DxMass();
         b.mass.dMassSetParameters(1, 0, 0, 0, 1, 1, 1, 0, 0, 0);
         b.invI = new DMatrix3();
-        //MAT.dSetZero (b.invI.v,4*3);
+
         b.invI.set00(1);
         b.invI.set11(1);
         b.invI.set22(1);
         b.invMass = 1;
         b._posr = new DxPosR();
-        //MAT.dSetZero (b.posr.pos.v,4);
+
         b._q = new DQuaternion();
-        //MAT.dSetZero (b._q.v,4);
+
         b._q.set(0, 1);
         b._posr.Rw().setIdentity();
         b.lvel = new DVector3();
-        //MAT.dSetZero (b.lvel.v,4);
+
         b.avel = new DVector3();
-        //MAT.dSetZero (b.avel.v,4);
+
         b.facc = new DVector3();
-        //MAT.dSetZero (b.facc.v,4);
+
         b.tacc = new DVector3();
-        //MAT.dSetZero (b.tacc.v,4);
+
         b.finite_rot_axis = new DVector3();
-        //MAT.dSetZero (b.finite_rot_axis.v,4);
-        //addObjectToList (b,(dObject **) &w.firstbody);
+
         addObjectToList(b, w.firstbody);
         w.nb++;
 
@@ -185,8 +178,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         return b;
     }
 
-
-    //		public void dBodyDestroy (dxBody b)
     public void dBodyDestroy() {
         //dAASSERT (b);
 
@@ -217,32 +208,16 @@ public class DxBody extends DObject implements DBody, Cloneable {
 
         // delete the average buffers
         //TZ nothing to do
-        //			if(average_lvel_buffer!= null)
-        //			{
-        //				delete[] (average_lvel_buffer);
-        //				average_lvel_buffer = null;
-        //			}
-        //			if(average_avel_buffer!= null)
-        //			{
-        //				delete[] (average_avel_buffer);
-        //				average_avel_buffer = null;
-        //			}
-        //
-        //			delete b;
         DESTRUCTOR();
     }
 
-
-    //public void dBodySetData (dxBody b, Object data)
     public void dBodySetData(Object data) {
         userdata = data;
     }
 
-
     public Object dBodyGetData() {
         return userdata;
     }
-
 
     public void dBodySetPosition(double x, double y, double z) {
         _posr.pos.set(x, y, z);
@@ -261,10 +236,7 @@ public class DxBody extends DObject implements DBody, Cloneable {
             geom2.dGeomMoved();
     }
 
-
-    //		public void dBodySetRotation (dxBody b, final dMatrix3 R)
     public void dBodySetRotation(DMatrix3C R) {
-        //memcpy(b->posr.R, R, sizeof(dMatrix3));
         _posr.Rw().set(R);
         dOrthogonalizeR(_posr.Rw());
         dQfromR(_q, R);
@@ -276,24 +248,16 @@ public class DxBody extends DObject implements DBody, Cloneable {
         }
     }
 
-
-    //		void dBodySetQuaternion (dxBody b, final dQuaternion q)
     public void dBodySetQuaternion(DQuaternionC q) {
         //dAASSERT (q);
-        //			_q.v[0] = q.v[0];
-        //			_q.v[1] = q.v[1];
-        //			_q.v[2] = q.v[2];
-        //			_q.v[3] = q.v[3];
         _q.set(q);
         dNormalize4(_q);
-        //dQtoR (b.q, b.posr.R);
         dRfromQ(_posr.Rw(), _q);
 
         // notify all attached geoms that this body has moved
         for (DxGeom geom2 = geom; geom2 != null; geom2 = geom2.dGeomGetBodyNext())
             geom2.dGeomMoved();
     }
-
 
     public void dBodySetLinearVel(double x, double y, double z) {
         lvel.set(x, y, z);
@@ -312,73 +276,41 @@ public class DxBody extends DObject implements DBody, Cloneable {
         avel.set(xyz);
     }
 
-
-    //		public final double[] dBodyGetPosition (dxBody b)
     public DVector3C dBodyGetPosition() {
         return _posr.pos();
     }
 
-
     void dBodyCopyPosition(DxBody b, DVector3 pos) {
-        //			dAASSERT (b);
-        //double[] src = b.posr.pos.v;
-        //			pos.v[0] = src[0];
-        //			pos.v[1] = src[1];
-        //			pos.v[2] = src[2];
+        // dAASSERT (b);
         pos.set(b._posr.pos());
     }
 
-
-    //		public final double[] dBodyGetRotation (dxBody b)
     public DMatrix3C dBodyGetRotation() {
         return _posr.R();
     }
 
-
     void dBodyCopyRotation(DxBody b, DMatrix3 R) {
-        //			dAASSERT (b);
-        //			final double[] src = b.posr.R.v;
-        //			R.v[0] = src[0];
-        //			R.v[1] = src[1];
-        //			R.v[2] = src[2];
-        //			R.v[3] = src[3];
-        //			R.v[4] = src[4];
-        //			R.v[5] = src[5];
-        //			R.v[6] = src[6];
-        //			R.v[7] = src[7];
-        //			R.v[8] = src[8];
-        //			R.v[9] = src[9];
-        //			R.v[10] = src[10];
-        //			R.v[11] = src[11];
+        // dAASSERT (b);
         //TODO clean up commented code and other TODO below (add(f), e.t.c)
         R.set(b._posr.R());
     }
 
-
-    //		final double[] dBodyGetQuaternion (dxBody b)
     public DQuaternionC dBodyGetQuaternion() {
         return _q;
     }
-
 
     void dBodyCopyQuaternion(DxBody b, DQuaternion quat) {
         quat.set(b._q);
     }
 
-
-    //		final double[] dBodyGetLinearVel (dxBody b)
     public DVector3C dBodyGetLinearVel() {
         return lvel;
     }
 
-
-    //		final double[] dBodyGetAngularVel (dxBody b)
     public DVector3C dBodyGetAngularVel() {
         return avel;
     }
 
-
-    //void dBodySetMass (dxBody b, final dMass mass)
     public void dBodySetMass(DMassC mass2) {
         //dAASSERT (mass2 );
         dIASSERT(mass2.check());
@@ -401,16 +333,11 @@ public class DxBody extends DObject implements DBody, Cloneable {
         invMass = dRecip(mass._mass);
     }
 
-
     public void dBodyGetMass(DxMass mass2)
-    //void dBodyGetMass (dxBody b, dMass *mass)
     {
         mass2.set(mass);
-        //memcpy (mass,b.mass,sizeof(dMass));
     }
 
-
-    //		public void dBodyAddForce (dxBody b, double fx, double fy, double fz)
     public void dBodyAddForce(double fx, double fy, double fz) {
         facc.add(fx, fy, fz);
     }
@@ -419,8 +346,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         facc.add(f);
     }
 
-
-    //		public void dBodyAddTorque (dxBody b, double fx, double fy, double fz)
     public void dBodyAddTorque(double fx, double fy, double fz) {
         tacc.add(fx, fy, fz);
     }
@@ -429,28 +354,23 @@ public class DxBody extends DObject implements DBody, Cloneable {
         tacc.add(f);
     }
 
-
     void dBodyAddRelForce(DVector3C f) {
         DVector3 t2 = new DVector3();
         dMultiply0_331(t2, _posr.R(), f);
         facc.add(t2);
     }
 
-
-    //	void dBodyAddRelTorque (dxBody b, double fx, double fy, double fz)
     public void dBodyAddRelTorque(DVector3C f) {
         DVector3 t2 = new DVector3();
         dMultiply0_331(t2, _posr.R(), f);
         tacc.add(t2);
     }
 
-
     void dBodyAddForceAtPos(DVector3C f, DVector3C p) {
         facc.add(f);
         DVector3 q = p.reSub(_posr.pos());
         dAddVectorCross3(tacc, q, f);
     }
-
 
     void dBodyAddForceAtRelPos(DVector3C f, DVector3C prel) {
         DVector3 p = new DVector3();
@@ -468,42 +388,23 @@ public class DxBody extends DObject implements DBody, Cloneable {
         dAddVectorCross3(tacc, q, f);
     }
 
-
-    //	void dBodyAddRelForceAtRelPos (dxBody b, double fx, double fy, double fz,
-    //	double px, double py, double pz)
     void dBodyAddRelForceAtRelPos(DVector3C fRel, DVector3C pRel) {
-        //		dVector3 frel = new dVector3(fx, fy, fz);
-        //		dVector3 prel = new dVector3(px, py, pz);
         DVector3 f = new DVector3();
         DVector3 p = new DVector3();
-        //		frel.v[0] = fx;
-        //		frel.v[1] = fy;
-        //		frel.v[2] = fz;
-        //		frel.v[3] = 0;
-        //		prel.v[0] = px;
-        //		prel.v[1] = py;
-        //		prel.v[2] = pz;
-        //		prel.v[3] = 0;
         dMultiply0_331(f, _posr.R(), fRel);
         dMultiply0_331(p, _posr.R(), pRel);
-        //		b.facc.v[0] += f.v[0];
-        //		b.facc.v[1] += f.v[1];
-        //		b.facc.v[2] += f.v[2];
         facc.add(f);
         dAddVectorCross3(tacc, p, f);
     }
-
 
     DVector3C dBodyGetForce() {
         //dAASSERT (b);
         return facc;
     }
 
-
     DVector3C dBodyGetTorque() {
         return tacc;
     }
-
 
     void dBodySetForce(double x, double y, double z) {
         facc.set(x, y, z);
@@ -513,7 +414,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         facc.set(xyz);
     }
 
-
     void dBodySetTorque(double x, double y, double z) {
         tacc.set(x, y, z);
     }
@@ -522,69 +422,37 @@ public class DxBody extends DObject implements DBody, Cloneable {
         tacc.set(t);
     }
 
-
-    //	void dBodyGetRelPointPos (dxBody b, double px, double py, double pz,
-    //			dVector3 result)
     void dBodyGetRelPointPos(DVector3C prel, DVector3 result) {
-        //dVector3 prel = new dVector3(px, py, pz);
-        //		dVector3 p = new dVector3();
-        //	  prel.v[0] = px;
-        //	  prel.v[1] = py;
-        //	  prel.v[2] = pz;
-        //	  prel.v[3] = 0;
-        //		dMULTIPLY0_331 (p,b._posr.R,prel);
-        //		result.v[0] = p.v[0] + b._posr.pos.v[0];
-        //		result.v[1] = p.v[1] + b._posr.pos.v[1];
-        //		result.v[2] = p.v[2] + b._posr.pos.v[2];
-        //		result.sum(p, b._posr.pos);
         dMultiply0_331(result, _posr.R(), prel);
         result.add(_posr.pos());
     }
 
-
-    //	public void dBodyGetRelPointVel (double px, double py, double pz,
-    //			dVector3 result)
     public void dBodyGetRelPointVel(DVector3C prel, DVector3 result) {
-        //dVector3 prel = new dVector3(px, py, pz);
         DVector3 p = new DVector3();
         dMultiply0_331(p, _posr.R(), prel);
         result.set(lvel);
         dAddVectorCross3(result, avel, p);
     }
 
-
-    //	void dBodyGetPointVel (dxBody b, double px, double py, double pz,
-    //			dVector3 result)
     void dBodyGetPointVel(DVector3C prel, DVector3 result) {
         DVector3 p = new DVector3(prel).sub(_posr.pos());
         result.set(lvel);
         dAddVectorCross3(result, avel, p);
     }
 
-
-    //	void dBodyGetPosRelPoint (dxBody b, double px, double py, double pz,
-    //			dVector3 result)
     void dBodyGetPosRelPoint(DVector3C p, DVector3 result) {
         DVector3 prel = p.reSub(_posr.pos());
         dMultiply1_331(result, _posr.R(), prel);
     }
 
-
-    //	void dBodyVectorToWorld (dxBody b, double px, double py, double pz,
-    //			dVector3 result)
     void dBodyVectorToWorld(DVector3C p, DVector3 result) {
         dMultiply0_331(result, _posr.R(), p);
     }
 
-
-    //	void dBodyVectorFromWorld (dxBody b, double px, double py, double pz,
-    //			dVector3 result)
     void dBodyVectorFromWorld(DVector3C p, DVector3 result) {
         dMultiply1_331(result, _posr.R(), p);
     }
 
-
-    //	void dBodySetFiniteRotationMode (dxBody b, int mode)
     void dBodySetFiniteRotationMode(boolean mode) {
         flags &= ~(dxBodyFlagFiniteRotation | dxBodyFlagFiniteRotationAxis);
         if (mode) {
@@ -596,8 +464,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         }
     }
 
-
-    //	void dBodySetFiniteRotationAxis (dxBody b, double x, double y, double z)
     void dBodySetFiniteRotationAxis(DVector3C xyz) {
         finite_rot_axis.set(xyz);
         if (xyz.get0() != 0 || xyz.get1() != 0 || xyz.get2() != 0) {
@@ -608,16 +474,13 @@ public class DxBody extends DObject implements DBody, Cloneable {
         }
     }
 
-
     boolean dBodyGetFiniteRotationMode() {
         return (flags & dxBodyFlagFiniteRotation) != 0;
     }
 
-
     void dBodyGetFiniteRotationAxis(DVector3 result) {
         result.set(finite_rot_axis);
     }
-
 
     int dBodyGetNumJoints() {
         int count = 0;
@@ -625,7 +488,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         for (DxJointNode n = firstjoint.get(); n != null; n = n.next, count++) ;
         return count;
     }
-
 
     DxJoint dBodyGetJoint(int index) {
         int i = 0;
@@ -636,13 +498,11 @@ public class DxBody extends DObject implements DBody, Cloneable {
         return null;
     }
 
-
     void dBodySetDynamic() {
         dBodySetMass(mass);
     }
 
     void dBodySetKinematic() {
-        //dSetZero (b->invI,4*3);
         invI.setZero();
         invMass = 0;
     }
@@ -651,7 +511,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         return invMass == 0;
     }
 
-    //	void dBodyEnable (dxBody b)
     public void dBodyEnable() {
         flags &= ~dxBodyDisabled;
         adis_stepsleft = adis.idle_steps;
@@ -667,8 +526,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         flags &= ~dxBodyDisabled;
     }
 
-
-    //	void dBodyDisable (dxBody b)
     public void dBodyDisable() {
         flags |= dxBodyDisabled;
     }
@@ -677,18 +534,14 @@ public class DxBody extends DObject implements DBody, Cloneable {
     /**
      * @return (flags & dxBodyDisabled) == 0
      */
-    //	public boolean dBodyIsEnabled (dxBody b)
     public boolean dBodyIsEnabled() {
         return ((flags & dxBodyDisabled) == 0);
     }
 
-
-    //	void dBodySetGravityMode (dxBody b, int mode)
     void dBodySetGravityMode(boolean mode) {
         if (mode) flags &= ~dxBodyNoGravity;
         else flags |= dxBodyNoGravity;
     }
-
 
     /**
      * @return (flags & dxBodyNoGravity) == 0
@@ -709,32 +562,25 @@ public class DxBody extends DObject implements DBody, Cloneable {
         adis.linear_average_threshold = linear_average_threshold * linear_average_threshold;
     }
 
-
     double dBodyGetAutoDisableAngularThreshold() {
         return dSqrt(adis.angular_average_threshold);
     }
-
 
     void dBodySetAutoDisableAngularThreshold(double angular_average_threshold) {
         adis.angular_average_threshold = angular_average_threshold * angular_average_threshold;
     }
 
-
     int dBodyGetAutoDisableAverageSamplesCount() {
         return adis.average_samples;
     }
 
-
-    //	void dBodySetAutoDisableAverageSamplesCount (dxBody b, unsigned int average_samples_count)
     void dBodySetAutoDisableAverageSamplesCount(int average_samples_count) {
         adis.average_samples = average_samples_count;
         // update the average buffers
         if (average_lvel_buffer != null) {
-            //TZ			delete[] b.average_lvel_buffer;
             average_lvel_buffer = null;
         }
         if (average_avel_buffer != null) {
-            //TZ			delete[] b.average_avel_buffer;
             average_avel_buffer = null;
         }
         if (adis.average_samples > 0) {
@@ -774,8 +620,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         return ((flags & dxBodyAutoDisable) != 0);
     }
 
-
-    //	void dBodySetAutoDisableFlag (dxBody b, int do_auto_disable)
     void dBodySetAutoDisableFlag(boolean do_auto_disable) {
         if (!do_auto_disable) {
             flags &= ~dxBodyAutoDisable;
@@ -868,13 +712,10 @@ public class DxBody extends DObject implements DBody, Cloneable {
         max_angular_speed = max_speed;
     }
 
-    //	void dBodySetMovedCallback(dxBody b, void (*callback)(dxBody))
     public void dBodySetMovedCallback(BodyMoveCallBack callback) {
         moved_callback = callback;
     }
 
-
-    //		dxGeom dBodyGetFirstGeom(dxBody b)
     DxGeom dBodyGetFirstGeom() {
         //			dAASSERT(b);
         return geom;
@@ -912,10 +753,8 @@ public class DxBody extends DObject implements DBody, Cloneable {
         else return dSin(x) / x;
     }
 
-
     // given a body b, apply its linear and angular rotation over the time
     // interval h, thereby adjusting its position and orientation.
-
     void dxStepBody(double h) {
         // cap the angular velocity
         if ((flags & dxBodyMaxAngularSpeed) != 0) {
@@ -941,13 +780,7 @@ public class DxBody extends DObject implements DBody, Cloneable {
                 // rotation axis, and a component orthogonal to it.
                 DVector3 frv = new DVector3();        // finite rotation vector
                 double k = dCalcVectorDot3(finite_rot_axis, avel);
-                //				frv.v[0] = finite_rot_axis.v[0] * k;
-                //				frv.v[1] = finite_rot_axis.v[1] * k;
-                //				frv.v[2] = finite_rot_axis.v[2] * k;
                 frv.set(finite_rot_axis).scale(k);
-                //				irv.v[0] = avel.v[0] - frv.v[0];
-                //				irv.v[1] = avel.v[1] - frv.v[1];
-                //				irv.v[2] = avel.v[2] - frv.v[2];
                 irv.eqDiff(avel, frv);
 
                 // make a rotation quaternion q that corresponds to frv * h.
@@ -955,51 +788,37 @@ public class DxBody extends DObject implements DBody, Cloneable {
                 h *= 0.5;
                 double theta = k * h;
                 double s = sinc(theta) * h;
-                //				q.v[0] = dCos(theta);
-                //				q.v[1] = frv.v[0] * s;
-                //				q.v[2] = frv.v[1] * s;
-                //				q.v[3] = frv.v[2] * s;
                 q.set(dCos(theta), frv.get0() * s, frv.get1() * s, frv.get2() * s);
             } else {
                 // make a rotation quaternion q that corresponds to w * h
-                double wlen = avel.length();//dSqrt (avel.v[0]*avel.v[0] + avel.v[1]*avel.v[1] +
-                //avel.v[2]*avel.v[2]);
+                double wlen = avel.length();
                 h *= 0.5;
                 double theta = wlen * h;
                 double s = sinc(theta) * h;
-                //				q.v[0] = dCos(theta);
-                //				q.v[1] = avel.v[0] * s;
-                //				q.v[2] = avel.v[1] * s;
-                //				q.v[3] = avel.v[2] * s;
                 q.set(dCos(theta), avel.get0() * s, avel.get1() * s, avel.get2() * s);
             }
 
             // do the finite rotation
             DQuaternion q2 = new DQuaternion();
             dQMultiply0(q2, q, _q);
-            //for (j=0; j<4; j++) _q.v[j] = q2.v[j];
+
             _q.set(q2);
 
             // do the infitesimal rotation if required
             if ((flags & dxBodyFlagFiniteRotationAxis) != 0) {
                 DQuaternion dq = new DQuaternion();
                 dDQfromW(dq, irv, _q);
-                //for (j=0; j<4; j++) _q.v[j] += h * dq[j];
                 _q.sum(_q, dq, h);
             }
         } else {
             // the normal way - do an infitesimal rotation
             DQuaternion dq = new DQuaternion();
             dDQfromW(dq, avel, _q);
-            //for (j=0; j<4; j++) _q.v[j] += h * dq[j];
             _q.sum(_q, dq, h);
         }
-
         // normalize the quaternion and convert it to a rotation matrix
         dNormalize4(_q);
         dRfromQ(_posr.Rw(), _q);
-
-
         // notify all attached geoms that this body has moved
         DxWorldProcessContext world_process_context = world.UnsafeGetWorldProcessingContext();
         for (DxGeom geom2 = geom; geom2 != null; geom2 = geom2.dGeomGetBodyNext()) {
@@ -1007,19 +826,16 @@ public class DxBody extends DObject implements DBody, Cloneable {
             geom2.dGeomMoved();
             world_process_context.UnlockForStepbodySerialization();
         }
-
         // notify the user
         if (moved_callback != null)
             moved_callback.run(this);
-
-
         // damping
         if ((flags & dxBodyLinearDamping) != 0) {
             final double lin_threshold = dampingp.linear_threshold;
             final double lin_speed = dCalcVectorDot3(lvel, lvel);
             if (lin_speed > lin_threshold) {
                 final double k = 1 - dampingp.linear_scale;
-                lvel.scale(k);//dOPEC(lvel.v, OP.MUL_EQ, k);
+                lvel.scale(k);
             }
         }
         if ((flags & dxBodyAngularDamping) != 0) {
@@ -1027,7 +843,7 @@ public class DxBody extends DObject implements DBody, Cloneable {
             final double ang_speed = dCalcVectorDot3(avel, avel);
             if (ang_speed > ang_threshold) {
                 final double k = 1 - dampingp.angular_scale;
-                avel.scale(k);//dOPEC(avel.v, OP.MUL_EQ, k);
+                avel.scale(k);
             }
         }
     }
@@ -1058,21 +874,15 @@ public class DxBody extends DObject implements DBody, Cloneable {
 
     //~dBody()
     @Override
-    //	  public void DESTRUCTOR()
-    //	    { dBodyDestroy (); super.DESTRUCTOR(); }
     public void DESTRUCTOR() {
         super.DESTRUCTOR();
     }
 
-    ;
-
-    //void setData (void *data)
     @Override
     public void setData(Object data) {
         dBodySetData(data);
     }
 
-    //void *getData()
     @Override
     public Object getData() {
         return dBodyGetData();
@@ -1147,10 +957,6 @@ public class DxBody extends DObject implements DBody, Cloneable {
         return dBodyGetAngularVel();
     }
 
-    //  void setMass (final dMass *mass)
-    //  { dBodySetMass (_id,mass); }
-    //void setMass (final dMass &mass)
-    //  { setMass (&mass); }
     @Override
     public void setMass(DMassC mass) {
         dBodySetMass(mass);

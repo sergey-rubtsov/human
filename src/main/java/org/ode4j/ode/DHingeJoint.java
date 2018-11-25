@@ -136,7 +136,6 @@ public interface DHingeJoint extends DJoint {
      */
     void addTorque(double torque);
 
-
     void setParamFMax(double d);
 
     void setParamVel(double cos);

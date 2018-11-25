@@ -44,8 +44,6 @@ public class DxJointBall extends DxJoint implements DBallJoint {
         super(w);
         anchor1 = new DVector3();
         anchor2 = new DVector3();
-        //    MAT.dSetZero( anchor1, 4 );
-        //    MAT.dSetZero( anchor2, 4 );
         erp = world.getERP();
         cfm = world.getCFM();
     }
@@ -62,31 +60,24 @@ public class DxJointBall extends DxJoint implements DBallJoint {
         info.setNub(3);
     }
 
-
     @Override
     public void
     getInfo2(double worldFPS, double worldERP, Info2Descr info) {
         info.setCfm(0, cfm);
         info.setCfm(1, cfm);
         info.setCfm(2, cfm);
-        //    info.cfm.set(cfm, cfm, cfm);
         setBall(this, worldFPS, erp, info, anchor1, anchor2);
     }
 
-
-    //void dJointSetBallAnchor( dJoint j, double x, double y, double z )
     public void dJointSetBallAnchor(DVector3C xyz) {
         setAnchors(xyz, anchor1, anchor2);
         //TODO TZ: Why not computeInitialRelativeRotations(); ??? Like in other joints?
     }
 
-
-    //void dJointSetBallAnchor2( dJoint j, double x, double y, double z )
     void dJointSetBallAnchor2(DVector3C xyz) {
         anchor2.set(xyz);
     }
 
-    //void dJointGetBallAnchor( dJoint j, dVector3 result )
     void dJointGetBallAnchor(DVector3 result) {
         if (isFlagsReverse())
             getAnchor2(result, anchor2);
@@ -94,15 +85,12 @@ public class DxJointBall extends DxJoint implements DBallJoint {
             getAnchor(result, anchor1);
     }
 
-
-    //void dJointGetBallAnchor2( dJoint j, dVector3 result )
     void dJointGetBallAnchor2(DVector3 result) {
         if (isFlagsReverse())
             getAnchor(result, anchor1);
         else
             getAnchor2(result, anchor2);
     }
-
 
     void set(PARAM num, double value) {
         switch (num) {
@@ -116,7 +104,6 @@ public class DxJointBall extends DxJoint implements DBallJoint {
         }
     }
 
-
     double get(PARAM num) {
         switch (num) {
             case dParamCFM:
@@ -128,11 +115,9 @@ public class DxJointBall extends DxJoint implements DBallJoint {
         }
     }
 
-
     void dJointSetBallParam(PARAM parameter, double value) {
         set(parameter, value);
     }
-
 
     double dJointGetBallParam(PARAM parameter) {
         return get(parameter);
@@ -145,11 +130,9 @@ public class DxJointBall extends DxJoint implements DBallJoint {
         setAnchors(anchor, anchor1, anchor2);
     }
 
-
     // *******************************
     // API dBallJoint
     // *******************************
-
     @Override
     public final void setAnchor(double x, double y, double z) {
         dJointSetBallAnchor(new DVector3(x, y, z));

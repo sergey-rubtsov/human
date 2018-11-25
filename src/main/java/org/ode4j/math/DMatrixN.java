@@ -147,34 +147,6 @@ public class DMatrixN {
         return r;
     }
 
-
-//	dMatrix dMatrix::operator + (const dMatrix &a)
-//	{
-//	  if (n != a.n || m != a.m) dDebug (0,"matrix +, mismatched sizes");
-//	  dMatrix r = new dMatrixN (n,m);
-//	  for (int i=0; i<n*m; i++) r.data[i] = data[i] + a.data[i];
-//	  return r;
-//	}
-//
-//
-//	dMatrix dMatrix::operator - (const dMatrix &a)
-//	{
-//	  if (n != a.n || m != a.m) dDebug (0,"matrix -, mismatched sizes");
-//	  dMatrix r = new dMatrixN (n,m);
-//	  for (int i=0; i<n*m; i++) r.data[i] = data[i] - a.data[i];
-//	  return r;
-//	}
-//
-//
-//	dMatrix dMatrix::operator - ()
-//	{
-//	  dMatrix r = new dMatrixN (n,m);
-//	  for (int i=0; i<n*m; i++) r.data[i] = -data[i];
-//	  return r;
-//	}
-
-
-    //	dMatrixN operator * (const dMatrix &a)
     public DMatrixN mulNew(final DMatrixN a) {
         if (MAX_I != a.MAX_J) dDebug(0, "matrix *, mismatched sizes");
         DMatrixN r = new DMatrixN(MAX_I, a.MAX_J);
@@ -188,20 +160,17 @@ public class DMatrixN {
         return r;
     }
 
-
     void plusEq(final DMatrixN a) {
         if (MAX_I != a.MAX_I || MAX_J != a.MAX_J)
             dDebug(0, "matrix +=, mismatched sizes");
         for (int i = 0; i < MAX_I * MAX_J; i++) v[i] += a.v[i];
     }
 
-
     void subEq(final DMatrixN a) {
         if (MAX_I != a.MAX_I || MAX_J != a.MAX_J)
             dDebug(0, "matrix -=, mismatched sizes");
         for (int i = 0; i < MAX_I * MAX_J; i++) v[i] -= a.v[i];
     }
-
 
     public void clearUpperTriangle() {
         if (MAX_I != MAX_J) dDebug(0, "clearUpperTriangle() only works on square matrices");
@@ -210,14 +179,12 @@ public class DMatrixN {
         }
     }
 
-
     public void clearLowerTriangle() {
         if (MAX_I != MAX_J) dDebug(0, "clearLowerTriangle() only works on square matrices");
         for (int i = 0; i < MAX_I; i++) {
             for (int j = 0; j < i; j++) v[i * MAX_J + j] = 0;
         }
     }
-
 
     DMatrixN makeRandom(double range) {
         for (int i = 0; i < MAX_I; i++) {
@@ -226,15 +193,6 @@ public class DMatrixN {
         }
         return this;
     }
-
-
-//	dMatrixN print (String fmt, FILE f) {
-//	  for (int i=0; i<n; i++) {
-//	    for (int j=0; j<m; j++) fprintf (f,fmt,v[i*m+j]);
-//	    fprintf (f,"\n");
-//	  }
-//	}
-
 
     public double maxDifference(final DMatrixN a) {
         if (MAX_J != a.MAX_J || MAX_I != a.MAX_I)

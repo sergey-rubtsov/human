@@ -112,10 +112,6 @@ public class Cmath extends Csetjmp {
         if (Double.isNaN(num)) {
             return Double.NaN;
         }
-//		double log10 = Math.log10(num);
-//		exp.i = (int)log10;
-//		double mantissa = Math.pow(10, log10  - exp.i);
-//		return mantissa;
         //http://www.math.northwestern.edu/~wphooper/code/java/
         long bits = Double.doubleToLongBits(num);
         exp.i = (int) ((0x7ff0000000000000L & bits) >> 52) - 1022;

@@ -50,19 +50,20 @@ import static org.ode4j.ode.internal.Rotation.dRFrom2Axes;
  * universal
  * <p>
  * I just realized that the universal joint is equivalent to a hinge 2 joint with
- * perfectly stiff suspension.  By comparing the hinge 2 implementation to
+ * perfectly stiff suspension.
+ * By comparing the hinge 2 implementation to
  * the universal implementation, you may be able to improve this
  * implementation (or, less likely, the hinge2 implementation).
  */
 public class DxJointUniversal extends DxJoint implements DUniversalJoint {
-    DVector3 _anchor1 = new DVector3(); // anchor w.r.t first body
-    DVector3 _anchor2 = new DVector3(); // anchor w.r.t second body
-    DVector3 _axis1;                    // axis w.r.t first body
-    DVector3 _axis2;                    // axis w.r.t second body
-    DQuaternion qrel1;                  // initial relative rotation body1 -> virtual cross piece
-    DQuaternion qrel2;                  // initial relative rotation virtual cross piece -> body2
-    DxJointLimitMotor limot1;           // limit and motor information for axis1
-    DxJointLimitMotor limot2;           // limit and motor information for axis2
+    protected DVector3 _anchor1 = new DVector3(); // anchor w.r.t first body
+    protected DVector3 _anchor2 = new DVector3(); // anchor w.r.t second body
+    protected DVector3 _axis1;                    // axis w.r.t first body
+    protected DVector3 _axis2;                    // axis w.r.t second body
+    protected DQuaternion qrel1;                  // initial relative rotation body1 -> virtual cross piece
+    protected DQuaternion qrel2;                  // initial relative rotation virtual cross piece -> body2
+    protected DxJointLimitMotor limot1;           // limit and motor information for axis1
+    protected DxJointLimitMotor limot2;           // limit and motor information for axis2
 
     DxJointUniversal(DxWorld w) {
         super(w);
@@ -177,8 +178,7 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
         }
     }
 
-    protected double
-    getAngle1Internal() {
+    protected double getAngle1Internal() {
         if (node[0].body != null) {
             // length 1 joint axis in global coordinates, from each body
             DVector3 ax1 = new DVector3(), ax2 = new DVector3();
@@ -217,8 +217,7 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
     }
 
 
-    protected double
-    getAngle2Internal() {
+    protected double getAngle2Internal() {
         if (node[0].body != null) {
             // length 1 joint axis in global coordinates, from each body
             DVector3 ax1 = new DVector3(), ax2 = new DVector3();
@@ -544,20 +543,6 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
         }
     }
 
-    //TZ removed to avoid RefDouble usage
-//	private void dJointGetUniversalAngles( RefDouble angle1, 
-//			RefDouble angle2 )
-//	{
-////		dxJointUniversal joint = ( dxJointUniversal )j;
-////		dUASSERT( joint, "bad joint argument" );
-////		checktype( joint, dxJointUniversal.class );
-//		if ( (flags & dJOINT_REVERSE) != 0 )
-//			getAngles( angle2, angle1 );
-//			angle2.d = -angle2.d;	
-//		else
-//			getAngles( angle1, angle2 );
-//	}
-
     public double dJointGetUniversalAngle1() {
         if (isFlagsReverse())
             return getAngle2Internal();
@@ -626,7 +611,6 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
             node[1].body.dBodyAddTorque(axis1.scale(-1));
     }
 
-
     @Override
     void setRelativeValues() {
         DVector3 anchor = new DVector3();
@@ -647,7 +631,6 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
 
         computeInitialRelativeRotations();
     }
-
 
     public DxJointLimitMotor getLimot1() {
         return limot1;

@@ -24,42 +24,33 @@
  *************************************************************************/
 package deep.learning.human;
 
-import deep.learning.human.utils.config.HumanConfig;
 import org.ode4j.math.DMatrix3;
-import org.ode4j.math.DMatrix3C;
 import org.ode4j.math.DQuaternion;
 import org.ode4j.math.DVector3;
-import org.ode4j.math.DVector3C;
-import org.ode4j.ode.DAABBC;
 import org.ode4j.ode.DBody;
-import org.ode4j.ode.DBox;
 import org.ode4j.ode.DCapsule;
-import org.ode4j.ode.DCylinder;
 import org.ode4j.ode.DGeom;
 import org.ode4j.ode.DJointGroup;
 import org.ode4j.ode.DSpace;
-import org.ode4j.ode.DSphere;
 import org.ode4j.ode.DWorld;
 import org.ode4j.ode.OdeHelper;
 import org.ode4j.ode.OdeMath;
-import org.ode4j.ode.internal.DxConvex;
 import org.ode4j.ode.internal.Rotation;
 
 import java.util.Random;
 
 import deep.learning.human.humanoid.HumanoidBuilder;
+import deep.learning.human.humanoid.LongBone;
 import deep.learning.human.utils.Utils;
+import deep.learning.human.utils.config.HumanConfig;
 
-import static deep.learning.human.internal.DrawStuff.dsDrawBox;
 import static deep.learning.human.internal.DrawStuff.dsDrawCapsule;
 import static deep.learning.human.internal.DrawStuff.dsDrawConvex;
-import static deep.learning.human.internal.DrawStuff.dsDrawCylinder;
-import static deep.learning.human.internal.DrawStuff.dsDrawSphere;
+import static deep.learning.human.internal.DrawStuff.dsDrawLine;
 import static deep.learning.human.internal.DrawStuff.dsFunctions;
-import static deep.learning.human.internal.DrawStuff.dsSetColorAlpha;
+import static deep.learning.human.internal.DrawStuff.dsSetColor;
 import static deep.learning.human.internal.DrawStuff.dsSetViewpoint;
 import static deep.learning.human.internal.DrawStuff.dsSimulationLoop;
-import static org.ode4j.ode.OdeHelper.areConnectedExcluding;
 
 public class DemoHumanoid extends dsFunctions {
 
@@ -67,7 +58,7 @@ public class DemoHumanoid extends dsFunctions {
     private DSpace space;
     private Human human;
     private static double[] xyz = {14.051105, -14.9596, 4.8200006};
-    private static double[] hpr = {135.5, 10.5, 0.0};
+    private static double[] hpr = {135.5, 17.5, 0.0};
     private DJointGroup contactGroup;
     private static final double STEP = 0.01;
 
@@ -96,8 +87,8 @@ public class DemoHumanoid extends dsFunctions {
         human = HumanoidBuilder.build(world, space, "bvh/edited.json");
         DQuaternion q = new DQuaternion(1, 0, 0, 0);
         Rotation.dQFromAxisAndAngle(q, new DVector3(1, 0, 0), -0.5 * Math.PI);
-        for (int i = 0; i < human.getBones().size(); i++) {
-            HumanBone bone = human.getBones().get(i);
+        for (int i = 0; i < human.getBonesList().size(); i++) {
+            HumanBone bone = human.getBonesList().get(i);
             DBody body = bone.getBody();
             DQuaternion qq = new DQuaternion();
             OdeMath.dQMultiply1(qq, q, body.getQuaternion());
@@ -110,7 +101,7 @@ public class DemoHumanoid extends dsFunctions {
         }
         // initial camera position
         dsSetViewpoint(xyz, hpr);
-        Utils.postProcessSelfColliding(space, world, contactGroup);
+        //Utils.postProcessSelfColliding(space, world, human);
     }
 
     @Override
@@ -123,51 +114,43 @@ public class DemoHumanoid extends dsFunctions {
 
     private void drawGeom(DGeom g) {
         if (g instanceof DCapsule) {
+            dsSetColor (1,1,1);
             DCapsule cap = (DCapsule) g;
             dsDrawCapsule(g.getPosition(),
                     g.getRotation(),
                     cap.getLength(),
                     cap.getRadius());
-        } else if (g instanceof DxConvex) {
+        } else if (g instanceof LongBone) {
+            dsSetColor (0.8,0.8,0.8);
             dsDrawConvex(
                     g.getPosition(),
                     g.getRotation(),
-                    ((DxConvex) g).getPlanes(),
-                    ((DxConvex) g).getPlaneCount(),
-                    ((DxConvex) g).getPoints(),
-                    ((DxConvex) g).getPointCount(),
-                    ((DxConvex) g).getPolygons());
+                    ((LongBone) g).getPlanes(),
+                    ((LongBone) g).getPlaneCount(),
+                    ((LongBone) g).getPoints(),
+                    ((LongBone) g).getPointCount(),
+                    ((LongBone) g).getPolygons());
+            /*
+            dsSetColor (1,0,0);
+            dsDrawLine(g.getBody().getPosition(), ((LongBone) g).getLeft());
+            dsDrawLine(g.getBody().getPosition(), ((LongBone) g).getTop());
+            dsSetColor (0,1,0);
+            dsDrawLine(g.getBody().getPosition(), ((LongBone) g).getRight());
+            dsDrawLine(g.getBody().getPosition(), ((LongBone) g).getBack());
+            dsDrawLine(g.getBody().getPosition(), ((LongBone) g).getBottom());
+            DVector3 force = new DVector3(g.getBody().getPosition()).add(g.getBody().getForce());
+            dsDrawLine(g.getBody().getPosition(), force);
+            dsSetColor (0,1,0);
+            DVector3 torque = new DVector3(g.getBody().getPosition()).add(g.getBody().getTorque());
+            dsDrawLine(g.getBody().getPosition(), torque);*/
         }
-    }
-
-    private void drawBoneGeom(DGeom g, DVector3C pos, DMatrix3C R, boolean show_aabb) {
-        if (g == null) return;
-        if (pos == null) pos = g.getPosition();
-        if (R == null) R = g.getRotation();
-
-        if (g instanceof DBox) {
-            DVector3C sides = ((DBox) g).getLengths();
-            dsDrawBox(pos, R, sides);
-        } else if (g instanceof DSphere) {
-            dsDrawSphere(pos, R, ((DSphere) g).getRadius());
-        } else if (g instanceof DCylinder) {
-            double radius = ((DCylinder) g).getRadius();
-            double length = ((DCylinder) g).getLength();
-            dsDrawCylinder(pos, R, length, radius);
-        } else if (g instanceof DCapsule) {
-            double radius = ((DCapsule) g).getRadius();
-            double length = ((DCapsule) g).getLength();
-            dsDrawCapsule(pos, R, length, radius);
-        }
-        if (show_aabb) {
-            // draw the bounding box for this geom
-            DAABBC aabb = g.getAABB();
-            DVector3 bbpos = aabb.getCenter();
-            DVector3 bbsides = aabb.getLengths();
-            DMatrix3 RI = new DMatrix3();
-            RI.setIdentity();
-            dsSetColorAlpha(1f, 0f, 0f, 0.5f);
-            dsDrawBox(bbpos, RI, bbsides);
+        if (g instanceof  HumanBone) {
+            dsSetColor (1,0,0);
+            DVector3 front = new DVector3(((HumanBone) g).getFront());
+            front.sub(g.getBody().getPosition());
+            front.scale(1.1);
+            front.add(g.getBody().getPosition());
+            dsDrawLine(g.getBody().getPosition(), front);
         }
     }
 
@@ -177,17 +160,43 @@ public class DemoHumanoid extends dsFunctions {
         }
     };
 
+    private double t;
+
     @Override
     public void step(boolean pause) {
         space.collide(null, nearCallback);
         if (!pause) {
+            t = t + STEP;
+            double f0 = Math.sin(t * 2) * 1000;
+            double f1 = Math.sin(t) * 5000;
+            HumanJoint rightKnee = human.getJoint("RightLegRightFoot");
+            HumanJoint leftKnee = human.getJoint("LeftLegLeftFoot");
+            HumanJoint leftElbow = human.getJoint("LeftForeArmLeftHand");
+            HumanJoint rightElbow = human.getJoint("RightForeArmRightHand");
+            HumanJoint rightHip = human.getJoint("RightUpLegRightLeg");
+            HumanJoint head = human.getJoint("Neck1Head");
+            HumanJoint LeftUpLegLeftLeg = human.getJoint("LeftUpLegLeftLeg");
+            //((BallJoint) LeftUpLegLeftLeg).pitch(f1);
+            //((UniversalJoint) rightHip).addTorque(f0, f1);
+            //((BallJoint) rightHip).twist(f1);
+            //((BallJoint) head).roll(f1);
+            //((BallJoint) head).pitch(f1);
+            //((BallJoint) head).yaw(f1);
+            //((DHingeJoint) rightElbow.getJoint()).addTorque(f1);
+            //((HingeJoint) leftElbow).addTorque(f0);
+            //HumanJoint neck0 = human.getJoint("Neck1Head");
+            //
+            //((DBallJoint) neck0.getJoint()).
+            //((DHingeJoint) rightKnee.getJoint()).addTorque(f0);
+            //((DHingeJoint) leftKnee.getJoint()).addTorque(f1);
+            for (DGeom g : space.getGeoms()) {
+                drawGeom(g);
+            }
             world.quickStep(STEP);
         }
         contactGroup.empty();
         // now we draw everything
-        for (DGeom g : space.getGeoms()) {
-            drawGeom(g);
-        }
+
     }
 
     public static void main(String[] args) {
@@ -207,10 +216,10 @@ public class DemoHumanoid extends dsFunctions {
         cmd = Character.toLowerCase(cmd);
         if (cmd == ' ') {
             Random r = new Random();
-            int bone = r.nextInt(human.getBones().size());
-            human.getBones().get(bone).getBody().setLinearVel(0, 0, 80);
-            //human.getBones().get(DHumanImpl.PELVIS).getBody().setLinearVel(0, 0, 80);
-            //human.getBones().get(DHumanImpl.PELVIS).getBody().addForce(0, 0, 8000);
+            int bone = r.nextInt(human.getBonesList().size());
+            human.getBonesList().get(bone).getBody().setLinearVel(0, 0, 80);
+            //human.getBonesList().get(DHumanImpl.PELVIS).getBody().setLinearVel(0, 0, 80);
+            //human.getBonesList().get(DHumanImpl.PELVIS).getBody().addForce(0, 0, 8000);
         }
     }
 

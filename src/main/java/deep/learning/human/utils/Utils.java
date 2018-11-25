@@ -2,12 +2,7 @@ package deep.learning.human.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import deep.learning.human.DemoHumanoid;
-import deep.learning.human.Human;
-import deep.learning.human.HumanBone;
-import deep.learning.human.bvh.Node;
-import deep.learning.human.bvh.Vec4;
-import deep.learning.human.utils.config.HumanConfig;
+
 import org.ode4j.math.DMatrix3;
 import org.ode4j.math.DVector3;
 import org.ode4j.math.DVector4;
@@ -31,6 +26,14 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import deep.learning.human.Human;
+import deep.learning.human.HumanBone;
+import deep.learning.human.HumanJoint;
+import deep.learning.human.bvh.Node;
+import deep.learning.human.bvh.Vec4;
+import deep.learning.human.humanoid.joints.FixedJoint;
+import deep.learning.human.utils.config.HumanConfig;
 
 import static org.ode4j.ode.OdeConstants.dContactBounce;
 import static org.ode4j.ode.OdeConstants.dContactSoftCFM;
@@ -85,7 +88,7 @@ public class Utils {
     }
 
     public static void setAngularDamping(Human skeleton, double damping) {
-        for (HumanBone bone : skeleton.getBones()) {
+        for (HumanBone bone : skeleton.getBonesList()) {
             bone.getBody().setAngularDamping(damping);
         }
     }
@@ -326,7 +329,7 @@ public class Utils {
         });
     }
 
-    public static void postProcessSelfColliding(DSpace space, DWorld world, DJointGroup contactGroup) {
+    public static void postProcessSelfColliding(DSpace space, DWorld world, Human human) {
         DGeom.DNearCallback nearCallback = (data, o1, o2) -> {
             // exit without doing anything if the two bodies are connected by a joint
             DBody b1 = o1.getBody();
@@ -334,13 +337,25 @@ public class Utils {
             if (b1 != null && b2 != null && areConnectedExcluding(b1, b2, DContactJoint.class)) {
                 return;
             } else {
-                DFixedJoint joint = OdeHelper.createFixedJoint(world);
-                joint.attach(b1, b2);
-                joint.setFixed();
+                if (o1 instanceof HumanBone && o2 instanceof HumanBone) {
+                    HumanBone child = (HumanBone) o1;
+                    HumanBone parent = (HumanBone) o2;
+                    String jointName = child.getName() + parent.getName();
+                    if (human.getJoints().containsKey(jointName)) {
+                        throw new RuntimeException("joints processing error");
+                    } else {
+                        System.out.println("add new joint " + jointName);
+                    }
+                    DFixedJoint joint = OdeHelper.createFixedJoint(world);
+                    joint.attach(b1, b2);
+                    joint.setFixed();
+                    HumanJoint humanJoint = new FixedJoint(child.getName() + parent.getName(),
+                            parent, child, joint);
+                    human.getJoints().put(humanJoint.getName(), humanJoint);
+                }
             }
         };
         space.collide(null, nearCallback);
         world.quickStep(0.01);
-        contactGroup.empty();
     }
 }

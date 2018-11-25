@@ -43,33 +43,44 @@ public interface DQuaternionC {
     /**
      * @param i The row to return [0, 1, 2].
      */
-    public double get(int i);
+    double get(int i);
 
     /**
      * w of [w, x, y, z].
      *
      * @return w
      */
-    public double get0();
+    double get0();
 
     /**
      * x of [w, x, y, z].
      *
      * @return x
      */
-    public double get1();
+    double get1();
 
     /**
      * y of [w, x, y, z].
      *
      * @return y
      */
-    public double get2();
+    double get2();
 
     /**
      * z of [w, x, y, z].
      *
      * @return z
      */
-    public double get3();
+    double get3();
+
+    /**
+     * rotation with the equivalent left-handed (Post-Multiplied) 3 × 3 rotation matrix
+     * @param input - vector to rotate
+     * @return vector, rotated by quaternion
+     */
+    DVector3 rotate(DVector3 input);
+
+    void normalize();
+
+
 }

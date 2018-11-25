@@ -44,48 +44,54 @@ public interface DVector3C {
     /**
      * @param i The row to return [0, 1, 2].
      */
-    public double get(int i);
+    double get(int i);
 
-    public double get0();
+    double get0();
 
-    public double get1();
+    double get1();
 
-    public double get2();
+    double get2();
 
-    public double[] toDoubleArray();
+    double[] toDoubleArray();
 
-    public DVector3 clone();
+    DVector3 clone();
 
-    public boolean isEq(DVector3C v);
+    boolean isEq(DVector3C v);
 
-    public double lengthSquared();
+    double lengthSquared();
 
-    public double length();
+    double length();
 
     /**
      * @return Distance between this vector and b).
      * @see DVector3#distance(DVector3C)
      */
-    public double distance(DVector3C a);
+    double distance(DVector3C a);
 
     /**
      * @see DVector3#dot(DVector3C)
      */
-    public double dot(DVector3C b);
+    double dot(DVector3C b);
 
     /**
      * @see DVector3#dot(DVector3C)
      */
-    public double dot(DVector3View b);
+    double dot(DVector3View b);
 
     /**
      * @see DVector3#reSub(DVector3C)
      */
-    public DVector3 reSub(DVector3C pos);
+    DVector3 reSub(DVector3C pos);
 
-    public DVector3 reScale(double s);
+    DVector3 reScale(double s);
 
-    public float[] toFloatArray4();
+    float[] toFloatArray4();
 
-    public double dotCol(DMatrix3C m, int col);
+    double dotCol(DMatrix3C m, int col);
+
+    DVector3 sub(DVector3C v2);
+
+    void normalize();
+
+    DVector3 scale(double s);
 }

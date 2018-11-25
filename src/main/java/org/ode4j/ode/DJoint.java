@@ -109,17 +109,7 @@ public interface DJoint {
         public DVector3 t2 = new DVector3();
     }
 
-    //virtual ~dJoint() // :
     void DESTRUCTOR();
-
-//	/**
-//	 * Destroy a joint.
-//	 *
-//	 * disconnects it from its attached bodies and removing it from the world.
-//	 * However, if the joint is a member of a group then this function has no
-//	 * effect - to destroy that joint the group must be emptied or destroyed.
-//	 */
-//	void destroy();
 
     /**
      * Return the number of bodies attached to the joint.
@@ -142,19 +132,15 @@ public interface DJoint {
      */
     void attach(DBody body1, DBody body2);
 
-
     /**
      * Set the user-data pointer.
      */
     void setData(Object data);
 
-
     /**
      * Get the user-data pointer.
      */
     Object getData();
-
-    //public dJointType getType();
 
     /**
      * Return the bodies that this joint connects.
@@ -220,18 +206,11 @@ public interface DJoint {
      */
     boolean isEnabled();
 
+    int P_OFS_1 = 0x000;
+    int P_OFS_2 = 0x100;
+    int P_OFS_3 = 0x200;
 
-    //
-    //// If not implemented it will do nothing as describe in the doc
-    //virtual void setParam (int, dReal) {};
-    //virtual dReal getParam (int) const { return 0; }
-
-    static final int P_OFS_1 = 0x000;
-    static final int P_OFS_2 = 0x100;
-    static final int P_OFS_3 = 0x200;
-
-    public enum PARAM {
-        //		dParamGroup(0),
+    enum PARAM {
         //	  /* parameters for limits and motors */ \
         dParamLoStop(0),
         dParamHiStop(1),
@@ -275,25 +254,8 @@ public interface DJoint {
         }
     }
 
-    public enum PARAM_N {
-        //		dParamGroup(0),
-        //		//	  /* parameters for limits and motors */ \
-        //		dParamLoStop(0),
-        //		dParamHiStop(1),
-        //		dParamVel(2),
-        //		dParamFMax (3),
-        //		dParamFudgeFactor (4),
-        //		dParamBounce (5),
-        //		dParamCFM (6),
-        //		dParamStopERP (7),
-        //		dParamStopCFM (8),
-        //		/* parameters for suspension */
-        //		dParamSuspensionERP (9),
-        //		dParamSuspensionCFM(10),
-        //		dParamERP(11),
-
-        //		dParamGroup1(0, P_OFS_1),
-        //	  /* parameters for limits and motors */ \
+    enum PARAM_N {
+        /* parameters for limits and motors */
         dParamLoStop1(0, P_OFS_1),
         dParamHiStop1(1, P_OFS_1),
         dParamVel1(2, P_OFS_1),
@@ -309,9 +271,7 @@ public interface DJoint {
         dParamSuspensionERP1(11, P_OFS_1),
         dParamSuspensionCFM1(12, P_OFS_1),
         dParamERP1(13, P_OFS_1),
-
-        //		dParamGroup2(0, P_OFS_2),
-        //	  /* parameters for limits and motors */ \
+        /* parameters for limits and motors */
         dParamLoStop2(0, P_OFS_2),
         dParamHiStop2(1, P_OFS_2),
         dParamVel2(2, P_OFS_2),
@@ -327,9 +287,7 @@ public interface DJoint {
         dParamSuspensionERP2(11, P_OFS_2),
         dParamSuspensionCFM2(12, P_OFS_2),
         dParamERP2(13, P_OFS_2),
-
-        //		dParamGroup3(0, P_OFS_3),
-        //	  /* parameters for limits and motors */ \
+        /* parameters for limits and motors */
         dParamLoStop3(0, P_OFS_3),
         dParamHiStop3(1, P_OFS_3),
         dParamVel3(2, P_OFS_3),
@@ -350,7 +308,7 @@ public interface DJoint {
         private final PARAM_GROUPS _group;
         private final PARAM _sub;
 
-        private PARAM_N(int x, int g) {
+        PARAM_N(int x, int g) {
             _x = x + g;
 
             switch (g) {
@@ -400,7 +358,7 @@ public interface DJoint {
         }
     }
 
-    public enum PARAM_GROUPS {
+    enum PARAM_GROUPS {
 
         dParamGroup1(P_OFS_1, 0),
         dParamGroup2(P_OFS_2, 1),
@@ -418,8 +376,7 @@ public interface DJoint {
     }
 
     /* transmission joint mode numbers */
-
-    public enum TRANSMISSION {
+    enum TRANSMISSION {
         dTransmissionParallelAxes, // = 0,
         dTransmissionIntersectingAxes, // = 1,
         dTransmissionChainDrive, // = 2

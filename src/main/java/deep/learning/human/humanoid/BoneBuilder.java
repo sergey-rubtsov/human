@@ -1,6 +1,6 @@
 package deep.learning.human.humanoid;
 
-import org.ode4j.math.DMatrix3;
+import org.ode4j.math.DQuaternion;
 import org.ode4j.math.DVector3;
 import org.ode4j.ode.DBody;
 import org.ode4j.ode.DMass;
@@ -17,6 +17,8 @@ import deep.learning.human.utils.config.BoneConfig;
 public class BoneBuilder {
 
     private static final double SCALE = 0.5;
+
+    private static final double COEFFICIENT = 1;
 
     private static final int OCTAHEDRON_VERTEXES = 6;
 
@@ -54,6 +56,9 @@ public class BoneBuilder {
                                      double radius) {
         p1 = new DVector3(p1);
         p2 = new DVector3(p2);
+        p2 = new DVector3(p2.sub(p1));
+        p2.scale(COEFFICIENT);
+        p2 = new DVector3(p2.add(p1));
         double length = p1.distance(p2);
         DBody body = OdeHelper.createBody(world);
         DMass m = OdeHelper.createMass();
@@ -61,33 +66,13 @@ public class BoneBuilder {
         body.setMass(m);
         HumanBone bone = new ShortBone(space, name, radius, length);
         bone.setBody(body);
-        DVector3 za = new DVector3(p2);
-        (za.sub(p1)).safeNormalize();
-        DVector3 xa;
-        DVector3 ya;
-        if (Math.abs(za.dot(new DVector3(1.0, 0.0, 0.0))) < 0.7) {
-            xa = new DVector3(1.0, 0.0, 0.0);
-            ya = new DVector3();
-            ya.eqCross(za, xa);
-            ya.safeNormalize();
-            xa.eqCross(ya, za);
-        } else {
-            ya = new DVector3(0.0, 1.0, 0.0);
-            xa = new DVector3();
-            xa.eqCross(ya, za);
-            xa.safeNormalize();
-            ya.eqCross(za, xa);
-        }
+        DVector3 a = new DVector3(p1);
+        DVector3 b = new DVector3(p2);
+        DVector3 c = a.sub(b);
+        DVector3 axis = new DVector3(0, 0, 1);
+        DQuaternion orientation = new DQuaternion(axis, c);
+        body.setQuaternion(orientation);
         body.setPosition(p1.add(p2).scale(SCALE));
-        body.setRotation(new DMatrix3(xa.get0(),
-                ya.get0(),
-                za.get0(),
-                xa.get1(),
-                ya.get1(),
-                za.get1(),
-                xa.get2(),
-                ya.get2(),
-                za.get2()));
         return bone;
     }
 
@@ -122,33 +107,13 @@ public class BoneBuilder {
         triMeshData.destroy();
         body.setMass(m);
         bone.setBody(body);
-        DVector3 za = new DVector3(p2);
-        (za.sub(p1)).safeNormalize();
-        DVector3 xa;
-        DVector3 ya;
-        if (Math.abs(za.dot(new DVector3(1.0, 0.0, 0.0))) < 0.7) {
-            xa = new DVector3(1.0, 0.0, 0.0);
-            ya = new DVector3();
-            ya.eqCross(za, xa);
-            ya.safeNormalize();
-            xa.eqCross(ya, za);
-        } else {
-            xa = new DVector3();
-            ya = new DVector3(0.0, 1.0, 0.0);
-            xa.eqCross(ya, za);
-            xa.safeNormalize();
-            ya.eqCross(za, xa);
-        }
+        DVector3 a = new DVector3(p1);
+        DVector3 b = new DVector3(p2);
+        DVector3 c = a.sub(b);
+        DVector3 axis = new DVector3(0, 0, 1);
+        DQuaternion orientation = new DQuaternion(axis, c);
+        body.setQuaternion(orientation);
         body.setPosition(p1.add(p2).scale(SCALE));
-        body.setRotation(new DMatrix3(xa.get0(),
-                ya.get0(),
-                za.get0(),
-                xa.get1(),
-                ya.get1(),
-                za.get1(),
-                xa.get2(),
-                ya.get2(),
-                za.get2()));
         return bone;
     }
 }

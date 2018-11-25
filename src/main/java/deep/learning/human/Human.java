@@ -1,14 +1,19 @@
 package deep.learning.human;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Human {
 
     double getMass();
 
-    List<HumanBone> getBones();
+    Map<String, HumanBone> getBones();
 
-    List<HumanJoint> getJoints();
+    Map<String, HumanJoint> getJoints();
+
+    List<HumanBone> getBonesList();
+
+    List<HumanJoint> getJointsList();
 
     HumanBone getBone(String name);
 

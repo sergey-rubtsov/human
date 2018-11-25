@@ -112,23 +112,15 @@ public class DxJointPU extends DxJointUniversal implements DPUJoint {
         //
 
         // Setting member variables which are w.r.t body2
-//		_axis1.dSetZero();//dSetZero( _axis1, 4 );
-//		_axis1.v[1] = 1;
         _axis1.set(0, 1, 0);
 
         // Setting member variables which are w.r.t body2
         _anchor2.setZero();//dSetZero( _anchor2, 4 );
-//		_axis2.dSetZero();//dSetZero( _axis2, 4 );
-//		_axis2.v[2] = 1;
         _axis2.set(0, 0, 1);
-
-//		axisP1.dSetZero();//dSetZero( axisP1, 4 );
-//		axisP1.v[0] = 1;
         axisP1.set(1, 0, 0);
 
-        qrel1.setZero();//dSetZero( qrel1, 4 );
-        qrel2.setZero();//dSetZero( qrel2, 4 );
-
+        qrel1.setZero();
+        qrel2.setZero();
 
         limotP.init(world);
         limot1.init(world);
@@ -137,10 +129,6 @@ public class DxJointPU extends DxJointUniversal implements DPUJoint {
 
 
     double dJointGetPUPosition() {
-        //		dxJointPU joint = ( dxJointPU ) j;
-        //		dUASSERT( joint, "bad joint argument" );
-        //		checktype( joint, dxJointPU.class );
-
         DVector3 q = new DVector3();
         // get the offset in global coordinates
         dMultiply0_331(q, node[0].body.posr().R(), _anchor1);
@@ -628,18 +616,12 @@ public class DxJointPU extends DxJointUniversal implements DPUJoint {
     void dJointSetPUAnchorDelta(double x, double y, double z,
                                 double dx, double dy, double dz) {
         if (node[0].body != null) {
-//			node[0].body._posr.pos.v[0] += dx;
-//			node[0].body._posr.pos.v[1] += dy;
-//			node[0].body._posr.pos.v[2] += dz;
             node[0].body._posr.pos.add(dx, dy, dz);
         }
 
         setAnchors(new DVector3(x, y, z), _anchor1, _anchor2);
 
         if (node[0].body != null) {
-//			node[0].body._posr.pos.v[0] -= dx;
-//			node[0].body._posr.pos.v[1] -= dy;
-//			node[0].body._posr.pos.v[2] -= dz;
             node[0].body._posr.pos.sub(dx, dy, dz);
         }
 

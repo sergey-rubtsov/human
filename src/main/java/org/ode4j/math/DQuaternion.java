@@ -21,6 +21,7 @@
  *************************************************************************/
 package org.ode4j.math;
 
+import org.ode4j.ode.internal.Rotation;
 
 /**
  * A quaternion consists of four numbers, [w, x, y, z].
@@ -33,13 +34,27 @@ public class DQuaternion implements DQuaternionC {
     private final double[] v;
     public static final int LEN = 4;
 
-    public DQuaternion() {
-        v = new double[LEN];
+    /**
+     * Creating a quaternion representing the rotation between two 3D vectors.
+     */
+    public DQuaternion(DVector3 u, DVector3 v) {
+        this.v = new double[LEN];
+        DVector3C a = DVector3.cross(u, v);
+        this.set1(a.get0());
+        this.set2(a.get1());
+        this.set3(a.get2());
+        double w = Math.sqrt(u.length() * u.length() * v.length() * v.length()) + u.dot(v);
+        this.set0(w);
+        normalize();
     }
 
-    public DQuaternion(double x0, double x1, double x2, double x3) {
+    public DQuaternion() {
+        this.v = new double[LEN];
+    }
+
+    public DQuaternion(double w, double x, double y, double z) {
         this();
-        set(x0, x1, x2, x3);
+        set(w, x, y, z);
     }
 
     public DQuaternion(DQuaternion x) {
@@ -229,11 +244,6 @@ public class DQuaternion implements DQuaternionC {
      */
     public final boolean safeNormalize4() {
         double d = Math.abs(get0());
-//		for (int i = 1; i < v.length; i++) {
-//			if (Math.abs(v[i]) > d) {
-//				d = Math.abs(v[i]);
-//			}
-//		}
         if (Math.abs(get1()) > d) d = Math.abs(get1());
         if (Math.abs(get2()) > d) d = Math.abs(get2());
         if (Math.abs(get3()) > d) d = Math.abs(get3());
@@ -242,21 +252,8 @@ public class DQuaternion implements DQuaternionC {
             set(1, 0, 0, 0);
             return false;
         }
-
         scale(1 / d);
-//		for (int i = 0; i < v.length; i++) {
-//			v[i] /= d;
-//		}
-
-//		double sum = 0;
-//		for (double d2: v) {
-//			sum += d2*d2;
-//		}
-
-        double l = 1. / length();//Math.sqrt(sum);
-//		for (int i = 0; i < v.length; i++) {
-//			v[i] *= l;
-//		}
+        double l = 1. / length();
         scale(l);
         return true;
     }
@@ -277,5 +274,14 @@ public class DQuaternion implements DQuaternionC {
 
     public void setIdentity() {
         set(1, 0, 0, 0);
+    }
+
+    /**
+     * rotation with the equivalent left-handed (Post-Multiplied) 3 × 3 rotation matrix
+     * @param a
+     * @return vector, rotated by quaternion
+     */
+    public DVector3 rotate(DVector3 a) {
+        return Rotation.rotateVectorByQuaternion(a, this);
     }
 }

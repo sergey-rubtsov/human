@@ -40,7 +40,6 @@ import static org.ode4j.ode.internal.Rotation.dQFromAxisAndAngle;
 import static org.ode4j.ode.internal.Rotation.dQMultiply1;
 import static org.ode4j.ode.internal.Rotation.dQMultiply3;
 
-
 /**
  * ****************************************************************************
  * hinge
@@ -53,10 +52,7 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
     private DQuaternion qrel;   // initial relative rotation body1 -> body2
     private DxJointLimitMotor limot; // limit and motor information
 
-
-    DxJointHinge(DxWorld w)
-    //dxJoint( w )
-    {
+    DxJointHinge(DxWorld w) {
         super(w);
         anchor1 = new DVector3();
         anchor2 = new DVector3();
@@ -64,22 +60,15 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         _axis2 = new DVector3();
         qrel = new DQuaternion();
         limot = new DxJointLimitMotor();
-//		dSetZero( anchor1, 4 );
-//		dSetZero( anchor2, 4 );
-//		dSetZero( _axis1, 4 );
         _axis1.set0(1);
-//		dSetZero( _axis2, 4 );
         _axis2.set0(1);
-//		dSetZero( qrel, 4 );
         limot.init(world);
     }
-
 
     @Override
     void getSureMaxInfo(SureMaxInfo info) {
         info.max_m = 6;
     }
-
 
     @Override
     public void
@@ -101,7 +90,6 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
                 info.setM(6);
         }
     }
-
 
     @Override
     public void
@@ -151,9 +139,6 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
             dMultiply0_331(ax2, node[1].body.posr().R(), _axis2);
         } else {
             ax2.set(_axis2);
-            //        ax2[0] = axis2[0];
-            //        ax2[1] = axis2[1];
-            //        ax2[2] = axis2[2];
         }
         dCalcVectorCross3(b, ax1, ax2);
         double k = worldFPS * worldERP;
@@ -164,49 +149,30 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         limot.addLimot(this, worldFPS, info, 5, ax1, true);
     }
 
-
-    //void dJointSetHingeAnchor( dxJointHinge j, double x, double y, double z )
     public void dJointSetHingeAnchor(double x, double y, double z) {
         dJointSetHingeAnchor(new DVector3(x, y, z));
     }
 
     public void dJointSetHingeAnchor(DVector3C xyz) {
-//		setAnchors( x, y, z, anchor1, anchor2 );
         setAnchors(xyz, anchor1, anchor2);
         computeInitialRelativeRotation();
     }
 
-
     void dJointSetHingeAnchorDelta(DxJointHinge joint, double x, double y,
                                    double z, double dx, double dy, double dz) {
         if (joint.node[0].body != null) {
-            //double q[4];
             DVector3 q = new DVector3();
-//			q.v[0] = x - joint.node[0].body._posr.pos.v[0];
-//			q.v[1] = y - joint.node[0].body._posr.pos.v[1];
-//			q.v[2] = z - joint.node[0].body._posr.pos.v[2];
-            //q[3] = 0;
             dMultiply1_331(joint.anchor1, joint.node[0].body.posr().R(), q);
 
             if (joint.node[1].body != null) {
-//				q.v[0] = x - joint.node[1].body._posr.pos.v[0];
-//				q.v[1] = y - joint.node[1].body._posr.pos.v[1];
-//				q.v[2] = z - joint.node[1].body._posr.pos.v[2];
                 q.set(x, y, z).sub(joint.node[1].body.posr().pos());
-                //q[3] = 0;
                 dMultiply1_331(joint.anchor2, joint.node[1].body.posr().R(), q);
             } else {
                 // Move the relative displacement between the passive body and the
                 //  anchor in the same direction as the passive body has just moved
-//				joint.anchor2.v[0] = x + dx;
-//				joint.anchor2.v[1] = y + dy;
-//				joint.anchor2.v[2] = z + dz;
                 joint.anchor2.set(x, y, z).add(dx, dy, dz);
             }
         }
-//		joint.anchor1.v[3] = 0;
-//		joint.anchor2.v[3] = 0;
-
         joint.computeInitialRelativeRotation();
     }
 
@@ -216,8 +182,6 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         computeInitialRelativeRotation();
     }
 
-
-    //void dJointSetHingeAxisOffset( dxJointHinge j, double x, double y, double z, double dangle )
     public void dJointSetHingeAxisOffset(double x, double y, double z, double dangle) {
         setAxes(x, y, z, _axis1, _axis2);
         computeInitialRelativeRotation();
@@ -227,15 +191,9 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         DQuaternion qAngle = new DQuaternion(), qOffset = new DQuaternion();
         dQFromAxisAndAngle(qAngle, x, y, z, dangle);
         dQMultiply3(qOffset, qAngle, qrel);
-//		qrel.v[0] = qOffset.v[0];
-//		qrel.v[1] = qOffset.v[1];
-//		qrel.v[2] = qOffset.v[2];
-//		qrel.v[3] = qOffset.v[3];
         qrel.set(qOffset);
     }
 
-
-    //void dJointGetHingeAnchor( dxJointHinge j, dVector3 result )
     void dJointGetHingeAnchor(DVector3 result) {
         if (isFlagsReverse())
             getAnchor2(result, anchor2);
@@ -243,8 +201,6 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
             getAnchor(result, anchor1);
     }
 
-
-    //void dJointGetHingeAnchor2( dxJointHinge j, dVector3 result )
     void dJointGetHingeAnchor2(DVector3 result) {
         if (isFlagsReverse())
             getAnchor(result, anchor1);
@@ -252,26 +208,18 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
             getAnchor2(result, anchor2);
     }
 
-
-    //	void dJointGetHingeAxis( dxJointHinge j, dVector3 result )
     void dJointGetHingeAxis(DVector3 result) {
         getAxis(result, _axis1);
     }
 
-
-    //void dJointSetHingeParam( dxJointHinge j, D_PARAM_NAMES_X parameter, double value )
     public void dJointSetHingeParam(PARAM_N parameter, double value) {
         limot.set(parameter.toSUB(), value);
     }
 
-
-    //double dJointGetHingeParam( dxJointHinge j, D_PARAM_NAMES parameter )
     double dJointGetHingeParam(PARAM_N parameter) {
         return limot.get(parameter.toSUB());
     }
 
-
-    //double dJointGetHingeAngle( dxJointHinge j )
     public double dJointGetHingeAngle() {
         if (node[0].body != null) {
             double ang = getHingeAngle(node[0].body,
@@ -285,7 +233,6 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         } else return 0;
     }
 
-
     public double dJointGetHingeAngleRate() {
         if (node[0].body != null) {
             DVector3 axis = new DVector3();
@@ -297,8 +244,6 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         } else return 0;
     }
 
-
-    //	void dJointAddHingeTorque( dxJointHinge j, double torque )
     void dJointAddHingeTorque(double torque) {
         DVector3 axis = new DVector3();
 
@@ -306,9 +251,7 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
             torque = -torque;
 
         getAxis(axis, _axis1);
-//		axis.v[0] *= torque;
-//		axis.v[1] *= torque;
-//		axis.v[2] *= torque;
+
         axis.scale(torque);
 
         if (node[0].body != null)
@@ -328,19 +271,13 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         computeInitialRelativeRotation();
     }
 
-
-    /// Compute initial relative rotation body1 . body2, or env . body1
-    void
-    computeInitialRelativeRotation() {
+    // Compute initial relative rotation body1 . body2, or env . body1
+    void computeInitialRelativeRotation() {
         if (node[0].body != null) {
             if (node[1].body != null) {
                 dQMultiply1(qrel, node[0].body._q, node[1].body._q);
             } else {
                 // set qrel to the transpose of the first body q
-//				qrel.v[0] =  node[0].body._q.v[0];
-//				qrel.v[1] = -node[0].body._q.v[1];
-//				qrel.v[2] = -node[0].body._q.v[2];
-//				qrel.v[3] = -node[0].body._q.v[3];
                 qrel.set(node[0].body._q.get0(),
                         -node[0].body._q.get1(),
                         -node[0].body._q.get2(),
@@ -424,24 +361,20 @@ public class DxJointHinge extends DxJoint implements DHingeJoint {
         dJointSetHingeParam(PARAM_N.dParamFMax1, d);
     }
 
-
     @Override
     public void setParamVel(double d) {
         dJointSetHingeParam(PARAM_N.dParamVel1, d);
     }
-
 
     @Override
     public void setParamHiStop(double d) {
         dJointSetHingeParam(PARAM_N.dParamHiStop1, d);
     }
 
-
     @Override
     public void setParamLoStop(double d) {
         dJointSetHingeParam(PARAM_N.dParamLoStop1, d);
     }
-
 
     @Override
     public void setParamBounce(double d) {

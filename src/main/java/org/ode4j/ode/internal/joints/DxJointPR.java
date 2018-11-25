@@ -372,9 +372,6 @@ public class DxJointPR extends DxJoint implements DPRJoint {
         if (node[1].body != null) {
             dMultiply0_331(ax2, R2, axisR2);
         } else {
-//			ax2.v[0] = axisR2.v[0];
-//			ax2.v[1] = axisR2.v[1];
-//			ax2.v[2] = axisR2.v[2];
             ax2.set(axisR2);
         }
 

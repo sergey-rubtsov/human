@@ -89,14 +89,10 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
     // constants to convert degrees to radians and the reverse
     //private static final double RAD_TO_DEG = 180.0/Math.PI;
     private static final double DEG_TO_RAD = Math.PI / 180.0;
-    //#define RAD_TO_DEG (180.0/M_PI)
-    //#define DEG_TO_RAD (M_PI/180.0)
 
     // light vector. LIGHTZ is implicitly 1
     private static final float LIGHTX = 1.0f;
     private static final float LIGHTY = 0.4f;
-    //#define LIGHTX (1.0f)
-    //#define LIGHTY (0.4f)
 
     // ground and sky
     private static final float SHADOW_INTENSITY = 0.65f;
@@ -104,10 +100,6 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
     private static final float GROUND_R = 0.5f;
     private static final float GROUND_G = 0.5f;
     private static final float GROUND_B = 0.3f;
-    //#define SHADOW_INTENSITY (0.65f)
-    //#define GROUND_R (0.5f) 	// ground color for when there's no texture
-    //#define GROUND_G (0.5f)
-    //#define GROUND_B (0.3f)
 
     private static final float ground_scale = 1.0f / 1.0f;    // ground texture scale (1/size)
     private static final float ground_ofsx = 0.5f;        // offset of ground texture
@@ -173,35 +165,31 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
             return image_data;
         }
 
-
         // skip over whitespace and comments in a stream.
-
         private void skipWhiteSpace(String filename, PushbackInputStream f) throws IOException {
             int c, d;
-            while (true) {//for(;;) {
-                c = f.read();//fgetc(f);
+            while (true) {
+                c = f.read();
                 if (c == -1) dsError("unexpected end of file in \"%s\"", filename);
 
                 // skip comments
                 if (c == '#') {
                     do {
-                        d = f.read();//fgetc(f);
+                        d = f.read();
                         if (d == -1) dsError("unexpected end of file in \"%s\"", filename);
                     } while (d != '\n');
                     continue;
                 }
 
                 if (c > ' ') {
-                    f.unread(c);//ungetc (c,f);
+                    f.unread(c);
                     return;
                 }
             }
         }
 
-
         // read a number from a stream, this return 0 if there is none (that's okay
         // because 0 is a bad value for all PPM numbers anyway).
-
         private int readNumber(String filename, PushbackInputStream f) throws IOException {
             int c, n = 0;
             for (; ; ) {
@@ -215,17 +203,14 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
             }
         }
 
-
         ImageIO(String filename) {
             PushbackInputStream f = null;
             try {
                 InputStream is = getClass().getResourceAsStream(filename);
                 if (is == null) throw new IllegalArgumentException("File not found: " + filename);
                 f = new PushbackInputStream(new BufferedInputStream(is));
-                //if (f == null) dsError ("Can't open image file `%s'",filename);
 
                 // read in header
-                //if (fgetcC(f) != 'P' || fgetcC(f) != '6')
                 if (f.read() != 'P' || f.read() != '6')
                     dsError("image file \"%s\" is not a binary PPM (no P6 header)", filename);
                 skipWhiteSpace(filename, f);
@@ -244,14 +229,14 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
                     dsError("image file \"%s\" must have color range of 255", filename);
 
                 // read either nothing, LF (10), or CR,LF (13,10)
-                int c = f.read();//fgetc(f);
+                int c = f.read();
                 if (c == 10) {
                     // LF
                 } else if (c == 13) {
                     // CR
-                    c = f.read();//fgetc(f);
-                    if (c != 10) f.unread(c);//ungetc (c,f);
-                } else f.unread(c);//ungetc (c,f);
+                    c = f.read();
+                    if (c != 10) f.unread(c);
+                } else f.unread(c);
 
                 // read in rest of data
                 //image_data = new byte [image_width*image_height*3];
@@ -284,15 +269,9 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
     private static class Texture {
         private Image image;
         private int name; // GLuint TZ
-        //public:
-        //Texture (String filename);
-        //  ~Texture();
-        //void bind (int modulate);
-
 
         public Texture(String filename) {
             image = new ImageIO(filename);
-//			GL11.glGenTextures (1,name);
             IntBuffer ib = BufferUtils.createIntBuffer(1);
             ib.put(name).flip();  //Necessary ? TZ
             GL11.glGenTextures(ib);
@@ -306,13 +285,6 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
             GL11.glPixelStorei(GL11.GL_UNPACK_SKIP_ROWS, 0);
             GL11.glPixelStorei(GL11.GL_UNPACK_SKIP_PIXELS, 0);
 
-//			glTexImage2D (GL11.GL_TEXTURE_2D, 0, 3, image->width(), image->height(), 0,
-//					   GL_RGB, GL_UNSIGNED_BYTE, image->data());
-//			GL11.glTexImage2D (GL11.GL_TEXTURE_2D, 0, 3, image.width(), image.height(), 0,
-//					GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, ByteBuffer.wrap(image.data()));
-            //TZ this is the original:
-//			GLX.gluBuild2DMipmaps (GL11.GL_TEXTURE_2D, 3, image.width(), image.height(),
-//			GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, image.data());
             GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, 3, image.width(), image.height(),
                     GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, image.data());
 
@@ -327,16 +299,9 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
             GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_DECAL);
         }
 
-
-        //Texture::~Texture()
-        //{
-        //  delete image;
-        //  glDeleteTextures (1,&name);
-        //}
         @Override
         protected void finalize() throws Throwable {
             image = null;
-//			GL11.glDeleteTextures (1, name));
             GL11.glDeleteTextures(IntBuffer.wrap(new int[]{name}));
             super.finalize();
         }
@@ -377,7 +342,6 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
     private FloatBuffer light_specular2 = BufferUtils.createFloatBuffer(4);
 
     private void setColor(float r, float g, float b, float alpha) {
-        //GLfloat light_ambient[4],light_diffuse[4],light_specular[4];
         light_ambient2.put(new float[]{r * 0.3f, g * 0.3f, b * 0.3f, alpha}).flip();
         light_diffuse2.put(new float[]{r * 0.7f, g * 0.7f, b * 0.7f, alpha}).flip();
         light_specular2.put(new float[]{r * 0.2f, g * 0.2f, b * 0.2f, alpha}).flip();
@@ -390,7 +354,6 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
 
     private FloatBuffer matrixF = BufferUtils.createFloatBuffer(16);
 
-    //	static void setTransform (final float pos[3], final float R[12])
     private void setTransform(final float[] pos, final float[] R) {
         //GLfloat
         float[] matrix = new float[16];
@@ -418,7 +381,6 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
 
     private DoubleBuffer matrixD = BufferUtils.createDoubleBuffer(16);
 
-    //	static void setTransformD (final double pos[3], final double R[12])
     private void setTransform(final DVector3C pos, final DMatrix3C R) {
         //GLdouble
         double[] matrix = new double[16];
@@ -444,9 +406,7 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
         GL11.glMultMatrix(matrixD);
     }
 
-
     // set shadow projection transform
-
     private FloatBuffer matrixSST = BufferUtils.createFloatBuffer(16);
 
     private void setShadowTransform() {
@@ -459,21 +419,11 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
         matrix[9] = -LIGHTY;
         matrix[15] = 1;
         matrixSST.put(matrix);
-//		for (int i=0; i < 16; i++) matrixSST.put(i, 0);
-//		matrixSST.put(0, 1);
-//		matrixSST.put(5, 1);
-//		matrixSST.put(8, -LIGHTX);
-//		matrixSST.put(9, -LIGHTY);
-//		matrixSST.put(15, 1);
         matrixSST.flip();
         GL11.glPushMatrix();
         GL11.glMultMatrix(matrixSST);
     }
 
-    //	static void drawConvex (float *_planes,unsigned int _planecount,
-//			float *_points,
-//			unsigned int _pointcount,
-//			unsigned int *_polygons)
     private void drawConvex(float[] _planes, int _planecount,
                             float[] _points,
                             int _pointcount,
@@ -485,7 +435,7 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
             int pointcount = _polygons[polyindex];
             polyindex++;
             GL11.glBegin(GL11.GL_POLYGON);
-            GL11.glNormal3f(_planes[(i * 4) + 0],
+            GL11.glNormal3f(_planes[i * 4],
                     _planes[(i * 4) + 1],
                     _planes[(i * 4) + 2]);
             for (int j = 0; j < pointcount; ++j) {
@@ -498,10 +448,6 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
         }
     }
 
-    //	static void drawConvexD (double *_planes,unsigned int _planecount,
-//			double *_points,
-//			unsigned int _pointcount,
-//			unsigned int *_polygons)
     private void drawConvexD(double[] _planes, int _planecount,
                              double[] _points,
                              int _pointcount,
@@ -513,7 +459,7 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
             int pointcount = _polygons[polyindex];
             polyindex++;
             GL11.glBegin(GL11.GL_POLYGON);
-            GL11.glNormal3d(_planes[(i * 4) + 0],
+            GL11.glNormal3d(_planes[i * 4],
                     _planes[(i * 4) + 1],
                     _planes[(i * 4) + 2]);
             for (int j = 0; j < pointcount; ++j) {
@@ -1564,11 +1510,7 @@ public class DrawStuffGL extends LwJGL implements DrawStuffApi {
         }
     }
 
-
     //extern "C"
-//	void dsDrawTriangle (final float pos[3], final float R[12],
-//			final float *v0, final float *v1,
-//			final float *v2, int solid)
     void dsDrawTriangle(final float[] pos, final float[] R,
                         final float[] v0, final float[] v1,
                         final float[] v2, boolean solid) {
