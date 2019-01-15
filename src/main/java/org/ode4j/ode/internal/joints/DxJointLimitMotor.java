@@ -39,23 +39,20 @@ import static org.ode4j.ode.OdeMath.dCalcVectorCross3;
  * common limit and motor information for a single joint axis of movement
  */
 public class DxJointLimitMotor {
-    public double vel;        // powered joint: velocity, max force
+    public double vel;          // powered joint: velocity, max force
     public double fmax;
-    public double lostop;   // joint limits, relative to initial position
+    public double lostop;       // joint limits, relative to initial position
     public double histop;
-    public double fudge_factor;     // when powering away from joint limits
-    public double normal_cfm;       // cfm to use when not at a stop
-    public double stop_erp; // erp and cfm for when at joint limit
+    public double fudge_factor; // when powering away from joint limits
+    public double normal_cfm;   // cfm to use when not at a stop
+    public double stop_erp;     // erp and cfm for when at joint limit
     double stop_cfm;
-    public double bounce;           // restitution factor
+    public double bounce;       // restitution factor
     // variables used between getInfo1() and getInfo2()
-    public int limit;          // 0=free, 1=at lo limit, 2=at hi limit
-    double limit_err;    // if at limit, amount over limit
+    public int limit;           // 0=free, 1=at lo limit, 2=at hi limit
+    double limit_err;           // if at limit, amount over limit
 
     //****************************************************************************
-    // dxJointLimitMotor
-
-
     public void init(DxWorld world) {
         vel = 0;
         fmax = 0;
@@ -69,7 +66,6 @@ public class DxJointLimitMotor {
         limit = 0;
         limit_err = 0;
     }
-
 
     public void set(PARAM num, double value) {
         switch (num) {
@@ -105,7 +101,6 @@ public class DxJointLimitMotor {
         }
     }
 
-
     public double get(PARAM num) {
         switch (num) {
             case dParamLoStop:
@@ -127,11 +122,9 @@ public class DxJointLimitMotor {
             case dParamStopCFM:
                 return stop_cfm;
             default:
-                //return 0;
                 throw new IllegalArgumentException("" + num.name());
         }
     }
-
 
     public boolean testRotationalLimit(double angle) {
         if (angle <= lostop) {
@@ -148,10 +141,6 @@ public class DxJointLimitMotor {
         }
     }
 
-
-    // public  int addLimot( dxJoint joint,
-    //         Info2 info, int row,
-    //         final dVector3 ax1, int rotational )
     public int addLimot(DxJoint joint, double fps,
                         Info2Descr info, int row,
                         final DVector3C ax1, boolean rotational) {
@@ -220,7 +209,6 @@ public class DxJointLimitMotor {
 
                     // if we're powering away from the limit, apply the fudge factor
                     if ((limit == 1 && vel > 0) || (limit == 2 && vel < 0)) fm *= fudge_factor;
-
 
                     double fm_ax1_0 = fm * ax1.get0(), fm_ax1_1 = fm * ax1.get1(), fm_ax1_2 = fm * ax1.get2();
 

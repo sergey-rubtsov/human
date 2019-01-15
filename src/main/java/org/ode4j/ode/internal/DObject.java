@@ -26,20 +26,16 @@ package org.ode4j.ode.internal;
 
 import org.ode4j.ode.internal.cpp4j.java.Ref;
 
-
 /**
  * Base class for bodies and joints.
  */
 public abstract class DObject extends DBase {
 
-    public DxWorld world;        // world this object is in
-    //      dObject *next;        // next object of this type in list
-//      dObject **tome;        // pointer to previous object's next ptr
-    private final Ref<DObject> _next;        // next object of this type in list
-    private Ref<DObject> _tome;        // pointer to previous object's next ptr
-    public int tag;            // used by dynamics algorithms
-    //void userdata;        // user settable data
-    protected Object userdata;        // user settable data
+    public DxWorld world;               // world this object is in
+    private final Ref<DObject> _next;   // next object of this type in list
+    private Ref<DObject> _tome;         // pointer to previous object's next ptr
+    public int tag;                     // used by dynamics algorithms
+    protected Object userdata;          // user settable data
 
     protected DObject(DxWorld w) { //From ODE.java
         world = w;
@@ -59,7 +55,6 @@ public abstract class DObject extends DBase {
      * @param first List to which the object should be added.
      * @see DObject#addObjectToList(Ref)
      */
-    //static void addObjectToList (dObject *obj, dObject **first)
     public static <T extends DObject> void addObjectToList(T obj, Ref<T> first) {
         obj.addObjectToList(first);
     }
@@ -75,10 +70,6 @@ public abstract class DObject extends DBase {
      */
     @SuppressWarnings("unchecked")
     protected <T extends DObject> void addObjectToList(Ref<T> first) {
-        //  obj.next = *first;
-        //  obj.tome = first;
-        //  if (first != null) first.tome = &obj.next;
-        //  first = obj;
         _next.set(first.get());
         _tome = (Ref<DObject>) first;
         if (first.get() != null) {
@@ -97,13 +88,7 @@ public abstract class DObject extends DBase {
      *
      * @param <T>
      */
-//    public static <T extends dObject>void removeObjectFromList (T obj)
     public <T extends DObject> void removeObjectFromList() {
-        //      if (obj.next) obj.next.tome = obj.tome;
-        //      *(obj.tome) = obj.next;
-        //      // safeguard
-        //      obj.next = 0;
-        //      obj.tome = 0;
         if (_next.get() != null) _next.get()._tome = _tome;
         _tome.set(_next.get());
         // safeguard

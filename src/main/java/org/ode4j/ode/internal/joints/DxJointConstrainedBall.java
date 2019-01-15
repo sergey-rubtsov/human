@@ -66,10 +66,8 @@ public class DxJointConstrainedBall extends DxJointBall {
     public void getInfo1(DxJoint.Info1 info) {
         info.setNub(3);
         info.setM(3);
-        boolean limitingFlex = (limotFlex.lostop >= -M_PI || limotFlex.histop <= M_PI)
-                && limotFlex.lostop <= limotFlex.histop;
-        boolean limitingTwist = (limotTwist.lostop >= -M_PI || limotTwist.histop <= M_PI)
-                && limotTwist.lostop <= limotTwist.histop;
+        boolean limitingFlex = checkLimits(limotFlex.lostop, limotFlex.histop);
+        boolean limitingTwist = checkLimits(limotTwist.lostop, limotTwist.histop);
         DVector3 flex = new DVector3();
         getAxis(flex, baseAxis);
         DVector3 twist = new DVector3();

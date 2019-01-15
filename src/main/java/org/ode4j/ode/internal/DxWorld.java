@@ -94,16 +94,6 @@ public class DxWorld extends DBase implements DWorld {
     //dxWorld();
     //virtual ~dxWorld(); // Compilers emit warnings if a class with virtual methods does not have a virtual destructor :(
 
-//    static boolean InitializeDefaultThreading();
-//    static void FinalizeDefaultThreading();
-//
-//    void AssignThreadingImpl(dxThreadingFunctionsInfo [][]functions_info, dThreadingImplementationID threading_impl);
-//    int GetThreadingIslandsMaxThreadsCount(int [][]out_active_thread_count_ptr=NULL);
-//    dxWorldProcessContext[][] UnsafeGetWorldProcessingContext();
-//
-//    //private: // dxIThreadingDefaultImplProvider
-//    dxThreadingFunctionsInfo RetrieveThreadingDefaultImpl(dThreadingImplementationID &out_default_impl);
-
     //****************************************************************************
     // world
     private DxWorld() {

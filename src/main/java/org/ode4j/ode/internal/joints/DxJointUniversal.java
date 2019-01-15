@@ -116,7 +116,6 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
 
             // This code is essentialy the same as getHingeAngle(), see the comments
             // there for details.
-
             // get qrel = relative rotation between node[0] and the cross
             dQMultiply1(qq, node[0].body._q, qcross);
             dQMultiply2(qrel, qq, qrel1);
@@ -149,7 +148,7 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
             //      normalized when we set them.
 
             // We set the quaternion q = [cos(theta), dir*sin(theta)] = [w, x, y, Z]
-            qrel.set0(0);                // equivalent to cos(Pi/2)
+            qrel.set0(0);                        // equivalent to cos(Pi/2)
             qrel.set1(ax1.get0() + ax2.get0());  // equivalent to x*sin(Pi/2); since sin(Pi/2) = 1
             qrel.set2(ax1.get1() + ax2.get1());
             qrel.set3(ax1.get2() + ax2.get2());
@@ -216,7 +215,6 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
         return 0;
     }
 
-
     protected double getAngle2Internal() {
         if (node[0].body != null) {
             // length 1 joint axis in global coordinates, from each body
@@ -250,7 +248,6 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
                 // pretend joint->node[1].body->q is the identity
                 dQMultiply2(qrel, qcross, qrel2);
             }
-
             return -getHingeAngleFromRelativeQuat(qrel, _axis2);
         }
         return 0;
@@ -266,10 +263,8 @@ public class DxJointUniversal extends DxJoint implements DUniversalJoint {
         info.setNub(4);
         info.setM(4);
 
-        boolean limiting1 = (limot1.lostop >= -M_PI || limot1.histop <= M_PI) &&
-                limot1.lostop <= limot1.histop;
-        boolean limiting2 = (limot2.lostop >= -M_PI || limot2.histop <= M_PI) &&
-                limot2.lostop <= limot2.histop;
+        boolean limiting1 = checkLimits(limot1.lostop, limot1.histop);
+        boolean limiting2 = checkLimits(limot2.lostop, limot2.histop);
 
         // We need to call testRotationLimit() even if we're motored, since it
         // records the result.

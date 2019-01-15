@@ -37,8 +37,8 @@ import org.ode4j.ode.internal.DxWorld;
 public class DxJointBall extends DxJoint implements DBallJoint {
     DVector3 anchor1;   // anchor w.r.t first body
     DVector3 anchor2;   // anchor w.r.t second body
-    double erp;          // error reduction
-    double cfm;          // constraint force mix in
+    double erp;         // error reduction
+    double cfm;         // constraint force mix in
 
     DxJointBall(DxWorld w) {
         super(w);
@@ -54,8 +54,7 @@ public class DxJointBall extends DxJoint implements DBallJoint {
     }
 
     @Override
-    public void
-    getInfo1(DxJoint.Info1 info) {
+    public void getInfo1(DxJoint.Info1 info) {
         info.setM(3);
         info.setNub(3);
     }

@@ -24,9 +24,17 @@
  *************************************************************************/
 package deep.learning.human;
 
+import deep.learning.human.humanoid.HumanoidBuilder;
+import deep.learning.human.humanoid.LongBone;
+import deep.learning.human.humanoid.ShortBone;
+import deep.learning.human.humanoid.joints.BallJoint;
+import deep.learning.human.humanoid.joints.UniversalJoint;
+import deep.learning.human.utils.Utils;
+import deep.learning.human.utils.config.HumanConfig;
 import org.ode4j.math.DMatrix3;
 import org.ode4j.math.DQuaternion;
 import org.ode4j.math.DVector3;
+import org.ode4j.math.DVector3C;
 import org.ode4j.ode.DBody;
 import org.ode4j.ode.DCapsule;
 import org.ode4j.ode.DGeom;
@@ -38,11 +46,6 @@ import org.ode4j.ode.OdeMath;
 import org.ode4j.ode.internal.Rotation;
 
 import java.util.Random;
-
-import deep.learning.human.humanoid.HumanoidBuilder;
-import deep.learning.human.humanoid.LongBone;
-import deep.learning.human.utils.Utils;
-import deep.learning.human.utils.config.HumanConfig;
 
 import static deep.learning.human.internal.DrawStuff.dsDrawCapsule;
 import static deep.learning.human.internal.DrawStuff.dsDrawConvex;
