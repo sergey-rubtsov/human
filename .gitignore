@@ -1,0 +1,22 @@
+### JetBrains template 
+# Covers IntelliJ 
+ 
+*.iml 
+.idea/ 
+*.ipr 
+*.iws 
+out/ 
+ 
+### Java template 
+*.class 
+ 
+# Package Files # 
+*.jar 
+*.war 
+*.ear 
+ 
+### Maven template 
+target/ 
+pom.xml 
+ 
+.tmp 
