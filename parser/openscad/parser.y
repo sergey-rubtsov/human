@@ -162,23 +162,23 @@ bool fileEnded=false;
 %type <arg> argument_call 
 %type <arg> argument_decl 
 %type <text> module_id 
- 
-%debug 
-%locations 
- 
-%% 
- 
-input 
- : /* empty */ 
- | input 
- TOK_USE 
- { 
- rootmodule->registerUse(std::string($2), LOC(@2)); 
- free($2); 
- } 
- | input statement 
- ; 
- 
+
+%debug
+%locations
+
+%%
+
+input
+ : /* empty */
+ | input
+ TOK_USE
+ {
+ rootmodule->registerUse(std::string($2), LOC(@2));
+ free($2);
+ }
+ | input statement
+ ;
+
 statement 
  : ';' 
  | '{' inner_input '}' 

@@ -1,24 +1,6 @@
-This directory contains a minimal example for using JLex and CUP
-together.  This example requires CUP version 0.10k or greater and
-JLex version 1.2.5 or greater.
+       Jay reads the grammar specification in the file filename and generates an LR(1) parser for
+       it.  The parsers consist of a set of LALR(1) parsing tables and a driver routine from  the
+       file  skeleton  written in the Java programming language.  Jay writes the parse tables and
+       the driver routine to standard output.
 
-To compile and build:
-
- java JLex.Main minimal.lex
- mv minimal.lex.java Yylex.java
- java java_cup.Main minimal.cup
- javac -d . parser.java sym.java Yylex.java
-
-The example is a simple calculator.  Only addition and multiplation
-are supported.  Input is taken from stdin.  To run:
- java -classpath .:$CLASSPATH Example.parser
-
-Try inputs such as:
- 1+2;
- 1+2*5;
- 5*1+2;
- 5*(1+2);
-
-Enjoy!
-
--- C. Scott Ananian <cananian@alumni.princeton.edu>, 27-Jul-1999
+        java -jar jay.jar -v compiler.y 1>stdout.txt

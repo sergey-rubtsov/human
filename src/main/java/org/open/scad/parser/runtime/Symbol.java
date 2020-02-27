@@ -2,7 +2,7 @@ package org.open.scad.parser.runtime;
 
 /**
  * Defines the Symbol class, which is used to represent all terminals
- * and nonterminals while parsing.  The lexer should pass CUP Symbols 
+ * and nonterminals while parsing.  The jlex should pass CUP Symbols
  * and CUP returns a Symbol.
  *
  * @version last updated: 7/3/96
@@ -11,7 +11,7 @@ package org.open.scad.parser.runtime;
 
 /* ****************************************************************
   Class Symbol
-  what the parser expects to receive from the lexer. 
+  what the parser expects to receive from the jlex.
   the token is identified as follows:
   sym:    the symbol type
   parse_state: the parse state.

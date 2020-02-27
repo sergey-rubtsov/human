@@ -1,0 +1,54 @@
+java -jar jay.jar -v openscad/compiler.y 1>stdout.txt
+
+Usage
+
+jay reads a grammar specification from a file and generates an LALR(1)
+parser for it. A parser consists of a set of parsing tables and a
+driver routine from a skeleton which is read from standard input.
+Suitable skeletons exist for Java and C#. Tables and driver are written
+to standard output.
+
+  jay [-ctv] [-b file-prefix] grammar skeleton|<skeleton
+  java -jar jay.jar [-ctv] [-b file-prefix] grammar skeleton|<skeleton
+
+The following options are available:
+-b file-prefix 	changes the prefix prepended to the secondary output
+file names to the string denoted by file_prefix. The default prefix
+is the character y.
+-c 	arranges for C preprocessor #line directives to be incorporated
+in the output. This is only useful for C#.
+-t 	arranges for debugging information to be incorporated in the output.
+ The actual information is controlled by the skeleton files; as
+ distributed it depends on additional runtime packages. For C# this
+ is part of the source download, for Java see jay.yydebug.
+-v 	causes a human-readable description of the generated parser to
+be written to the file file_prefix.output.
+
+       jay [ -tv ] [ -c ] [ -p ] [ -b file_prefix ] [ -V yyValue ] filename < skeleton
+
+       Jay reads the grammar specification in the file filename and generates an LR(1) parser for
+       it.  The parsers consist of a set of LALR(1) parsing tables and a driver routine from  the
+       file  skeleton  written in the Java programming language.  Jay writes the parse tables and
+       the driver routine to standard output.
+
+       The following options are available:
+
+              -b file_prefix
+                     The -b option changes the prefix prepended to the output file names  to  the
+                     string denoted by file_prefix.  The default prefix is the character y.
+
+              -c     The -c option makes jay generate C# code instead of the default Java.
+
+              -t     The  -t  option arranges for debugging information to be incorporated in the
+                     compiled code.
+
+              -v     The -v option causes a human-readable description of the generated parser to
+                     be written to the file y.output.
+
+              -p     The -p option causes jay to print the directory in which its sample skeleton
+                     files are installed.  If a project wants to use the  default  skeleton  file
+                     included  with jay, it can use this option in a makefile to find the path to
+                     the skeleton or skeleton.cs file included with the jay distribution.
+
+       If the environment variable TMPDIR is set, the string denoted by TMPDIR will  be  used  as
+       the name of the directory where the temporary files are created.

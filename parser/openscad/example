@@ -1,0 +1,21 @@
+// create an icosahedron by intersecting 3 orthogonal golden-ratio rectangles
+module icosahedron(size) {
+   phi=0.5*(sqrt(5)+1); // golden ratio
+   st=size/10000;  // microscopic sheet thickness
+   hull() {
+       cube([size*phi,size,st], true);
+       rotate([90,90,0]) cube([size*phi,size,st], true);
+       rotate([90,0,90]) cube([size*phi,size,st], true);
+   }
+}
+
+// display the 3 internal sheets alongside the icosahedron
+phi=0.5*(sqrt(5)+1);
+size=10;
+translate([-20,0,0]) union() {
+   cube([size*phi,size,0.01], true);
+   rotate([90,90,0]) cube([size*phi,size,0.01], true);
+   rotate([90,0,90]) cube([size*phi,size,0.01], true);
+}
+
+icosahedron(size);

@@ -4,7 +4,7 @@ import org.open.scad.parser.runtime.Symbol;
 
 import java.util.Hashtable;
 
-/** This class implements a small scanner (aka lexical analyzer or lexer) for
+/** This class implements a small scanner (aka lexical analyzer or jlex) for
  *  the JavaCup specification.  This scanner reads characters from standard 
  *  input (System.in) and returns integers corresponding to the terminal 
  *  number of the next Symbol. Once end of input is reached the EOF Symbol is 

@@ -1,0 +1,82 @@
+package org.open.scad.compiler;
+
+import static org.open.scad.compiler.Parser.*;
+
+%%
+%public
+%class Lexer
+%implements Parser.yyInput
+%{
+  /** returned by {@link #token()}.
+    */
+  protected int token;
+  /** returned by {@link #value()}.
+    */
+  protected Object value;
+  /** current input symbol.
+    */
+  public int token() { return token; }
+  /** null or string associated with current input symbol.
+    */
+  public Object value() { return value; }
+  /** position for error message.
+    */
+  public String toString () { return "("+(yyline+1)+")"; }
+%}
+%type boolean
+%function advance
+%eofval{
+  return false;
+%eofval}
+%line
+
+D = [0-9]
+E = [Ee][+-]?{D}+
+H = [0-9a-fA-F]
+
+U = [\x80-\xbf]
+U2 = [\xc2-\xdf]
+U3 = [\xe0-\xef]
+U4 = [\xf0-\xf4]
+UNICODE = {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
+
+number = {D}+{E}? | {D}*\.{D}+{E}? | {D}+\.{D}*{E}?
+
+id = "$"?[a-zA-Z0-9_]+
+
+use = "use" [ \t\r\n]*"<" [^\t\r\n>]+ ">"
+include = "include" [ \t\r\n]*"<" [^\t\r\n>]*"/" [^\t\r\n>/]+ ">"
+
+%%
+
+[number]    { token = TOK_NUMBER;       value = yytext(); }
+[id]        { token = TOK_ID;           value = yytext(); }
+[use]       { token = TOK_USE; value = yytext(); }
+[include]   { }
+
+"<=" { token = LE;}
+">=" { token = GE;}
+"==" { token = EQ;}
+"!=" { token = NE;}
+"&&" { token = AND;}
+"||" { token = OR;}
+
+"\x03" { token = TOK_EOT; }
+
+"module"    { token = TOK_MODULE; }
+"function"  { token =  TOK_FUNCTION; }
+"if"        { token = TOK_IF; }
+"else"      { token = TOK_ELSE; }
+"let"       { token = TOK_LET; }
+"assert"    { token = TOK_ASSERT; }
+"echo"      { token = TOK_ECHO; }
+"for"       { token = TOK_FOR; }
+"each"      { token = TOK_EACH; }
+"true"      { token = TOK_TRUE; }
+"false"     { token = TOK_FALSE; }
+"undef"     { token = TOK_UNDEF; }
+
+
+
+[ \t\r\n\f] { /* ignore white space. */ }
+{UNICODE}+ { System.err.println("Illegal character: " + yytext()); }
