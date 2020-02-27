@@ -1,7 +1,6 @@
 package org.open.scad.compiler;
 
 import static org.open.scad.compiler.Parser.*;
-
 %%
 %public
 %class Lexer
