@@ -19,7 +19,8 @@ public class LexerTest {
         InputStreamReader is = new InputStreamReader(is1);
         Lexer lexer = new Lexer(is);
         while(lexer.advance()) {
-            System.out.println(lexer.value());
+            System.out.print(" " + lexer.token() + " " + lexer.tokenName());
+            System.out.println(" " + lexer.value());
         }
     }
 

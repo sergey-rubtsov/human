@@ -34,6 +34,10 @@ import static org.open.scad.compiler.Parser.*;
       return token;
   }
 
+  public String tokenName() {
+      return yyNames[token];
+  }
+
   /** null or string associated with current input symbol.
     */
   public Object value() {
@@ -43,6 +47,18 @@ import static org.open.scad.compiler.Parser.*;
   /** position for error message.
     */
   public String toString() { return "Error line: " + (yyline + 1); }
+
+  /*
+   Rules for include <path/file>
+   1) include <sourcepath/path/file>
+   2) include <librarydir/path/file>
+
+   Globals used: filepath, sourcefile, filename
+   */
+  //"use"[ \t\r\n]*"<" [^\t\r\n>]+ ">"          { return new Token(TOK_USE, yytext()); }
+  //"include"[ \t\r\n]*"<" [^\t\r\n>]*"/" [^\t\r\n>/]+ ">"   { }
+  //. { System.out.println(yytext().charAt(0)); }
+
 %}
 
 %type Token
@@ -51,16 +67,45 @@ import static org.open.scad.compiler.Parser.*;
   return new Token(YY_EOF, "EOF");
 %eofval}
 
-DIGIT=		[0-9]
-LETTER=		[a-zA-Z]
-WHITESPACE=	[ \t\n\r]      // space, tab, newline
+D=  [0-9]
+E=  [Ee][+-]?{D}+
 
+U=[\x80-\xbf]
+U2=[\xc2-\xdf]
+U3=[\xe0-\xef]
+U4=[\xf0-\xf4]
+UNICODE={U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
+
+number = {D}+{E}? | {D}*\.{D}+{E}? | {D}+\.{D}*{E}?
+
+id = "$"?[a-zA-Z0-9_]+
 %%
 
-{LETTER}({LETTER}|{DIGIT}*) {System.out.println("line id " + (yyline + 1)); return new Token(1, yytext());}
-{DIGIT}+                    {System.out.println("line dg " + (yyline + 1)); return new Token(2, yytext());}
-"="                         {System.out.println("line as " + (yyline + 1)); return new Token(3, yytext());}
-"=="                        {System.out.println("line eq " + (yyline + 1)); return new Token(4, yytext());}
-{WHITESPACE}*               { }
-.               	    {System.out.println(yyline+1 + ": bad char");  return new Token(5, yytext());}
-"\x03" { return new Token(YY_EOF, yytext());}
+"<=" { return new Token(LE, yytext()); }
+">=" { return new Token(GE, yytext()); }
+"==" { return new Token(EQ, yytext()); }
+"!=" { return new Token(NE, yytext()); }
+"&&" { return new Token(AND, yytext()); }
+"||" { return new Token(OR, yytext()); }
+
+"\x03" { return new Token(TOK_EOT, yytext()); }
+
+"module"    { return new Token(TOK_MODULE, yytext()); }
+"function"  { return new Token(TOK_FUNCTION, yytext()); }
+"if"        { return new Token(TOK_IF, yytext()); }
+"else"      { return new Token(TOK_ELSE, yytext()); }
+"let"       { return new Token(TOK_LET, yytext()); }
+"assert"    { return new Token(TOK_ASSERT, yytext()); }
+"echo"      { return new Token(TOK_ECHO, yytext()); }
+"for"       { return new Token(TOK_FOR, yytext()); }
+"each"      { return new Token(TOK_EACH, yytext()); }
+"true"      { return new Token(TOK_TRUE, yytext()); }
+"false"     { return new Token(TOK_FALSE, yytext()); }
+"undef"     { return new Token(TOK_UNDEF, yytext()); }
+
+[ \t\r\n\f] { /* ignore white space. */ }
+[UNICODE]+  { return new Token(YY_NOT_ACCEPT, yytext()); }
+
+[number]    { return new Token(TOK_NUMBER, yytext()); }
+[id]        { return new Token(TOK_ID, yytext()); }
+. { return new Token(YY_NOT_ACCEPT, yytext()); }
