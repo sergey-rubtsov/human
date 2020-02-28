@@ -13,21 +13,36 @@ public class Lexer implements Parser.yyInput {
 	private final int YY_BOL = 128;
 	private final int YY_EOF = 129;
 
-  /** returned by {@link #token()}.
-    */
+  public boolean advance() throws java.io.IOException {
+      Token t = yylex();
+      if (t == null) {
+          return false;
+      }
+      value = t.getValue();
+      token = t.getToken();
+      return (token != YY_EOF);
+  }
+  /**
+   * returned by {@link #token()}.
+   */
   protected int token;
-  /** returned by {@link #value()}.
-    */
+  /**
+   * returned by {@link #value()}.
+   */
   protected Object value;
   /** current input symbol.
     */
-  public int token() { return token; }
+  public int token() {
+      return token;
+  }
   /** null or string associated with current input symbol.
     */
-  public Object value() { return value; }
+  public Object value() {
+      return value;
+  }
   /** position for error message.
     */
-  public String toString () { return "("+(yyline+1)+")"; }
+  public String toString() { return "Error line: " + (yyline + 1); }
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -219,98 +234,33 @@ public class Lexer implements Parser.yyInput {
 		return res;
 	}
 	private int yy_acpt[] = {
-		/* 0 */ YY_NOT_ACCEPT,
+		/* 0 */ YY_NO_ANCHOR,
 		/* 1 */ YY_NO_ANCHOR,
 		/* 2 */ YY_NO_ANCHOR,
 		/* 3 */ YY_NO_ANCHOR,
 		/* 4 */ YY_NO_ANCHOR,
 		/* 5 */ YY_NO_ANCHOR,
 		/* 6 */ YY_NO_ANCHOR,
-		/* 7 */ YY_NO_ANCHOR,
+		/* 7 */ YY_NOT_ACCEPT,
 		/* 8 */ YY_NO_ANCHOR,
 		/* 9 */ YY_NO_ANCHOR,
 		/* 10 */ YY_NO_ANCHOR,
 		/* 11 */ YY_NO_ANCHOR,
-		/* 12 */ YY_NO_ANCHOR,
-		/* 13 */ YY_NO_ANCHOR,
-		/* 14 */ YY_NO_ANCHOR,
-		/* 15 */ YY_NO_ANCHOR,
-		/* 16 */ YY_NO_ANCHOR,
-		/* 17 */ YY_NO_ANCHOR,
-		/* 18 */ YY_NO_ANCHOR,
-		/* 19 */ YY_NO_ANCHOR,
-		/* 20 */ YY_NO_ANCHOR,
-		/* 21 */ YY_NO_ANCHOR,
-		/* 22 */ YY_NO_ANCHOR,
-		/* 23 */ YY_NO_ANCHOR,
-		/* 24 */ YY_NO_ANCHOR,
-		/* 25 */ YY_NO_ANCHOR,
-		/* 26 */ YY_NOT_ACCEPT,
-		/* 27 */ YY_NO_ANCHOR,
-		/* 28 */ YY_NO_ANCHOR,
-		/* 29 */ YY_NO_ANCHOR,
-		/* 30 */ YY_NOT_ACCEPT,
-		/* 31 */ YY_NO_ANCHOR,
-		/* 32 */ YY_NOT_ACCEPT,
-		/* 33 */ YY_NO_ANCHOR,
-		/* 34 */ YY_NOT_ACCEPT,
-		/* 35 */ YY_NOT_ACCEPT,
-		/* 36 */ YY_NOT_ACCEPT,
-		/* 37 */ YY_NOT_ACCEPT,
-		/* 38 */ YY_NOT_ACCEPT,
-		/* 39 */ YY_NOT_ACCEPT,
-		/* 40 */ YY_NOT_ACCEPT,
-		/* 41 */ YY_NOT_ACCEPT,
-		/* 42 */ YY_NOT_ACCEPT,
-		/* 43 */ YY_NOT_ACCEPT,
-		/* 44 */ YY_NOT_ACCEPT,
-		/* 45 */ YY_NOT_ACCEPT,
-		/* 46 */ YY_NOT_ACCEPT,
-		/* 47 */ YY_NOT_ACCEPT,
-		/* 48 */ YY_NOT_ACCEPT,
-		/* 49 */ YY_NOT_ACCEPT,
-		/* 50 */ YY_NOT_ACCEPT,
-		/* 51 */ YY_NOT_ACCEPT,
-		/* 52 */ YY_NOT_ACCEPT,
-		/* 53 */ YY_NOT_ACCEPT,
-		/* 54 */ YY_NOT_ACCEPT,
-		/* 55 */ YY_NOT_ACCEPT,
-		/* 56 */ YY_NOT_ACCEPT,
-		/* 57 */ YY_NOT_ACCEPT,
-		/* 58 */ YY_NOT_ACCEPT,
-		/* 59 */ YY_NOT_ACCEPT,
-		/* 60 */ YY_NOT_ACCEPT,
-		/* 61 */ YY_NOT_ACCEPT,
-		/* 62 */ YY_NOT_ACCEPT,
-		/* 63 */ YY_NOT_ACCEPT,
-		/* 64 */ YY_NOT_ACCEPT,
-		/* 65 */ YY_NOT_ACCEPT,
-		/* 66 */ YY_NOT_ACCEPT,
-		/* 67 */ YY_NOT_ACCEPT,
-		/* 68 */ YY_NOT_ACCEPT,
-		/* 69 */ YY_NOT_ACCEPT,
-		/* 70 */ YY_NOT_ACCEPT,
-		/* 71 */ YY_NOT_ACCEPT,
-		/* 72 */ YY_NOT_ACCEPT
+		/* 12 */ YY_NOT_ACCEPT,
+		/* 13 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"0:9,27:2,0,27:2,0:18,27,10,0:4,11,0:9,15,0:2,16,0:8,7,8,9,0:29,13,0:4,24,1," +
-"5,19,3,22,0,26,2,0:2,21,17,6,18,0:2,25,4,23,20,0:2,14,0:3,12,0:3,28:2")[0];
+"5:9,4:2,5:2,4,5:18,4,5:15,8,2:2,9,2:6,5:3,3,5:3,1:26,5,6,5:4,1:23,7,1:2,5:5" +
+",0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,73,
-"0,1,2,1:23,3,4,1,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25," +
-"26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48")[0];
+	private int yy_rmap[] = unpackFromString(1,14,
+"0,1,2,3,4,1:2,5,1,6,1,7,8,9")[0];
 
-	private int yy_nxt[][] = unpackFromString(49,29,
-"-1,1,2,27,3,4,1,26,30,32,34,35,36,37,-1:3,31,-1,28,33,29,38,39,40,1,-1,5,6," +
-"-1:51,7,-1:14,8,-1:25,41,-1:15,67,-1:2,42,-1:7,45,-1:33,9,-1:38,44,-1:18,10" +
-",-1:26,68,-1:30,11,-1:31,12,-1:29,13,-1:30,43,-1:32,46,-1,47,-1:3,48,-1:29," +
-"49,-1:7,71,-1:50,50,-1:7,52,-1:38,53,-1:32,69,-1:32,14,-1:30,15,-1:9,55,-1:" +
-"43,72,-1:27,56,-1:26,16,-1:13,17,-1:51,18,-1:18,19,-1:15,58,-1:30,59,-1:26," +
-"20,-1:46,62,-1:29,21,-1:29,63,-1:8,22,-1:50,64,-1:6,23,-1:27,65,-1:49,24,-1" +
-":23,66,-1:16,25,-1:26,51,-1:43,54,-1:29,57,-1:11,61,-1:29,70,-1:28,60,-1:24");
+	private int yy_nxt[][] = unpackFromString(10,10,
+"1,2,3,4,9,5,11,2,3:2,-1:11,10,13,-1:4,10,13:2,-1:2,3,-1:5,3:2,-1:3,6,-1:14," +
+"12,-1:5,9,-1:12,7,-1:11,8,-1:2,13,-1:5,13:2");
 
-	public boolean advance ()
+	public Token yylex ()
 		throws java.io.IOException {
 		int yy_lookahead;
 		int yy_anchor = YY_NO_ANCHOR;
@@ -333,7 +283,7 @@ public class Lexer implements Parser.yyInput {
 			yy_next_state = yy_nxt[yy_rmap[yy_state]][yy_cmap[yy_lookahead]];
 			if (YY_EOF == yy_lookahead && true == yy_initial) {
 
-  return false;
+  return new Token(YY_EOF, "EOF");
 			}
 			if (YY_F != yy_next_state) {
 				yy_state = yy_next_state;
@@ -355,125 +305,53 @@ public class Lexer implements Parser.yyInput {
 					}
 					yy_to_mark();
 					switch (yy_last_accept_state) {
-					case 1:
-						{ token = TOK_NUMBER;       value = yytext(); }
+					case 0:
+						{ }
 					case -2:
 						break;
-					case 2:
-						{ token = TOK_ID;           value = yytext(); }
+					case 1:
+						
 					case -3:
 						break;
-					case 3:
-						{ token = TOK_USE; value = yytext(); }
+					case 2:
+						{System.out.println("line id " + (yyline + 1)); return new Token(1, yytext());}
 					case -4:
 						break;
-					case 4:
-						{ }
+					case 3:
+						{System.out.println("line dg " + (yyline + 1)); return new Token(2, yytext());}
 					case -5:
 						break;
-					case 5:
-						{ /* ignore white space. */ }
+					case 4:
+						{System.out.println("line as " + (yyline + 1)); return new Token(3, yytext());}
 					case -6:
 						break;
-					case 6:
-						
+					case 5:
+						{System.out.println(yyline+1 + ": bad char");  return new Token(5, yytext());}
 					case -7:
 						break;
-					case 7:
-						{ token = TOK_IF; }
+					case 6:
+						{System.out.println("line eq " + (yyline + 1)); return new Token(4, yytext());}
 					case -8:
 						break;
 					case 8:
-						{ token = LE;}
+						{ return new Token(YY_EOF, yytext());}
 					case -9:
 						break;
 					case 9:
-						{ token = EQ;}
+						{ }
 					case -10:
 						break;
 					case 10:
-						{ token = GE;}
+						{System.out.println("line id " + (yyline + 1)); return new Token(1, yytext());}
 					case -11:
 						break;
 					case 11:
-						{ token = NE;}
+						{System.out.println(yyline+1 + ": bad char");  return new Token(5, yytext());}
 					case -12:
 						break;
-					case 12:
-						{ token = AND;}
-					case -13:
-						break;
 					case 13:
-						{ token = OR;}
-					case -14:
-						break;
-					case 14:
-						{ token = TOK_LET; }
-					case -15:
-						break;
-					case 15:
-						{ token = TOK_FOR; }
-					case -16:
-						break;
-					case 16:
-						{ token = TOK_ECHO; }
-					case -17:
-						break;
-					case 17:
-						{ token = TOK_ELSE; }
-					case -18:
-						break;
-					case 18:
-						{ token = TOK_EACH; }
-					case -19:
-						break;
-					case 19:
-						{ token = TOK_EOT; }
-					case -20:
-						break;
-					case 20:
-						{ token = TOK_TRUE; }
-					case -21:
-						break;
-					case 21:
-						{ token = TOK_UNDEF; }
-					case -22:
-						break;
-					case 22:
-						{ token = TOK_FALSE; }
-					case -23:
-						break;
-					case 23:
-						{ token = TOK_MODULE; }
-					case -24:
-						break;
-					case 24:
-						{ token = TOK_ASSERT; }
-					case -25:
-						break;
-					case 25:
-						{ token =  TOK_FUNCTION; }
-					case -26:
-						break;
-					case 27:
-						{ token = TOK_NUMBER;       value = yytext(); }
-					case -27:
-						break;
-					case 28:
-						{ token = TOK_ID;           value = yytext(); }
-					case -28:
-						break;
-					case 29:
-						{ }
-					case -29:
-						break;
-					case 31:
-						{ token = TOK_NUMBER;       value = yytext(); }
-					case -30:
-						break;
-					case 33:
-						{ token = TOK_NUMBER;       value = yytext(); }
-					case -31:
+						{System.out.println("line id " + (yyline + 1)); return new Token(1, yytext());}
+					case -13:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

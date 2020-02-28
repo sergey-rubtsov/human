@@ -3,4 +3,24 @@
        file  skeleton  written in the Java programming language.  Jay writes the parse tables and
        the driver routine to standard output.
 
-        java -jar jay.jar -v compiler.y 1>stdout.txt
+        java -jar jay.jar -vt openscad/compiler.y 1>stdout.txt
+
+        The following options are available:
+
+               -b file_prefix
+                      The -b option changes the prefix prepended to the output file names  to  the
+                      string denoted by file_prefix.  The default prefix is the character y.
+
+               -c     The -c option makes jay generate C# code instead of the default Java.
+
+               -t     The  -t  option arranges for debugging information to be incorporated in the
+                      compiled code.
+
+               -v     The -v option causes a human-readable description of the generated parser to
+                      be written to the file y.output.
+
+               -p     The -p option causes jay to print the directory in which its sample skeleton
+                      files are installed.  If a project wants to use the  default  skeleton  file
+                      included  with jay, it can use this option in a makefile to find the path to
+                      the skeleton or skeleton.cs file included with the jay distribution.
+

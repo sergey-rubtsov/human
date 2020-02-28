@@ -110,15 +110,6 @@
 %type <text> module_id
 
 %%
-input
- : /* empty */
- | input
- TOK_USE
- {
-     System.out.println("input");
- }
- | input statement
- ;
 
 statement
  : ';'

@@ -1,0 +1,8 @@
+module icosahedron() {
+   phi=0.5;
+   hull() {
+       cube([phi,3,5], true);
+       rotate([90,90,0]) cube([4*phi,0,1], true);
+       rotate([90,0,90]) cube([4*phi,0,1], true);
+   }
+}
