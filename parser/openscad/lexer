@@ -1,6 +1,6 @@
-package org.open.scad.compiler;
+package scad.compiler;
 
-import static org.open.scad.compiler.Parser.*;
+import static scad.compiler.Parser.*;
 
 %%
 %public

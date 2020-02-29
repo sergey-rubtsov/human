@@ -1,3 +1,20 @@
+echo(version=version());
+use <logo.scad>
+
+$vpr = [90, 0, 0];
+$vpt = [250, 0, 80];
+$vpd = 500;
+
+logosize = 120;
+
+translate([110, 0, 80]) {
+  translate([0, 0, 30]) rotate([25, 25, -40]) Logo(logosize);
+  translate([100, 0, 40]) green() t("Open", 42, ":style=Bold");
+  translate([247, 0, 40]) black() t("SCAD", 42, ":style=Bold");
+  translate([100, 0, 0]) black() t("The Programmers");
+  translate([160, 0, -30]) black() t("Solid 3D CAD Modeller");
+}
+
 wing_w = 2.1;
 many = 3;
 wing_l = 40;

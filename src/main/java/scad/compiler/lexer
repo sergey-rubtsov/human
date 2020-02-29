@@ -1,0 +1,108 @@
+package scad.compiler;
+
+import static scad.compiler.Parser.*;
+
+%%
+%public
+%class Lexer
+%implements Parser.yyInput
+%{
+
+  public boolean advance() throws java.io.IOException {
+      Token t = yylex();
+      if (t == null) {
+          return false;
+      }
+      value = t.getValue();
+      token = t.getToken();
+      return (token != YY_EOF);
+  }
+
+  /**
+   * returned by {@link #token()}.
+   */
+
+  protected int token;
+  /**
+   * returned by {@link #value()}.
+   */
+  protected Object value;
+  /** current input symbol.
+    */
+
+  public int token() {
+      return token;
+  }
+
+  public String tokenName() {
+      return yyNames[token];
+  }
+
+  /** null or string associated with current input symbol.
+    */
+  public Object value() {
+      return value;
+  }
+
+  /** position for error message.
+    */
+  public String toString() { return "Error line: " + (yyline + 1); }
+
+  /*
+   Rules for include <path/file>
+   1) include <sourcepath/path/file>
+   2) include <librarydir/path/file>
+
+   Globals used: filepath, sourcefile, filename
+   */
+  //
+  //
+  //. { System.out.println(yytext().charAt(0)); }
+  //
+%}
+
+%type Token
+%line
+%eofval{
+  return new Token(YY_EOF, "EOF");
+%eofval}
+
+D=          [-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?
+
+U=[\x80-\xbf]
+U2=[\xc2-\xdf]
+U3=[\xe0-\xef]
+U4=[\xf0-\xf4]
+UNICODE=    {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
+
+%%
+
+"<=" { return new Token(LE, yytext()); }
+">=" { return new Token(GE, yytext()); }
+"==" { return new Token(EQ, yytext()); }
+"!=" { return new Token(NE, yytext()); }
+"&&" { return new Token(AND, yytext()); }
+"||" { return new Token(OR, yytext()); }
+
+"module"    { return new Token(TOK_MODULE, yytext()); }
+"function"  { return new Token(TOK_FUNCTION, yytext()); }
+"if"        { return new Token(TOK_IF, yytext()); }
+"else"      { return new Token(TOK_ELSE, yytext()); }
+"let"       { return new Token(TOK_LET, yytext()); }
+"assert"    { return new Token(TOK_ASSERT, yytext()); }
+"echo"      { return new Token(TOK_ECHO, yytext()); }
+"for"       { return new Token(TOK_FOR, yytext()); }
+"each"      { return new Token(TOK_EACH, yytext()); }
+"true"      { return new Token(TOK_TRUE, yytext()); }
+"false"     { return new Token(TOK_FALSE, yytext()); }
+"undef"     { return new Token(TOK_UNDEF, yytext()); }
+
+[ \t\r\n\f]                                         { /* ignore white space. */ }
+[UNICODE]+                                          { return new Token(TOK_ERROR, yytext()); }
+\"(\$\{.*\}|\\.|[^\"\\])*\"                         { return new Token(TOK_STRING, yytext()); }
+"use"[ \t\r\n]*"<"[^\t\r\n>]+">"                    { return new Token(TOK_USE, yytext()); }
+"include"[ \t\r\n]*"<"[^\t\r\n>]*"/"[^\t\r\n>/]+">" { }
+{D}                                                 { return new Token(TOK_NUMBER, yytext()); }
+"$"?[a-zA-Z0-9_]+                                   { return new Token(TOK_ID, yytext()); }
+.                                                   { }
+"\x03"                                              { return new Token(TOK_EOT, yytext()); }
