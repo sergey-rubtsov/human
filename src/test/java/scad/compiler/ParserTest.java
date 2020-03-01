@@ -20,6 +20,6 @@ public class ParserTest {
         new BufferedReader(isr);
         Parser p = new Parser();
         yyDebug debugger = new Debug();
-        //p.yyparse(new Lexer(new BufferedReader(isr)), debugger);
+        p.yyparse(new Lexer(new BufferedReader(isr)), debugger);
     }
 }

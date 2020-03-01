@@ -104,5 +104,5 @@ UNICODE=    {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
 "include"[ \t\r\n]*"<"[^\t\r\n>]*"/"[^\t\r\n>/]+">" { }
 {D}                                                 { return new Token(TOK_NUMBER, yytext()); }
 "$"?[a-zA-Z0-9_]+                                   { return new Token(TOK_ID, yytext()); }
-.                                                   { }
+.                                                   { return new Token(yytext().charAt(0), yytext()); }
 "\x03"                                              { return new Token(TOK_EOT, yytext()); }

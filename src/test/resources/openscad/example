@@ -1,24 +1,21 @@
 echo(version=version());
 use <logo.scad>
 
-$vpr = [90, 0, 0];
-$vpt = [250, 0, 80];
+$vpr = [90, 1, 2];
+$vpt = [250, 3, 80];
 $vpd = 500;
 
 logosize = 120;
 
-translate([110, 0, 80]) {
-  translate([0, 0, 30]) rotate([25, 25, -40]) Logo(logosize);
-  translate([100, 0, 40]) green() t("Open", 42, ":style=Bold");
-  translate([247, 0, 40]) black() t("SCAD", 42, ":style=Bold");
-  translate([100, 0, 0]) black() t("The Programmers");
-  translate([160, 0, -30]) black() t("Solid 3D CAD Modeller");
+translate([110, 30, 80]) {
+  translate([0, 20, 30]) rotate([25, 25, -40]) Logo(logosize);
+  translate([100, 10, 40]) green() t("Open", 42, ":style=Bold");
 }
 
 wing_w = 2.1;
 many = 3;
 wing_l = 40;
-wing_h = 40;
+wing_h = 50;
 wing_points = [[0,0],[wing_l,0],[0,wing_h]];
 
 module wing() {

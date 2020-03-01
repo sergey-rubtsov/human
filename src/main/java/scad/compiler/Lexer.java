@@ -464,7 +464,7 @@ public class Lexer implements Parser.yyInput {
 					case -2:
 						break;
 					case 2:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -3:
 						break;
 					case 3:
@@ -556,7 +556,7 @@ public class Lexer implements Parser.yyInput {
 					case -25:
 						break;
 					case 25:
-						{ return new Token(TOK_USE, yytext()); }
+						{ return new Token(TOK_USE, ""); }
 					case -26:
 						break;
 					case 26:
@@ -572,7 +572,7 @@ public class Lexer implements Parser.yyInput {
 					case -29:
 						break;
 					case 30:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -30:
 						break;
 					case 31:
@@ -588,7 +588,7 @@ public class Lexer implements Parser.yyInput {
 					case -33:
 						break;
 					case 35:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -34:
 						break;
 					case 36:
@@ -600,7 +600,7 @@ public class Lexer implements Parser.yyInput {
 					case -36:
 						break;
 					case 39:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -37:
 						break;
 					case 40:
@@ -612,7 +612,7 @@ public class Lexer implements Parser.yyInput {
 					case -39:
 						break;
 					case 43:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -40:
 						break;
 					case 44:
@@ -624,7 +624,7 @@ public class Lexer implements Parser.yyInput {
 					case -42:
 						break;
 					case 47:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -43:
 						break;
 					case 48:
@@ -632,7 +632,7 @@ public class Lexer implements Parser.yyInput {
 					case -44:
 						break;
 					case 50:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -45:
 						break;
 					case 51:
@@ -640,7 +640,7 @@ public class Lexer implements Parser.yyInput {
 					case -46:
 						break;
 					case 53:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -47:
 						break;
 					case 54:
@@ -648,7 +648,7 @@ public class Lexer implements Parser.yyInput {
 					case -48:
 						break;
 					case 56:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -49:
 						break;
 					case 57:
@@ -656,7 +656,7 @@ public class Lexer implements Parser.yyInput {
 					case -50:
 						break;
 					case 59:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -51:
 						break;
 					case 60:
@@ -664,7 +664,7 @@ public class Lexer implements Parser.yyInput {
 					case -52:
 						break;
 					case 62:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -53:
 						break;
 					case 63:
@@ -672,7 +672,7 @@ public class Lexer implements Parser.yyInput {
 					case -54:
 						break;
 					case 65:
-						{ }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -55:
 						break;
 					case 66:
