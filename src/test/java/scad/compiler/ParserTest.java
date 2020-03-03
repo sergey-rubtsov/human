@@ -15,11 +15,12 @@ public class ParserTest {
 
     @Test
     public void yyparse() throws IOException, Parser.yyException {
-        InputStream is = getClass().getResourceAsStream("/openscad/example");
+        InputStream is = getClass().getResourceAsStream("/openscad/support");
         InputStreamReader isr = new InputStreamReader(is);
         new BufferedReader(isr);
         Parser p = new Parser();
-        yyDebug debugger = new Debug();
-        p.yyparse(new Lexer(new BufferedReader(isr)), debugger);
+        p.yyparse(new Lexer(new BufferedReader(isr)));
+        //yyDebug debugger = new Debug();
+        //p.yyparse(new Lexer(new BufferedReader(isr)), debugger);
     }
 }

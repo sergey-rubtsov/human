@@ -1,5 +1,7 @@
 package scad.compiler;
 import static scad.compiler.Parser.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 
 public class Lexer implements Parser.yyInput {
@@ -14,8 +16,13 @@ public class Lexer implements Parser.yyInput {
 	private final int YY_EOF = 129;
 
   public boolean advance() throws java.io.IOException {
-      Token t = yylex();
-      if (t == null) {
+	  Token t = null;
+	  try {
+		  t = yylex();
+	  } catch (ParseException e) {
+		  throw new RuntimeException(e);
+	  }
+	  if (t == null) {
           return false;
       }
       value = t.getValue();
@@ -46,16 +53,12 @@ public class Lexer implements Parser.yyInput {
   /** position for error message.
     */
   public String toString() { return "Error line: " + (yyline + 1); }
-  /*
-   Rules for include <path/file>
-   1) include <sourcepath/path/file>
-   2) include <librarydir/path/file>
-   Globals used: filepath, sourcefile, filename
-   */
-  //
-  //
-  //. { System.out.println(yytext().charAt(0)); }
-  //
+/*
+{START}	  	{yymore(); BEGIN C;}
+<C>{SIMPLE}	{yymore();}
+<C>{COMPLEX}	{yymore();}
+<C>{END}  	{BEGIN 0;}
+*/
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -276,24 +279,24 @@ public class Lexer implements Parser.yyInput {
 		/* 26 */ YY_NO_ANCHOR,
 		/* 27 */ YY_NO_ANCHOR,
 		/* 28 */ YY_NO_ANCHOR,
-		/* 29 */ YY_NOT_ACCEPT,
+		/* 29 */ YY_NO_ANCHOR,
 		/* 30 */ YY_NO_ANCHOR,
 		/* 31 */ YY_NO_ANCHOR,
-		/* 32 */ YY_NO_ANCHOR,
+		/* 32 */ YY_NOT_ACCEPT,
 		/* 33 */ YY_NO_ANCHOR,
-		/* 34 */ YY_NOT_ACCEPT,
+		/* 34 */ YY_NO_ANCHOR,
 		/* 35 */ YY_NO_ANCHOR,
 		/* 36 */ YY_NO_ANCHOR,
-		/* 37 */ YY_NO_ANCHOR,
-		/* 38 */ YY_NOT_ACCEPT,
+		/* 37 */ YY_NOT_ACCEPT,
+		/* 38 */ YY_NO_ANCHOR,
 		/* 39 */ YY_NO_ANCHOR,
 		/* 40 */ YY_NO_ANCHOR,
-		/* 41 */ YY_NO_ANCHOR,
-		/* 42 */ YY_NOT_ACCEPT,
+		/* 41 */ YY_NOT_ACCEPT,
+		/* 42 */ YY_NO_ANCHOR,
 		/* 43 */ YY_NO_ANCHOR,
 		/* 44 */ YY_NO_ANCHOR,
-		/* 45 */ YY_NO_ANCHOR,
-		/* 46 */ YY_NOT_ACCEPT,
+		/* 45 */ YY_NOT_ACCEPT,
+		/* 46 */ YY_NO_ANCHOR,
 		/* 47 */ YY_NO_ANCHOR,
 		/* 48 */ YY_NO_ANCHOR,
 		/* 49 */ YY_NOT_ACCEPT,
@@ -316,23 +319,23 @@ public class Lexer implements Parser.yyInput {
 		/* 66 */ YY_NO_ANCHOR,
 		/* 67 */ YY_NOT_ACCEPT,
 		/* 68 */ YY_NO_ANCHOR,
-		/* 69 */ YY_NOT_ACCEPT,
-		/* 70 */ YY_NO_ANCHOR,
-		/* 71 */ YY_NOT_ACCEPT,
+		/* 69 */ YY_NO_ANCHOR,
+		/* 70 */ YY_NOT_ACCEPT,
+		/* 71 */ YY_NO_ANCHOR,
 		/* 72 */ YY_NO_ANCHOR,
 		/* 73 */ YY_NOT_ACCEPT,
-		/* 74 */ YY_NOT_ACCEPT,
-		/* 75 */ YY_NO_ANCHOR,
-		/* 76 */ YY_NOT_ACCEPT,
-		/* 77 */ YY_NO_ANCHOR,
+		/* 74 */ YY_NO_ANCHOR,
+		/* 75 */ YY_NOT_ACCEPT,
+		/* 76 */ YY_NO_ANCHOR,
+		/* 77 */ YY_NOT_ACCEPT,
 		/* 78 */ YY_NOT_ACCEPT,
-		/* 79 */ YY_NO_ANCHOR,
-		/* 80 */ YY_NO_ANCHOR,
-		/* 81 */ YY_NO_ANCHOR,
+		/* 79 */ YY_NOT_ACCEPT,
+		/* 80 */ YY_NOT_ACCEPT,
+		/* 81 */ YY_NOT_ACCEPT,
 		/* 82 */ YY_NO_ANCHOR,
-		/* 83 */ YY_NO_ANCHOR,
+		/* 83 */ YY_NOT_ACCEPT,
 		/* 84 */ YY_NO_ANCHOR,
-		/* 85 */ YY_NO_ANCHOR,
+		/* 85 */ YY_NOT_ACCEPT,
 		/* 86 */ YY_NO_ANCHOR,
 		/* 87 */ YY_NO_ANCHOR,
 		/* 88 */ YY_NO_ANCHOR,
@@ -356,66 +359,83 @@ public class Lexer implements Parser.yyInput {
 		/* 106 */ YY_NO_ANCHOR,
 		/* 107 */ YY_NO_ANCHOR,
 		/* 108 */ YY_NO_ANCHOR,
-		/* 109 */ YY_NO_ANCHOR
+		/* 109 */ YY_NO_ANCHOR,
+		/* 110 */ YY_NO_ANCHOR,
+		/* 111 */ YY_NO_ANCHOR,
+		/* 112 */ YY_NO_ANCHOR,
+		/* 113 */ YY_NO_ANCHOR,
+		/* 114 */ YY_NO_ANCHOR,
+		/* 115 */ YY_NO_ANCHOR,
+		/* 116 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"27:9,31,22,27,28,22,27:18,32,4,24,27,25,27,5,27:4,34,27,34,36,33,40,35:2,41" +
-",35:6,27:2,1,2,3,27:2,38:2,23:2,37,38:3,23,38:4,23:2,38:5,23,38:5,27,30,27:" +
-"2,38,27,19,38,15,9,12,13,38,21,17,38:2,11,7,14,8,38:2,20,18,16,10,38:2,39,3" +
-"8:2,26,6,29,27:2,0:2")[0];
+"27:9,31,22,27,28,22,27:18,32,4,24,27,25,27,6,27:3,43,38,27,34,36,33,41,35:2" +
+",42,35:6,27:2,1,2,3,27:2,39:2,23:2,37,39:3,23,39:4,23:2,39:5,23,39:5,27,30," +
+"27:2,39,27,19,39,15,9,12,13,39,21,17,39:2,11,7,14,8,39:2,20,18,16,10,39:2,4" +
+"0,39:2,26,5,29,27:2,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,110,
-"0,1,2,3,1,4,5,1:6,6,1,6:6,1,6:3,1,6:2,1,7,8,9,10,11,12,13,14,15,16,17,18,19" +
-",20,21,22,23,24,25,26,27,7,28,29,6,30,23,1,31,32,33,34,35,36,37,38,20,39,40" +
-",41,11,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64" +
-",65,66,67,68,69,70,71,72,73,74,75,76,77,78,6,79,80")[0];
+	private int yy_rmap[] = unpackFromString(1,117,
+"0,1,2,3,1,4,5,1:6,6,1,7,8,6:6,1:2,6:3,1,6:2,1,9,10,11,12,13,14,15,16,17,18," +
+"19,20,21,22,23,24,25,26,27,28,29,9,30,8,6,31,32,1,33,34,35,36,25,37,38,39,4" +
+"0,41,42,22,43,44,45,46,47,48,13,49,50,51,52,53,54,55,56,57,58,59,60,61,62,6" +
+"3,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,6,84,85")[0];
 
-	private int yy_nxt[][] = unpackFromString(81,42,
-"1,2,30,35,39,43,47,3,107:2,91,75,92,79,107:2,93,31,107,109,107:2,4,5,50,53," +
-"56:2,4,56,59,4:2,56,62,6,65,5,107:2,6:2,-1:44,7,-1:46,107,100,107:13,-1,107" +
-",-1:11,107,-1,107:5,-1:7,107:15,-1,5,-1:11,107,-1,5,107:4,-1:7,107:5,44,107" +
-":9,-1,107,-1:11,6,42,44,107:2,6:2,-1:7,107:15,-1,107,-1:11,107,-1,107:5,-1," +
-"29:23,14,76,29:4,34,29:11,-1:2,8,-1:46,107:6,13,102,107:7,-1,107,-1:11,107," +
-"-1,107:5,-1:12,52,-1:22,32,42,52,-1:2,32:2,-1,69:21,-1,69:6,46,69:12,-1,29:" +
-"21,-1,29:19,-1:2,9,-1:46,107:9,15,107:5,-1,107,-1:11,107,-1,107:5,-1:12,52," +
-"-1:22,37,-1,52,-1:2,37:2,-1:40,49,-1:3,10,-1:46,107:13,16,107,-1,107,-1:11," +
-"107,-1,107:5,-1:7,107:15,-1,107,-1:11,41,-1,107:3,41:2,-1:35,37,-1:4,37:2,-" +
-"1:5,11,-1:43,107:15,-1,107,-1:10,55,41,-1,107:3,41:2,-1:35,45,-1:4,45:2,-1," +
-"46:21,29,46,33,46:5,64,46:11,-1:6,12,-1:36,58,-1:5,107:15,61,107,-1:7,61:2," +
-"-1:2,107,-1,107:5,-1:41,21,-1:7,107:5,17,107:9,-1,107,-1:11,107,-1,107:5,-1" +
-":34,55,45,-1:4,45:2,-1:7,107,18,107:13,-1,107,-1:11,107,-1,107:5,-1:7,107:1" +
-"4,19,-1,107,-1:11,107,-1,107:5,-1,67:2,-1,67:18,-1,67:8,-1,67:10,-1:39,38,-" +
-"1:9,107:5,20,107:9,-1,107,-1:11,107,-1,107:5,-1,58,-1:20,61,-1:8,61:2,-1:44" +
-",32,42,-1:3,32:2,-1:7,107:6,22,107:8,-1,107,-1:11,107,-1,107:5,-1,46:21,-1," +
-"46:19,-1:7,107:5,23,107:9,-1,107,-1:11,107,-1,107:5,-1,67:2,25,67:18,-1,67:" +
-"8,-1,67:10,-1:7,107:5,24,107:9,-1,107,-1:11,107,-1,107:5,-1:7,107:9,26,107:" +
-"5,-1,107,-1:11,107,-1,107:5,-1,71:2,-1,71:18,-1,71:8,-1,71,78,71:8,-1:7,107" +
-":7,27,107:7,-1,107,-1:11,107,-1,107:5,-1,71,-1:20,73,-1:8,73:2,-1:10,74:2,2" +
-"8,74:18,-1,74:8,-1,74,78,74:8,-1:7,107:5,36,107:9,-1,107,-1:11,107,-1,107:5" +
-",-1,29:23,14,76,46,29:3,34,29:11,-1,71,-1:5,107:15,73,107,-1:7,73:2,-1:2,10" +
-"7,-1,107:5,-1,74:2,-1,74:18,-1,74:8,-1,74,78,74:8,-1:7,107,40,107,101,107:8" +
-",95,107:2,-1,107,-1:11,107,-1,107:5,-1:7,107:5,48,107:9,-1,107,-1:11,107,-1" +
-",107:5,-1:7,107:11,51,107:3,-1,107,-1:11,107,-1,107:5,-1:7,107:14,54,-1,107" +
-",-1:11,107,-1,107:5,-1:7,107:8,57,107:6,-1,107,-1:11,107,-1,107:5,-1:7,107:" +
-"3,60,107:11,-1,107,-1:11,107,-1,107:5,-1:7,107:5,63,107:9,-1,107,-1:11,107," +
-"-1,107:5,-1:7,107:11,66,107:3,-1,107,-1:11,107,-1,107:5,-1:7,107:4,68,107:1" +
-"0,-1,107,-1:11,107,-1,107:5,-1:7,107:13,70,107,-1,107,-1:11,107,-1,107:5,-1" +
-":7,107,72,107:13,-1,107,-1:11,107,-1,107:5,-1:7,107:5,77,107:9,-1,107,-1:11" +
-",107,-1,107:5,-1:7,107:7,94,107:3,80,107:3,-1,107,-1:11,107,-1,107:5,-1:7,1" +
-"07:4,81,107:3,82,107:3,83,107:2,-1,107,-1:11,107,-1,107:5,-1:7,107:13,84,10" +
-"7,-1,107,-1:11,107,-1,107:5,-1:7,107:2,85,107:12,-1,107,-1:11,107,-1,107:5," +
-"-1:7,107:4,86,107:10,-1,107,-1:11,107,-1,107:5,-1:7,107:3,87,107:11,-1,107," +
-"-1:11,107,-1,107:5,-1:7,107:5,88,107:9,-1,107,-1:11,107,-1,107:5,-1:7,107:1" +
-"0,89,107:4,-1,107,-1:11,107,-1,107:5,-1:7,107:2,90,107:12,-1,107,-1:11,107," +
-"-1,107:5,-1:7,107:2,96,107:12,-1,107,-1:11,107,-1,107:5,-1:7,107:7,108,107:" +
-"7,-1,107,-1:11,107,-1,107:5,-1:7,107:8,104,107:6,-1,107,-1:11,107,-1,107:5," +
-"-1:7,107:11,97,107:3,-1,107,-1:11,107,-1,107:5,-1:7,107:4,106,107:10,-1,107" +
-",-1:11,107,-1,107:5,-1:7,107:9,98,107:5,-1,107,-1:11,107,-1,107:5,-1:7,107:" +
-"3,99,107:11,-1,107,-1:11,107,-1,107:5,-1:7,107:8,105,107:6,-1,107,-1:11,107" +
-",-1,107:5,-1:7,107:11,103,107:3,-1,107,-1:11,107,-1,107:5");
+	private int yy_nxt[][] = unpackFromString(86,44,
+"1,2,33,38,42,46,50,3,114:2,98,82,99,86,114:2,100,34,114,116,114:2,4,5,53,56" +
+",59:2,4,59,62,4:2,65,68,6,71,5,59,114:2,6:2,59,-1:46,7,-1:48,114,107,114:13" +
+",-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:15,-1,5,-1:11,114,-1,5,-1,114:4," +
+"-1:8,114:5,47,114:9,-1,114,-1:11,6,45,47,-1,114:2,6:2,-1:8,114:15,-1,114,-1" +
+":11,114,-1,114,-1,114:4,-1:2,15:21,-1,15:21,-1,55:42,58,-1,32:23,14,83,32:4" +
+",37,32:13,-1:2,8,-1:48,114:6,13,109,114:7,-1,114,-1:11,114,-1,114,-1,114:4," +
+"-1:13,61,-1:22,35,45,61,-1:3,35:2,-1:2,78:21,-1,78:6,49,78:14,-1,32:21,-1,3" +
+"2:21,-1:2,9,-1:48,114:9,17,114:5,-1,114,-1:11,114,-1,114,-1,114:4,-1:13,61," +
+"-1:22,40,-1,61,-1:3,40:2,-1:42,52,-1:4,10,-1:48,114:13,18,114,-1,114,-1:11," +
+"114,-1,114,-1,114:4,-1:8,114:15,-1,114,-1:11,44,-1,114,-1,114:2,44:2,-1:36," +
+"40,-1:5,40:2,-1:6,11,-1:45,114:15,-1,114,-1:10,64,44,-1,114,64,114:2,44:2,-" +
+"1:36,48,-1:5,48:2,-1:2,49:21,32,49,36,49:5,73,49:13,-1:6,12,-1:38,67,-1:5,1" +
+"14:15,70,114,-1:7,70:2,-1:2,114,-1,114,-1,114:4,-1:43,23,-1:8,114:5,19,114:" +
+"9,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114,20,114:13,-1,114,-1:11,114,-1,1" +
+"14,-1,114:4,-1:2,75:32,24,75:9,58,-1:7,114:14,21,-1,114,-1:11,114,-1,114,-1" +
+",114:4,-1:35,64,48,-1:2,64,-1:2,48:2,-1:41,41,-1:10,114:5,22,114:9,-1,114,-" +
+"1:11,114,-1,114,-1,114:4,-1:34,15,-1:9,16,-1:7,114:6,25,114:8,-1,114,-1:11," +
+"114,-1,114,-1,114:4,-1:2,77:2,-1,77:18,-1,77:8,-1,77:12,-1:35,35,45,-1:4,35" +
+":2,-1:8,114:5,26,114:9,-1,114,-1:11,114,-1,114,-1,114:4,-1:2,67,-1:20,70,-1" +
+":8,70:2,-1:18,114:5,27,114:9,-1,114,-1:11,114,-1,114,-1,114:4,-1:2,49:21,-1" +
+",49:21,-1:7,114:9,29,114:5,-1,114,-1:11,114,-1,114,-1,114:4,-1:2,75:42,58,-" +
+"1:7,114:7,30,114:7,-1,114,-1:11,114,-1,114,-1,114:4,-1:2,77:2,28,77:18,-1,7" +
+"7:8,-1,77:12,-1,79:2,-1,79:18,-1,79:8,-1,79,85,79:10,-1,79,-1:20,80,-1:8,80" +
+":2,-1:12,81:2,31,81:18,-1,81:8,-1,81,85,81:10,-1:7,114:5,39,114:9,-1,114,-1" +
+":11,114,-1,114,-1,114:4,-1:2,32:23,14,83,49,32:3,37,32:13,-1,79,-1:5,114:15" +
+",80,114,-1:7,80:2,-1:2,114,-1,114,-1,114:4,-1:2,81:2,-1,81:18,-1,81:8,-1,81" +
+",85,81:10,-1:7,114,43,114,108,114:8,102,114:2,-1,114,-1:11,114,-1,114,-1,11" +
+"4:4,-1:8,114:5,51,114:9,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:11,54,114" +
+":3,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:14,57,-1,114,-1:11,114,-1,114," +
+"-1,114:4,-1:8,114:8,60,114:6,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:3,63" +
+",114:11,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:5,66,114:9,-1,114,-1:11,1" +
+"14,-1,114,-1,114:4,-1:8,114:11,69,114:3,-1,114,-1:11,114,-1,114,-1,114:4,-1" +
+":8,114:4,72,114:10,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:13,74,114,-1,1" +
+"14,-1:11,114,-1,114,-1,114:4,-1:8,114,76,114:13,-1,114,-1:11,114,-1,114,-1," +
+"114:4,-1:8,114:5,84,114:9,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:7,101,1" +
+"14:3,87,114:3,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:4,88,114:3,89,114:3" +
+",90,114:2,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:13,91,114,-1,114,-1:11," +
+"114,-1,114,-1,114:4,-1:8,114:2,92,114:12,-1,114,-1:11,114,-1,114,-1,114:4,-" +
+"1:8,114:4,93,114:10,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:3,94,114:11,-" +
+"1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:5,95,114:9,-1,114,-1:11,114,-1,114" +
+",-1,114:4,-1:8,114:10,96,114:4,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:2," +
+"97,114:12,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:2,103,114:12,-1,114,-1:" +
+"11,114,-1,114,-1,114:4,-1:8,114:7,115,114:7,-1,114,-1:11,114,-1,114,-1,114:" +
+"4,-1:8,114:8,111,114:6,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:11,104,114" +
+":3,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:4,113,114:10,-1,114,-1:11,114," +
+"-1,114,-1,114:4,-1:8,114:9,105,114:5,-1,114,-1:11,114,-1,114,-1,114:4,-1:8," +
+"114:3,106,114:11,-1,114,-1:11,114,-1,114,-1,114:4,-1:8,114:8,112,114:6,-1,1" +
+"14,-1:11,114,-1,114,-1,114:4,-1:8,114:11,110,114:3,-1,114,-1:11,114,-1,114," +
+"-1,114:4,-1");
 
 	public Token yylex ()
-		throws java.io.IOException {
+		throws java.io.IOException, 
+ParseException
+
+		{
 		int yy_lookahead;
 		int yy_anchor = YY_NO_ANCHOR;
 		int yy_state = yy_state_dtrans[yy_lexical_state];
@@ -480,7 +500,7 @@ public class Lexer implements Parser.yyInput {
 					case -6:
 						break;
 					case 6:
-						{ return new Token(TOK_NUMBER, yytext()); }
+						{ return new Token(TOK_NUMBER, NumberFormat.getInstance().parse(yytext())); }
 					case -7:
 						break;
 					case 7:
@@ -500,11 +520,11 @@ public class Lexer implements Parser.yyInput {
 					case -11:
 						break;
 					case 11:
-						{ return new Token(AND, yytext()); }
+						{ return new Token(OR, yytext()); }
 					case -12:
 						break;
 					case 12:
-						{ return new Token(OR, yytext()); }
+						{ return new Token(AND, yytext()); }
 					case -13:
 						break;
 					case 13:
@@ -516,312 +536,328 @@ public class Lexer implements Parser.yyInput {
 					case -15:
 						break;
 					case 15:
-						{ return new Token(TOK_LET, yytext()); }
+						{ /* skip line comment */ }
 					case -16:
 						break;
 					case 16:
-						{ return new Token(TOK_FOR, yytext()); }
+						{ throw new ParseException("Unterminated comment", yyline); }
 					case -17:
 						break;
 					case 17:
-						{ return new Token(TOK_ELSE, yytext()); }
+						{ return new Token(TOK_LET, yytext()); }
 					case -18:
 						break;
 					case 18:
-						{ return new Token(TOK_ECHO, yytext()); }
+						{ return new Token(TOK_FOR, yytext()); }
 					case -19:
 						break;
 					case 19:
-						{ return new Token(TOK_EACH, yytext()); }
+						{ return new Token(TOK_ELSE, yytext()); }
 					case -20:
 						break;
 					case 20:
-						{ return new Token(TOK_TRUE, yytext()); }
+						{ return new Token(TOK_ECHO, yytext()); }
 					case -21:
 						break;
 					case 21:
-						{ return new Token(TOK_EOT, yytext()); }
+						{ return new Token(TOK_EACH, yytext()); }
 					case -22:
 						break;
 					case 22:
-						{ return new Token(TOK_UNDEF, yytext()); }
+						{ return new Token(TOK_TRUE, yytext()); }
 					case -23:
 						break;
 					case 23:
-						{ return new Token(TOK_FALSE, yytext()); }
+						{ return new Token(TOK_EOT, yytext()); }
 					case -24:
 						break;
 					case 24:
-						{ return new Token(TOK_MODULE, yytext()); }
+						{ /* skip multiline comment */ }
 					case -25:
 						break;
 					case 25:
-						{ return new Token(TOK_USE, ""); }
+						{ return new Token(TOK_UNDEF, yytext()); }
 					case -26:
 						break;
 					case 26:
-						{ return new Token(TOK_ASSERT, yytext()); }
+						{ return new Token(TOK_FALSE, yytext()); }
 					case -27:
 						break;
 					case 27:
-						{ return new Token(TOK_FUNCTION, yytext()); }
+						{ return new Token(TOK_MODULE, yytext()); }
 					case -28:
 						break;
 					case 28:
-						{ }
+						{ return new Token(TOK_USE, yytext()); }
 					case -29:
 						break;
-					case 30:
-						{ return new Token(yytext().charAt(0), yytext()); }
+					case 29:
+						{ return new Token(TOK_ASSERT, yytext()); }
 					case -30:
 						break;
-					case 31:
-						{ return new Token(TOK_ID, yytext()); }
+					case 30:
+						{ return new Token(TOK_FUNCTION, yytext()); }
 					case -31:
 						break;
-					case 32:
-						{ return new Token(TOK_NUMBER, yytext()); }
+					case 31:
+						{ }
 					case -32:
 						break;
 					case 33:
-						{ return new Token(TOK_STRING, yytext()); }
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -33:
 						break;
-					case 35:
-						{ return new Token(yytext().charAt(0), yytext()); }
+					case 34:
+						{ return new Token(TOK_ID, yytext()); }
 					case -34:
 						break;
-					case 36:
-						{ return new Token(TOK_ID, yytext()); }
+					case 35:
+						{ return new Token(TOK_NUMBER, NumberFormat.getInstance().parse(yytext())); }
 					case -35:
 						break;
-					case 37:
-						{ return new Token(TOK_NUMBER, yytext()); }
+					case 36:
+						{ return new Token(TOK_STRING, yytext()); }
 					case -36:
 						break;
-					case 39:
+					case 38:
 						{ return new Token(yytext().charAt(0), yytext()); }
 					case -37:
 						break;
-					case 40:
+					case 39:
 						{ return new Token(TOK_ID, yytext()); }
 					case -38:
 						break;
-					case 41:
-						{ return new Token(TOK_NUMBER, yytext()); }
+					case 40:
+						{ return new Token(TOK_NUMBER, NumberFormat.getInstance().parse(yytext())); }
 					case -39:
 						break;
-					case 43:
+					case 42:
 						{ return new Token(yytext().charAt(0), yytext()); }
 					case -40:
 						break;
-					case 44:
+					case 43:
 						{ return new Token(TOK_ID, yytext()); }
 					case -41:
 						break;
-					case 45:
-						{ return new Token(TOK_NUMBER, yytext()); }
+					case 44:
+						{ return new Token(TOK_NUMBER, NumberFormat.getInstance().parse(yytext())); }
 					case -42:
 						break;
-					case 47:
+					case 46:
 						{ return new Token(yytext().charAt(0), yytext()); }
 					case -43:
 						break;
-					case 48:
+					case 47:
 						{ return new Token(TOK_ID, yytext()); }
 					case -44:
 						break;
+					case 48:
+						{ return new Token(TOK_NUMBER, NumberFormat.getInstance().parse(yytext())); }
+					case -45:
+						break;
 					case 50:
 						{ return new Token(yytext().charAt(0), yytext()); }
-					case -45:
+					case -46:
 						break;
 					case 51:
 						{ return new Token(TOK_ID, yytext()); }
-					case -46:
+					case -47:
 						break;
 					case 53:
 						{ return new Token(yytext().charAt(0), yytext()); }
-					case -47:
+					case -48:
 						break;
 					case 54:
 						{ return new Token(TOK_ID, yytext()); }
-					case -48:
+					case -49:
 						break;
 					case 56:
 						{ return new Token(yytext().charAt(0), yytext()); }
-					case -49:
+					case -50:
 						break;
 					case 57:
 						{ return new Token(TOK_ID, yytext()); }
-					case -50:
+					case -51:
 						break;
 					case 59:
 						{ return new Token(yytext().charAt(0), yytext()); }
-					case -51:
+					case -52:
 						break;
 					case 60:
 						{ return new Token(TOK_ID, yytext()); }
-					case -52:
+					case -53:
 						break;
 					case 62:
 						{ return new Token(yytext().charAt(0), yytext()); }
-					case -53:
+					case -54:
 						break;
 					case 63:
 						{ return new Token(TOK_ID, yytext()); }
-					case -54:
+					case -55:
 						break;
 					case 65:
 						{ return new Token(yytext().charAt(0), yytext()); }
-					case -55:
+					case -56:
 						break;
 					case 66:
 						{ return new Token(TOK_ID, yytext()); }
-					case -56:
-						break;
-					case 68:
-						{ return new Token(TOK_ID, yytext()); }
 					case -57:
 						break;
-					case 70:
-						{ return new Token(TOK_ID, yytext()); }
+					case 68:
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -58:
 						break;
-					case 72:
+					case 69:
 						{ return new Token(TOK_ID, yytext()); }
 					case -59:
 						break;
-					case 75:
-						{ return new Token(TOK_ID, yytext()); }
+					case 71:
+						{ return new Token(yytext().charAt(0), yytext()); }
 					case -60:
 						break;
-					case 77:
+					case 72:
 						{ return new Token(TOK_ID, yytext()); }
 					case -61:
 						break;
-					case 79:
+					case 74:
 						{ return new Token(TOK_ID, yytext()); }
 					case -62:
 						break;
-					case 80:
+					case 76:
 						{ return new Token(TOK_ID, yytext()); }
 					case -63:
 						break;
-					case 81:
+					case 82:
 						{ return new Token(TOK_ID, yytext()); }
 					case -64:
 						break;
-					case 82:
+					case 84:
 						{ return new Token(TOK_ID, yytext()); }
 					case -65:
 						break;
-					case 83:
+					case 86:
 						{ return new Token(TOK_ID, yytext()); }
 					case -66:
 						break;
-					case 84:
+					case 87:
 						{ return new Token(TOK_ID, yytext()); }
 					case -67:
 						break;
-					case 85:
+					case 88:
 						{ return new Token(TOK_ID, yytext()); }
 					case -68:
 						break;
-					case 86:
+					case 89:
 						{ return new Token(TOK_ID, yytext()); }
 					case -69:
 						break;
-					case 87:
+					case 90:
 						{ return new Token(TOK_ID, yytext()); }
 					case -70:
 						break;
-					case 88:
+					case 91:
 						{ return new Token(TOK_ID, yytext()); }
 					case -71:
 						break;
-					case 89:
+					case 92:
 						{ return new Token(TOK_ID, yytext()); }
 					case -72:
 						break;
-					case 90:
+					case 93:
 						{ return new Token(TOK_ID, yytext()); }
 					case -73:
 						break;
-					case 91:
+					case 94:
 						{ return new Token(TOK_ID, yytext()); }
 					case -74:
 						break;
-					case 92:
+					case 95:
 						{ return new Token(TOK_ID, yytext()); }
 					case -75:
 						break;
-					case 93:
+					case 96:
 						{ return new Token(TOK_ID, yytext()); }
 					case -76:
 						break;
-					case 94:
+					case 97:
 						{ return new Token(TOK_ID, yytext()); }
 					case -77:
 						break;
-					case 95:
+					case 98:
 						{ return new Token(TOK_ID, yytext()); }
 					case -78:
 						break;
-					case 96:
+					case 99:
 						{ return new Token(TOK_ID, yytext()); }
 					case -79:
 						break;
-					case 97:
+					case 100:
 						{ return new Token(TOK_ID, yytext()); }
 					case -80:
 						break;
-					case 98:
+					case 101:
 						{ return new Token(TOK_ID, yytext()); }
 					case -81:
 						break;
-					case 99:
+					case 102:
 						{ return new Token(TOK_ID, yytext()); }
 					case -82:
 						break;
-					case 100:
+					case 103:
 						{ return new Token(TOK_ID, yytext()); }
 					case -83:
 						break;
-					case 101:
+					case 104:
 						{ return new Token(TOK_ID, yytext()); }
 					case -84:
 						break;
-					case 102:
+					case 105:
 						{ return new Token(TOK_ID, yytext()); }
 					case -85:
 						break;
-					case 103:
+					case 106:
 						{ return new Token(TOK_ID, yytext()); }
 					case -86:
 						break;
-					case 104:
+					case 107:
 						{ return new Token(TOK_ID, yytext()); }
 					case -87:
 						break;
-					case 105:
+					case 108:
 						{ return new Token(TOK_ID, yytext()); }
 					case -88:
 						break;
-					case 106:
+					case 109:
 						{ return new Token(TOK_ID, yytext()); }
 					case -89:
 						break;
-					case 107:
+					case 110:
 						{ return new Token(TOK_ID, yytext()); }
 					case -90:
 						break;
-					case 108:
+					case 111:
 						{ return new Token(TOK_ID, yytext()); }
 					case -91:
 						break;
-					case 109:
+					case 112:
 						{ return new Token(TOK_ID, yytext()); }
 					case -92:
+						break;
+					case 113:
+						{ return new Token(TOK_ID, yytext()); }
+					case -93:
+						break;
+					case 114:
+						{ return new Token(TOK_ID, yytext()); }
+					case -94:
+						break;
+					case 115:
+						{ return new Token(TOK_ID, yytext()); }
+					case -95:
+						break;
+					case 116:
+						{ return new Token(TOK_ID, yytext()); }
+					case -96:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

@@ -1,6 +1,8 @@
 package scad.compiler;
 
 import static scad.compiler.Parser.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 %%
 %public
@@ -9,8 +11,13 @@ import static scad.compiler.Parser.*;
 %{
 
   public boolean advance() throws java.io.IOException {
-      Token t = yylex();
-      if (t == null) {
+	  Token t = null;
+	  try {
+		  t = yylex();
+	  } catch (ParseException e) {
+		  throw new RuntimeException(e);
+	  }
+	  if (t == null) {
           return false;
       }
       value = t.getValue();
@@ -48,17 +55,13 @@ import static scad.compiler.Parser.*;
     */
   public String toString() { return "Error line: " + (yyline + 1); }
 
-  /*
-   Rules for include <path/file>
-   1) include <sourcepath/path/file>
-   2) include <librarydir/path/file>
+/*
 
-   Globals used: filepath, sourcefile, filename
-   */
-  //
-  //
-  //. { System.out.println(yytext().charAt(0)); }
-  //
+{START}	  	{yymore(); BEGIN C;}
+<C>{SIMPLE}	{yymore();}
+<C>{COMPLEX}	{yymore();}
+<C>{END}  	{BEGIN 0;}
+*/
 %}
 
 %type Token
@@ -67,12 +70,16 @@ import static scad.compiler.Parser.*;
   return new Token(YY_EOF, "EOF");
 %eofval}
 
-D=          [-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?
+%yylexthrow{
+ParseException
+%yylexthrow}
 
-U=[\x80-\xbf]
-U2=[\xc2-\xdf]
-U3=[\xe0-\xef]
-U4=[\xf0-\xf4]
+D=          [-]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?
+
+U=          [\x80-\xbf]
+U2=         [\xc2-\xdf]
+U3=         [\xe0-\xef]
+U4=         [\xf0-\xf4]
 UNICODE=    {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
 
 %%
@@ -81,8 +88,8 @@ UNICODE=    {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
 ">=" { return new Token(GE, yytext()); }
 "==" { return new Token(EQ, yytext()); }
 "!=" { return new Token(NE, yytext()); }
-"&&" { return new Token(AND, yytext()); }
 "||" { return new Token(OR, yytext()); }
+"&&" { return new Token(AND, yytext()); }
 
 "module"    { return new Token(TOK_MODULE, yytext()); }
 "function"  { return new Token(TOK_FUNCTION, yytext()); }
@@ -102,7 +109,10 @@ UNICODE=    {U2}{U}|{U3}{U}{U}|{U4}{U}{U}{U}
 \"(\$\{.*\}|\\.|[^\"\\])*\"                         { return new Token(TOK_STRING, yytext()); }
 "use"[ \t\r\n]*"<"[^\t\r\n>]+">"                    { return new Token(TOK_USE, yytext()); }
 "include"[ \t\r\n]*"<"[^\t\r\n>]*"/"[^\t\r\n>/]+">" { }
-{D}                                                 { return new Token(TOK_NUMBER, yytext()); }
+{D}                                                 { return new Token(TOK_NUMBER, NumberFormat.getInstance().parse(yytext())); }
 "$"?[a-zA-Z0-9_]+                                   { return new Token(TOK_ID, yytext()); }
 .                                                   { return new Token(yytext().charAt(0), yytext()); }
 "\x03"                                              { return new Token(TOK_EOT, yytext()); }
+"//".*                                              { /* skip line comment */ }
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/]                 { /* skip multiline comment */ }
+[/][*]                                              { throw new ParseException("Unterminated comment", yyline); }

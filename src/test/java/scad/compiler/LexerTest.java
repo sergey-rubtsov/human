@@ -12,7 +12,7 @@ public class LexerTest {
 
     @Test
     public void complete() throws IOException {
-        InputStream is1 = getClass().getResourceAsStream("/openscad/example");
+        InputStream is1 = getClass().getResourceAsStream("/openscad/support");
         InputStreamReader is = new InputStreamReader(is1);
         Lexer lexer = new Lexer(is);
         while(lexer.advance()) {

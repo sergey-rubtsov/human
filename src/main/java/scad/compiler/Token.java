@@ -4,9 +4,9 @@ public class Token {
 
     private int token;
 
-    private String value;
+    private Object value;
 
-    public Token(int token, String value) {
+    public Token(int token, Object value) {
         this.token = token;
         this.value = value;
     }
@@ -15,7 +15,7 @@ public class Token {
         return token;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 }

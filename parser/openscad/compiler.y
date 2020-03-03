@@ -12,10 +12,10 @@
 %token TOK_ECHO
 %token TOK_EACH
 
-%token <text> TOK_ID
-%token <text> TOK_STRING
-%token <text> TOK_USE
-%token <number> TOK_NUMBER
+%token <String> TOK_ID
+%token <String> TOK_STRING
+%token <String> TOK_USE
+%token <Number> TOK_NUMBER
 
 %token TOK_TRUE
 %token TOK_FALSE
@@ -53,63 +53,19 @@
 
 %type <arg> argument_call
 %type <arg> argument_decl
-%type <text> module_id
-
-%token TOK_ERROR
-
-%token TOK_EOT
-
-%token TOK_MODULE
-%token TOK_FUNCTION
-%token TOK_IF
-%token TOK_ELSE
-%token TOK_FOR
-%token TOK_LET
-%token TOK_ASSERT
-%token TOK_ECHO
-%token TOK_EACH
-
-%token <text> TOK_ID
-%token <text> TOK_STRING
-%token <text> TOK_USE
-%token <number> TOK_NUMBER
-
-%token TOK_TRUE
-%token TOK_FALSE
-%token TOK_UNDEF
-
-%token LE GE EQ NE AND OR
-
-%type <expr> expr
-%type <expr> call
-%type <expr> logic_or
-%type <expr> logic_and
-%type <expr> equality
-%type <expr> comparison
-%type <expr> addition
-%type <expr> multiplication
-%type <expr> exponent
-%type <expr> unary
-%type <expr> primary
-%type <vec> vector_expr
-%type <expr> list_comprehension_elements
-%type <expr> list_comprehension_elements_p
-%type <expr> list_comprehension_elements_or_expr
-%type <expr> expr_or_empty
-
-%type <inst> module_instantiation
-%type <ifelse> if_statement
-%type <ifelse> ifelse_statement
-%type <inst> single_module_instantiation
-
-%type <args> arguments_call
-%type <args> arguments_decl
-
-%type <arg> argument_call
-%type <arg> argument_decl
-%type <text> module_id
+%type <String> module_id
 
 %%
+
+input
+ :
+ | input
+ TOK_USE
+ {
+    System.out.println("use " + $2);
+ }
+ | input statement
+ ;
 
 statement
  : ';'
@@ -234,7 +190,7 @@ module_id
 single_module_instantiation
  : module_id '(' arguments_call ')'
  {
-    System.out.println("single_module_instantiation");
+    System.out.println("single_module_instantiation, module_id = " + $1 + " argument = " + $3);
  }
  ;
 
