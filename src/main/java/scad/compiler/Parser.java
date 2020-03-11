@@ -549,19 +549,19 @@ public class Parser {
          @return <tt>false</tt> if positioned beyond tokens.
          @throws IOException on input error.
          */
-        boolean advance() throws java.io.IOException;
+        boolean advance () throws java.io.IOException;
 
         /** classifies current token.
          Should not be called if {@link #advance()} returned <tt>false</tt>.
          @return current <tt>%token</tt> or single character.
          */
-        int token();
+        int token ();
 
         /** associated with current token.
          Should not be called if {@link #advance()} returned <tt>false</tt>.
          @return value for {@link #token()}.
          */
-        Object value();
+        Object value ();
     }
 
     /** simplified error message.
@@ -878,360 +878,361 @@ public class Parser {
                     case 39:
                         // line 192 "openscad/compiler.y"
                     {
-                        System.out.println("single_module_instantiation, module_id = " + ((String)yyVals[-3+yyTop]) + " argument = " + ((String)yyVals[-1+yyTop]));
+                        /*System.out.println("single_module_instantiation, module_id = " + $1 + " argument = " + $3);*/
+                        System.out.println("single_module_instantiation, module_id = " + ((String)yyVals[-3+yyTop]));
                     }
                     break;
                     case 41:
-                        // line 200 "openscad/compiler.y"
+                        // line 201 "openscad/compiler.y"
                     {
                         System.out.println("254");
                     }
                     break;
                     case 42:
-                        // line 204 "openscad/compiler.y"
+                        // line 205 "openscad/compiler.y"
                     {
                         System.out.println("258");
                     }
                     break;
                     case 43:
-                        // line 208 "openscad/compiler.y"
+                        // line 209 "openscad/compiler.y"
                     {
                         System.out.println("262");
                     }
                     break;
                     case 44:
-                        // line 212 "openscad/compiler.y"
+                        // line 213 "openscad/compiler.y"
                     {
                         System.out.println("266");
                     }
                     break;
                     case 45:
-                        // line 216 "openscad/compiler.y"
+                        // line 217 "openscad/compiler.y"
                     {
                         System.out.println("270");
                     }
                     break;
                     case 47:
-                        // line 224 "openscad/compiler.y"
+                        // line 225 "openscad/compiler.y"
                     {
                         System.out.println("278");
                     }
                     break;
                     case 49:
-                        // line 232 "openscad/compiler.y"
+                        // line 233 "openscad/compiler.y"
                     {
                         System.out.println("286");
                     }
                     break;
                     case 51:
-                        // line 240 "openscad/compiler.y"
+                        // line 241 "openscad/compiler.y"
                     {
                         System.out.println("294");
                     }
                     break;
                     case 52:
-                        // line 244 "openscad/compiler.y"
+                        // line 245 "openscad/compiler.y"
                     {
                         System.out.println("298");
                     }
                     break;
                     case 54:
-                        // line 252 "openscad/compiler.y"
+                        // line 253 "openscad/compiler.y"
                     {
                         System.out.println("306");
                     }
                     break;
                     case 55:
-                        // line 256 "openscad/compiler.y"
+                        // line 257 "openscad/compiler.y"
                     {
                         System.out.println("310");
                     }
                     break;
                     case 56:
-                        // line 260 "openscad/compiler.y"
+                        // line 261 "openscad/compiler.y"
                     {
                         System.out.println("314");
                     }
                     break;
                     case 57:
-                        // line 264 "openscad/compiler.y"
+                        // line 265 "openscad/compiler.y"
                     {
                         System.out.println("318");
                     }
                     break;
                     case 59:
-                        // line 272 "openscad/compiler.y"
+                        // line 273 "openscad/compiler.y"
                     {
                         System.out.println("326");
                     }
                     break;
                     case 60:
-                        // line 276 "openscad/compiler.y"
+                        // line 277 "openscad/compiler.y"
                     {
                         System.out.println("330");
                     }
                     break;
                     case 62:
-                        // line 284 "openscad/compiler.y"
+                        // line 285 "openscad/compiler.y"
                     {
                         System.out.println("338");
                     }
                     break;
                     case 63:
-                        // line 288 "openscad/compiler.y"
+                        // line 289 "openscad/compiler.y"
                     {
                         System.out.println("342");
                     }
                     break;
                     case 64:
-                        // line 292 "openscad/compiler.y"
+                        // line 293 "openscad/compiler.y"
                     {
                         System.out.println("346");
                     }
                     break;
                     case 66:
-                        // line 301 "openscad/compiler.y"
+                        // line 302 "openscad/compiler.y"
                     {
                         System.out.println("355");
                     }
                     break;
                     case 67:
-                        // line 305 "openscad/compiler.y"
+                        // line 306 "openscad/compiler.y"
                     {
                         System.out.println("359");
                     }
                     break;
                     case 68:
-                        // line 309 "openscad/compiler.y"
+                        // line 310 "openscad/compiler.y"
                     {
                         System.out.println("363");
                     }
                     break;
                     case 70:
-                        // line 317 "openscad/compiler.y"
+                        // line 318 "openscad/compiler.y"
                     {
                         System.out.println("371");
                     }
                     break;
                     case 72:
-                        // line 325 "openscad/compiler.y"
+                        // line 326 "openscad/compiler.y"
                     {
                         System.out.println("379");
                     }
                     break;
                     case 73:
-                        // line 329 "openscad/compiler.y"
+                        // line 330 "openscad/compiler.y"
                     {
                         System.out.println("383");
                     }
                     break;
                     case 74:
-                        // line 333 "openscad/compiler.y"
+                        // line 334 "openscad/compiler.y"
                     {
                         System.out.println("387");
                     }
                     break;
                     case 75:
-                        // line 340 "openscad/compiler.y"
+                        // line 341 "openscad/compiler.y"
                     {
                         System.out.println("TOK_TRUE");
                     }
                     break;
                     case 76:
-                        // line 344 "openscad/compiler.y"
+                        // line 345 "openscad/compiler.y"
                     {
                         System.out.println("TOK_FALSE");
                     }
                     break;
                     case 77:
-                        // line 348 "openscad/compiler.y"
+                        // line 349 "openscad/compiler.y"
                     {
                         System.out.println("TOK_UNDEF");
                     }
                     break;
                     case 78:
-                        // line 352 "openscad/compiler.y"
+                        // line 353 "openscad/compiler.y"
                     {
                         System.out.println("TOK_NUMBER");
                     }
                     break;
                     case 79:
-                        // line 356 "openscad/compiler.y"
+                        // line 357 "openscad/compiler.y"
                     {
                         System.out.println("String");
                     }
                     break;
                     case 80:
-                        // line 360 "openscad/compiler.y"
+                        // line 361 "openscad/compiler.y"
                     {
                         System.out.println("TOK_ID");
                     }
                     break;
                     case 81:
-                        // line 364 "openscad/compiler.y"
+                        // line 365 "openscad/compiler.y"
                     {
                         System.out.println("418");
                     }
                     break;
                     case 82:
-                        // line 368 "openscad/compiler.y"
+                        // line 369 "openscad/compiler.y"
                     {
                         System.out.println("422");
                     }
                     break;
                     case 83:
-                        // line 372 "openscad/compiler.y"
+                        // line 373 "openscad/compiler.y"
                     {
                         System.out.println("426");
                     }
                     break;
                     case 84:
-                        // line 376 "openscad/compiler.y"
+                        // line 377 "openscad/compiler.y"
                     {
                         System.out.println("430");
                     }
                     break;
                     case 85:
-                        // line 380 "openscad/compiler.y"
+                        // line 381 "openscad/compiler.y"
                     {
                         System.out.println("434");
                     }
                     break;
                     case 86:
-                        // line 387 "openscad/compiler.y"
+                        // line 388 "openscad/compiler.y"
                     {
                         yyVal = null;
                     }
                     break;
                     case 87:
-                        // line 391 "openscad/compiler.y"
+                        // line 392 "openscad/compiler.y"
                     {
                         /*$$ = $1;*/
                     }
                     break;
                     case 88:
-                        // line 400 "openscad/compiler.y"
+                        // line 401 "openscad/compiler.y"
                     {
                         System.out.println("454");
                     }
                     break;
                     case 89:
-                        // line 404 "openscad/compiler.y"
+                        // line 405 "openscad/compiler.y"
                     {
                         System.out.println("458");
                     }
                     break;
                     case 90:
-                        // line 408 "openscad/compiler.y"
+                        // line 409 "openscad/compiler.y"
                     {
                         System.out.println("462");
                     }
                     break;
                     case 91:
-                        // line 412 "openscad/compiler.y"
+                        // line 413 "openscad/compiler.y"
                     {
                         System.out.println("466");
                     }
                     break;
                     case 92:
-                        // line 416 "openscad/compiler.y"
+                        // line 417 "openscad/compiler.y"
                     {
                         System.out.println("470");
                     }
                     break;
                     case 93:
-                        // line 420 "openscad/compiler.y"
+                        // line 421 "openscad/compiler.y"
                     {
                         System.out.println("474");
                     }
                     break;
                     case 95:
-                        // line 429 "openscad/compiler.y"
+                        // line 430 "openscad/compiler.y"
                     {
                         /*$$ = $2;*/
                     }
                     break;
                     case 100:
-                        // line 446 "openscad/compiler.y"
+                        // line 447 "openscad/compiler.y"
                     {
                         System.out.println("500");
                     }
                     break;
                     case 101:
-                        // line 450 "openscad/compiler.y"
+                        // line 451 "openscad/compiler.y"
                     {
                         System.out.println("504");
                     }
                     break;
                     case 102:
-                        // line 454 "openscad/compiler.y"
+                        // line 455 "openscad/compiler.y"
                     {
                         System.out.println("509");
                     }
                     break;
                     case 103:
-                        // line 461 "openscad/compiler.y"
+                        // line 462 "openscad/compiler.y"
                     {
                         System.out.println("516");
                     }
                     break;
                     case 104:
-                        // line 465 "openscad/compiler.y"
+                        // line 466 "openscad/compiler.y"
                     {
 
                         System.out.println("520");
                     }
                     break;
                     case 105:
-                        // line 470 "openscad/compiler.y"
+                        // line 471 "openscad/compiler.y"
                     {
 
                         System.out.println("525");
                     }
                     break;
                     case 106:
-                        // line 478 "openscad/compiler.y"
+                        // line 479 "openscad/compiler.y"
                     {
                         System.out.println("532");
                     }
                     break;
                     case 107:
-                        // line 482 "openscad/compiler.y"
+                        // line 483 "openscad/compiler.y"
                     {
                         System.out.println("536");
                     }
                     break;
                     case 108:
-                        // line 489 "openscad/compiler.y"
+                        // line 490 "openscad/compiler.y"
                     {
                         System.out.println("543");
                     }
                     break;
                     case 109:
-                        // line 493 "openscad/compiler.y"
+                        // line 494 "openscad/compiler.y"
                     {
                         System.out.println("547");
                     }
                     break;
                     case 110:
-                        // line 497 "openscad/compiler.y"
+                        // line 498 "openscad/compiler.y"
                     {
                         System.out.println("552");
                     }
                     break;
                     case 111:
-                        // line 504 "openscad/compiler.y"
+                        // line 505 "openscad/compiler.y"
                     {
                         System.out.println("559");
                     }
                     break;
                     case 112:
-                        // line 508 "openscad/compiler.y"
+                        // line 509 "openscad/compiler.y"
                     {
                         System.out.println("563");
                     }
                     break;
-                    // line 1231 "-"
+                    // line 1232 "-"
                 }
                 yyTop -= yyLen[yyN];
                 yyState = yyStates[yyTop];
@@ -1260,6 +1261,5 @@ public class Parser {
             }
         }
     }
-
 
 }

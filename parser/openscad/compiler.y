@@ -190,7 +190,8 @@ module_id
 single_module_instantiation
  : module_id '(' arguments_call ')'
  {
-    System.out.println("single_module_instantiation, module_id = " + $1 + " argument = " + $3);
+    //System.out.println("single_module_instantiation, module_id = " + $1 + " argument = " + $3);
+    System.out.println("single_module_instantiation, module_id = " + $1);
  }
  ;
 

@@ -24,14 +24,14 @@
  *************************************************************************/
 package deep.learning.human.internal;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+//import org.lwjgl.LWJGLException;
+//import org.lwjgl.Sys;
+//import org.lwjgl.input.Keyboard;
+//import org.lwjgl.input.Mouse;
+//import org.lwjgl.opengl.Display;
+//import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
+//import org.lwjgl.opengl.GLContext;
 import org.ode4j.ode.OdeHelper;
 import org.ode4j.ode.internal.Common;
 
@@ -97,53 +97,53 @@ abstract class LwJGL extends Internal implements DrawStuffApi {
 
     private static void createMainWindow(int _width, int _height) {
         // create Window of size 300x300
-        try {
-            Display.setLocation((Display.getDisplayMode().getWidth() - _width) / 2,
-                    (Display.getDisplayMode().getHeight() - _height) / 2);
-        } catch (UnsatisfiedLinkError e) {
-            System.err.println("Missing lwjgl native libraries.");
-            System.err.println("If you are using maven, make sure to use "
-                    + "'-Djava.library.path=target/natives' as VM argument of your application.");
-            System.err.println("For plain Eclipse, add the native library path to the included "
-                    + "lwjgl.jar in the definition of the Referenced Libraries.");
-            throw e;
-        }
-        try {
-            Display.setDisplayMode(new DisplayMode(_width, _height));
-            Display.setTitle("Simulation");
-            Display.setVSyncEnabled(true);  //for VSync (TZ)
-            Display.create();
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            Keyboard.create();
-            Mouse.create();
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (firsttime) {
-            System.err.println("GL_VENDOR:     " + GL11.glGetString(GL11.GL_VENDOR));
-            System.err.println("GL_RENDERER:   " + GL11.glGetString(GL11.GL_RENDERER));
-            System.err.println("GL_VERSION:    " + GL11.glGetString(GL11.GL_VERSION));
-            System.err.println("LWJGL_VERSION: " + Sys.getVersion());
-            System.err.println();
-            System.err.println("glLoadTransposeMatrixfARB() supported: " +
-                    GLContext.getCapabilities().GL_ARB_transpose_matrix);
-        }
-        width = _width;
-        height = _height;
-        last_key_pressed = 0;
-
-        if (width < 1 || height < 1) dsDebug("", "bad window width or height");
+//        try {
+//            Display.setLocation((Display.getDisplayMode().getWidth() - _width) / 2,
+//                    (Display.getDisplayMode().getHeight() - _height) / 2);
+//        } catch (UnsatisfiedLinkError e) {
+//            System.err.println("Missing lwjgl native libraries.");
+//            System.err.println("If you are using maven, make sure to use "
+//                    + "'-Djava.library.path=target/natives' as VM argument of your application.");
+//            System.err.println("For plain Eclipse, add the native library path to the included "
+//                    + "lwjgl.jar in the definition of the Referenced Libraries.");
+//            throw e;
+//        }
+//        try {
+//            Display.setDisplayMode(new DisplayMode(_width, _height));
+//            Display.setTitle("Simulation");
+//            Display.setVSyncEnabled(true);  //for VSync (TZ)
+//            Display.create();
+//        } catch (LWJGLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        try {
+//            Keyboard.create();
+//            Mouse.create();
+//        } catch (LWJGLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        if (firsttime) {
+//            System.err.println("GL_VENDOR:     " + GL11.glGetString(GL11.GL_VENDOR));
+//            System.err.println("GL_RENDERER:   " + GL11.glGetString(GL11.GL_RENDERER));
+//            System.err.println("GL_VERSION:    " + GL11.glGetString(GL11.GL_VERSION));
+//            System.err.println("LWJGL_VERSION: " + Sys.getVersion());
+//            System.err.println();
+//            System.err.println("glLoadTransposeMatrixfARB() supported: " +
+//                    GLContext.getCapabilities().GL_ARB_transpose_matrix);
+//        }
+//        width = _width;
+//        height = _height;
+//        last_key_pressed = 0;
+//
+//        if (width < 1 || height < 1) dsDebug("", "bad window width or height");
     }
 
     private static void destroyMainWindow() {
-        Keyboard.destroy();
-        Mouse.destroy();
-        Display.destroy();
+//        Keyboard.destroy();
+//        Mouse.destroy();
+//        Display.destroy();
     }
 
     private static void captureFrame(int num) {
@@ -156,53 +156,53 @@ abstract class LwJGL extends Internal implements DrawStuffApi {
      * @param fn
      */
     private void handleKeyboard(dsFunctions fn) {
-        Keyboard.poll();
-        while (Keyboard.next()) {
-            char key = (char) Keyboard.getEventKey();
-            if (key == Keyboard.KEY_ESCAPE) {
-                run = false;
-            }
-
-            if (!(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) ||
-                    Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))) {
-                char keyChar = Keyboard.getEventCharacter();
-                if (keyChar >= ' ' && keyChar <= 126) fn.command(keyChar);
-            } else {
-                if (key == last_key_pressed) {
-                    continue;
-                }
-                switch (key) {
-                    case Keyboard.KEY_T:
-                        dsSetTextures(!dsGetTextures());
-                        break;
-                    case Keyboard.KEY_S:
-                        dsSetShadows(!dsGetShadows());
-                        break;
-                    case Keyboard.KEY_X:
-                        run = false;
-                        break;
-                    case Keyboard.KEY_P:
-                        pause = !pause;
-                        singlestep = false;
-                        break;
-                    case Keyboard.KEY_O:
-                        if (pause) singlestep = true;
-                        break;
-                    case Keyboard.KEY_V: {
-                        float[] xyz = new float[3], hpr = new float[3];
-                        dsGetViewpoint(xyz, hpr);
-                        printf("Viewpoint = (%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\n",
-                                xyz[0], xyz[1], xyz[2], hpr[0], hpr[1], hpr[2]);
-                        break;
-                    }
-                    case Keyboard.KEY_W:
-                        writeframes = !writeframes;
-                        if (writeframes) printf("Now writing frames to PPM files\n");
-                        break;
-                }
-            }
-            last_key_pressed = key;        // a kludgy place to put this...
-        }
+//        Keyboard.poll();
+//        while (Keyboard.next()) {
+//            char key = (char) Keyboard.getEventKey();
+//            if (key == Keyboard.KEY_ESCAPE) {
+//                run = false;
+//            }
+//
+//            if (!(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) ||
+//                    Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))) {
+//                char keyChar = Keyboard.getEventCharacter();
+//                if (keyChar >= ' ' && keyChar <= 126) fn.command(keyChar);
+//            } else {
+//                if (key == last_key_pressed) {
+//                    continue;
+//                }
+//                switch (key) {
+//                    case Keyboard.KEY_T:
+//                        dsSetTextures(!dsGetTextures());
+//                        break;
+//                    case Keyboard.KEY_S:
+//                        dsSetShadows(!dsGetShadows());
+//                        break;
+//                    case Keyboard.KEY_X:
+//                        run = false;
+//                        break;
+//                    case Keyboard.KEY_P:
+//                        pause = !pause;
+//                        singlestep = false;
+//                        break;
+//                    case Keyboard.KEY_O:
+//                        if (pause) singlestep = true;
+//                        break;
+//                    case Keyboard.KEY_V: {
+//                        float[] xyz = new float[3], hpr = new float[3];
+//                        dsGetViewpoint(xyz, hpr);
+//                        printf("Viewpoint = (%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\n",
+//                                xyz[0], xyz[1], xyz[2], hpr[0], hpr[1], hpr[2]);
+//                        break;
+//                    }
+//                    case Keyboard.KEY_W:
+//                        writeframes = !writeframes;
+//                        if (writeframes) printf("Now writing frames to PPM files\n");
+//                        break;
+//                }
+//            }
+//            last_key_pressed = key;        // a kludgy place to put this...
+//        }
     }
 
     /**
@@ -217,14 +217,14 @@ abstract class LwJGL extends Internal implements DrawStuffApi {
      */
     private void readBufferedMouse() {
         // iterate all events, use the last button down
-        while (Mouse.next()) {
-            if (Mouse.getEventButton() != -1) {
-                if (Mouse.getEventButtonState()) {
-                }
-                //lastButton = Mouse.getEventButton();
-            }
-        }
-
+//        while (Mouse.next()) {
+//            if (Mouse.getEventButton() != -1) {
+//                if (Mouse.getEventButtonState()) {
+//                }
+//                //lastButton = Mouse.getEventButton();
+//            }
+//        }
+//
         updateState();
     }
 
@@ -232,26 +232,26 @@ abstract class LwJGL extends Internal implements DrawStuffApi {
      * Updates our "model"
      */
     private void updateState() {
-        int dx = Mouse.getDX();
-        int dy = Mouse.getDY();
-        int dw = Mouse.getDWheel();
-        // get out if no movement
-        if (dx == dy && dx == 0 && dw == 0) {
-            return;
-        }
-        //LWJGL: 0=left 1=right 2=middle
-        //GL: 0=left 1=middle 2=right
-        int mode = 0;
-        if (Mouse.isButtonDown(0)) mode |= 1;
-        if (Mouse.isButtonDown(2)) mode |= 2;
-        if (Mouse.isButtonDown(1)) mode |= 4;
-        if (mode != 0) {
-            //LWJGL has inverted dy wrt C++/GL
-            dsMotion(mode, dx, -dy);
-            float[] xyz = getView_xyz();
-            float[] hpr = getView_hpr();
-            System.out.println(xyz[0] + ", " + xyz[1] + ", " + xyz[2] + "\n" + hpr[0] + ", " + hpr[1] + ", " + hpr[2]);
-        }
+//        int dx = Mouse.getDX();
+//        int dy = Mouse.getDY();
+//        int dw = Mouse.getDWheel();
+//        // get out if no movement
+//        if (dx == dy && dx == 0 && dw == 0) {
+//            return;
+//        }
+//        //LWJGL: 0=left 1=right 2=middle
+//        //GL: 0=left 1=middle 2=right
+//        int mode = 0;
+//        if (Mouse.isButtonDown(0)) mode |= 1;
+//        if (Mouse.isButtonDown(2)) mode |= 2;
+//        if (Mouse.isButtonDown(1)) mode |= 4;
+//        if (mode != 0) {
+//            //LWJGL has inverted dy wrt C++/GL
+//            dsMotion(mode, dx, -dy);
+//            float[] xyz = getView_xyz();
+//            float[] hpr = getView_hpr();
+//            System.out.println(xyz[0] + ", " + xyz[1] + ", " + xyz[2] + "\n" + hpr[0] + ", " + hpr[1] + ", " + hpr[2]);
+//        }
     }
 
     private static boolean firsttime = true;
@@ -264,12 +264,12 @@ abstract class LwJGL extends Internal implements DrawStuffApi {
         //glXMakeCurrent (display,win,glx_context);
         //TODO ?
         //GLContext.useContext(context);
-        try {
-            //Sets the context / by TZ
-            Display.makeCurrent();
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            //Sets the context / by TZ
+//            Display.makeCurrent();
+//        } catch (LWJGLException e) {
+//            throw new RuntimeException(e);
+//        }
 
         dsStartGraphics(window_width, window_height, fn);
 
@@ -308,37 +308,37 @@ abstract class LwJGL extends Internal implements DrawStuffApi {
         run = true;
         long startTime = System.currentTimeMillis() + 5000;
         long fps = 0;
-        while (run && !Display.isCloseRequested()) {
-            handleKeyboard(fn);
-            handleMouse();
-
-            //processDrawFrame: This was not move into separate method for convenience
-
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-            dsDrawFrame(width, height, fn, pause && !singlestep);
-            singlestep = false;
-
-            Display.update();
-            if (startTime > System.currentTimeMillis()) {
-                fps++;
-            } else {
-                long timeUsed = 5000 + (startTime - System.currentTimeMillis());
-                startTime = System.currentTimeMillis() + 5000;
-                System.out.println(fps + " frames in " + (timeUsed / 1000f) + " seconds = "
-                        + (fps / (timeUsed / 1000f)));
-                fps = 0;
-            }
-
-            // capture frames if necessary
-            if (pause == false && writeframes) {
-                captureFrame(frame);
-                frame++;
-            }
-        }
-
-        //if (fn.stop)
-        fn.stop();
+//        while (run && !Display.isCloseRequested()) {
+//            handleKeyboard(fn);
+//            handleMouse();
+//
+//            //processDrawFrame: This was not move into separate method for convenience
+//
+//            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+//
+//            dsDrawFrame(width, height, fn, pause && !singlestep);
+//            singlestep = false;
+//
+//            Display.update();
+//            if (startTime > System.currentTimeMillis()) {
+//                fps++;
+//            } else {
+//                long timeUsed = 5000 + (startTime - System.currentTimeMillis());
+//                startTime = System.currentTimeMillis() + 5000;
+//                System.out.println(fps + " frames in " + (timeUsed / 1000f) + " seconds = "
+//                        + (fps / (timeUsed / 1000f)));
+//                fps = 0;
+//            }
+//
+//            // capture frames if necessary
+//            if (pause == false && writeframes) {
+//                captureFrame(frame);
+//                frame++;
+//            }
+//        }
+//
+//        //if (fn.stop)
+//        fn.stop();
         dsStopGraphics();
 
         destroyMainWindow();

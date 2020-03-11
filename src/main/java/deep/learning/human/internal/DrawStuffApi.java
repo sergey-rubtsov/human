@@ -79,6 +79,10 @@ public interface DrawStuffApi {
     void dsSetColorAlpha(float red, float green, float blue,
                          float alpha);
 
+    /**
+     * Set Drawmode (0=Polygon Fill,1=Wireframe).
+     * Use the DS_POLYFILL and DS_WIREFRAME macros.
+     */
     void dsSetDrawMode(int mode);
 
     void dsDrawTriangle(DVector3C pos, DMatrix3C rot,
@@ -90,6 +94,13 @@ public interface DrawStuffApi {
     void dsDrawTriangle(final DVector3C pos, final DMatrix3C R,
                         final float[] v0, final float[] v1, final float[] v2, boolean solid);
 
+    /**
+     * Set the quality with which curved objects are rendered.
+     * <p>
+     * Higher numbers are higher quality, but slower to draw.
+     * This must be set before the first objects are drawn to be effective.
+     * Default sphere quality is 1, default capsule quality is 3.
+     */
     void dsSetSphereQuality(int n);
 
     // position x,y,z

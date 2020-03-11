@@ -86,7 +86,6 @@ public class DrawStuffNull implements DrawStuffApi {
 
     void dsPlatformSimLoop(int window_width, int window_height, dsFunctions fn,
                            boolean initial_pause) {
-//		dsStartGraphics (window_width,window_height,fn);
 
         //TZ static bool firsttime=true;
         if (firsttime) {

@@ -1,8 +1,3 @@
-/*
- * comment
-*/
-
-// some comment
 CubePoints = [
   [  0,  0,  0 ],  //point 0
   [ 10,  0,  0 ],  //1
@@ -30,3 +25,9 @@ translate([-24,0,z]) {
         sphere(10);
     }
 }
+
+/*
+ * comment
+*/
+
+// some comment

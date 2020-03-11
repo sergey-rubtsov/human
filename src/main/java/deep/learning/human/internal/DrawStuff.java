@@ -53,7 +53,7 @@ public class DrawStuff {
         if (DS == null) {
             //default;
             DS = new DrawStuffGL();
-            //DS = new DrawStuffNull();
+            //DS = new DrawStuffGL3();
         }
         return DS;
     }
