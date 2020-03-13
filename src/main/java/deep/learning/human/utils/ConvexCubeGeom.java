@@ -1,7 +1,7 @@
 package deep.learning.human.utils;
 
 public class ConvexCubeGeom {
-    static final double[] planes = // planes for a cube
+    public static final double[] planes = // planes for a cube
 
             {
                     1.0f, 0.0f, 0.0f, 0.25f,
@@ -12,8 +12,8 @@ public class ConvexCubeGeom {
                     -1.0f, 0.0f, 0.0f, 0.25f
             };
 
-    static final int planecount = 6;
-    static final double points[] = // points for a cube
+    public static final int planecount = 6;
+    public static final double points[] = // points for a cube
             {
                     0.25f, 0.25f, 0.25f, // point 0
                     -0.25f, 0.25f, 0.25f, // point 1
@@ -27,8 +27,8 @@ public class ConvexCubeGeom {
                     0.25f, -0.25f, -0.25f, // point 6
                     -0.25f, -0.25f, -0.25f,// point 7
             };
-    static final int pointcount = 8;
-    static final int polygons[] = // Polygons for a cube (6 squares)
+    public static final int pointcount = 8;
+    public static final int polygons[] = // Polygons for a cube (6 squares)
             {
                     4, 0, 2, 6, 4, // positive X, first number is count of points
                     4, 1, 0, 4, 5, // positive Y

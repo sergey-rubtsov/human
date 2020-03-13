@@ -16,7 +16,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lwjgl.version>3.2.3</lwjgl.version>
-        <joml.version>1.9.23-SNAPSHOT</joml.version>
+        <joml.version>1.9.22</joml.version>
         <ode4j.bnd-maven-plugin.version>3.5.0</ode4j.bnd-maven-plugin.version>
         <ode4j.build-helper-maven-plugin.version>3.0.0</ode4j.build-helper-maven-plugin.version>
         <ode4j.maven-clean-plugin.version>3.0.0</ode4j.maven-clean-plugin.version>
@@ -103,12 +103,6 @@
         </profile>
     </profiles>
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.lwjgl.lwjgl</groupId>-->
-<!--            <artifactId>lwjgl_util</artifactId>-->
-<!--            <version>2.9.3</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.joml</groupId>
             <artifactId>joml</artifactId>
@@ -119,7 +113,6 @@
             <artifactId>lwjgl</artifactId>
             <version>${lwjgl.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-stb</artifactId>
@@ -136,7 +129,6 @@
             <artifactId>lwjgl-glfw</artifactId>
             <version>${lwjgl.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-opengl</artifactId>
@@ -160,8 +152,6 @@
             <version>${lwjgl.version}</version>
             <classifier>natives-${platform}</classifier>
         </dependency>
-
-
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl-nanovg</artifactId>
@@ -173,6 +163,7 @@
             <version>${lwjgl.version}</version>
             <classifier>natives-${platform}</classifier>
         </dependency>
+
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
@@ -183,25 +174,21 @@
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.9.7</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.9.7</version>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

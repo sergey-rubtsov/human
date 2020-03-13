@@ -137,6 +137,7 @@ abstract class LwJGL3 extends Internal implements DrawStuffApi {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         glfwWindowHint(GLFW_SAMPLES, 4);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         long monitor = glfwGetPrimaryMonitor();
         GLFWVidMode vidmode = glfwGetVideoMode(monitor);
         if (!windowed) {
@@ -244,7 +245,7 @@ abstract class LwJGL3 extends Internal implements DrawStuffApi {
             }
         });
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
         glfwShowWindow(window);
 
         IntBuffer framebufferSize = BufferUtils.createIntBuffer(2);
