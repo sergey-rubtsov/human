@@ -78,6 +78,7 @@ abstract class LwJGL3 extends Internal implements DrawStuffApi {
     private GLFWKeyCallback keyCallback;
     private GLFWCursorPosCallback cpCallback;
     private GLFWMouseButtonCallback mbCallback;
+    private GLFWScrollCallback scrollCallback;
     private GLFWFramebufferSizeCallback fbCallback;
     private GLFWWindowSizeCallback wsCallback;
     private Callback debugProc;
@@ -242,6 +243,12 @@ abstract class LwJGL3 extends Internal implements DrawStuffApi {
                     else if (action == GLFW_RELEASE)
                         rightMouseDown = false;
                 }
+            }
+        });
+        glfwSetScrollCallback(window, scrollCallback = new GLFWScrollCallback() {
+            @Override
+            public void invoke(long l, double v, double v1) {
+
             }
         });
         glfwMakeContextCurrent(window);

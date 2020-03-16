@@ -1253,9 +1253,6 @@ public class DrawStuffGL extends LwJGL3 implements DrawStuffApi {
         // setup lights. it makes a difference whether this is done in the
         // GL_PROJECTION matrix mode (lights are scene relative) or the
         // GL_MODELVIEW matrix mode (lights are camera relative, bad!).
-//		static GLfloat light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
-//		static GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-//		static GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
         GL11.glLightfv(GL11.GL_LIGHT0, GL11.GL_AMBIENT, light_ambient);
         GL11.glLightfv(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, light_diffuse);
         GL11.glLightfv(GL11.GL_LIGHT0, GL11.GL_SPECULAR, light_specular);
@@ -1409,14 +1406,6 @@ public class DrawStuffGL extends LwJGL3 implements DrawStuffApi {
         for (int i = 0; i < args.length; i++) {
             //Ignore empty arguments
             if (args[i] == null || args[i].equals("")) continue;
-            if (args[i].equals("-h")) {
-                fn.dsPrintHelp();
-                continue;
-            }
-            if (args[i].equals("-help")) {
-                fn.dsPrintHelp();
-                continue;
-            }
             if (args[i].equals("-notex")) {
                 use_textures = false;
                 continue;
@@ -1433,13 +1422,7 @@ public class DrawStuffGL extends LwJGL3 implements DrawStuffApi {
                 initial_pause = true;
                 continue;
             }
-            if (args[i].equals("-texturepath"))
-                if (++i < args.length) {
-                    fn.dsSetPathToTextures(args[i]);
-                    continue;
-                }
             System.out.println("Argument not understood: \"" + args[i] + "\"");
-            fn.dsPrintHelp();
             return;
         }
 
@@ -1510,16 +1493,6 @@ public class DrawStuffGL extends LwJGL3 implements DrawStuffApi {
         setTransform(pos, R);
         drawBox(sides);
         GL11.glPopMatrix();
-
-        if (use_shadows) {
-            setShadowDrawingMode();
-            setShadowTransform();
-            setTransform(pos, R);
-            drawBox(sides);
-            GL11.glPopMatrix();
-            GL11.glPopMatrix();
-            GL11.glDepthRange(0, 1);
-        }
     }
 
     void dsDrawConvex(final float[] pos, final float[] R,
@@ -1533,15 +1506,6 @@ public class DrawStuffGL extends LwJGL3 implements DrawStuffApi {
         setTransform(pos, R);
         drawConvex(_planes, _planecount, _points, _pointcount, _polygons);
         GL11.glPopMatrix();
-        if (use_shadows) {
-            setShadowDrawingMode();
-            setShadowTransform();
-            setTransform(pos, R);
-            drawConvex(_planes, _planecount, _points, _pointcount, _polygons);
-            GL11.glPopMatrix();
-            GL11.glPopMatrix();
-            GL11.glDepthRange(0, 1);
-        }
     }
 
 
@@ -1556,25 +1520,6 @@ public class DrawStuffGL extends LwJGL3 implements DrawStuffApi {
         GL11.glPopMatrix();
         GL11.glDisable(GL11.GL_NORMALIZE);
 
-        // draw shadows
-        if (use_shadows) {
-            GL11.glDisable(GL11.GL_LIGHTING);
-            if (use_textures) {
-                ground_texture.bind(true);
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
-                GL11.glDisable(GL11.GL_TEXTURE_GEN_S);
-                GL11.glDisable(GL11.GL_TEXTURE_GEN_T);
-                GL11.glColor3f(SHADOW_INTENSITY, SHADOW_INTENSITY, SHADOW_INTENSITY);
-            } else {
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glColor3f(GROUND_R * SHADOW_INTENSITY, GROUND_G * SHADOW_INTENSITY,
-                        GROUND_B * SHADOW_INTENSITY);
-            }
-            GL11.glShadeModel(GL11.GL_FLAT);
-            GL11.glDepthRange(0, 0.9999);
-            drawSphereShadow(pos[0], pos[1], pos[2], radius);
-            GL11.glDepthRange(0, 1);
-        }
     }
 
     //extern "C"

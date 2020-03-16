@@ -109,6 +109,10 @@ public class SpaceGame {
     private int fbWidth = 800;
     private int fbHeight = 600;
 
+    float fovy = (float) Math.toRadians(40.0f);
+    float zNear = 0.1f;
+    float zFar = 5000f;
+
     private int cubemapProgram;
     private int cubemap_invViewProjUniform;
 
@@ -488,10 +492,9 @@ public class SpaceGame {
         updateParticles(dt);
         cam.update(dt);
 
-        projMatrix.setPerspective((float) Math.toRadians(40.0f), (float) width / height, 0.1f, 5000.0f);
-        viewMatrix.set(cam.rotation).invert(invViewMatrix);
-        viewProjMatrix.set(projMatrix).mul(viewMatrix).invert(invViewProjMatrix);
-        frustumIntersection.set(viewProjMatrix);
+
+
+        setProjectMatrix(fovy, zNear, zFar);
 
         /* Update the background shader */
         glUseProgram(cubemapProgram);
@@ -521,13 +524,23 @@ public class SpaceGame {
         shootFromShip(thisTime, shootingShip);
     }
 
+    private void setProjectMatrix(float fovy, float zNear, float zFar) {
+        projMatrix.setPerspective(fovy, (float) width / height, zNear, zFar);
+        viewMatrix.set(cam.rotation).invert(invViewMatrix);
+        viewProjMatrix.set(projMatrix).mul(viewMatrix).invert(invViewProjMatrix);
+        frustumIntersection.set(viewProjMatrix);
+    }
+
     private void updateControls() {
         cam.linearAcc.zero();
         float rotZ = 0.0f;
         if (keyDown[GLFW_KEY_W])
-            cam.linearAcc.fma(mainThrusterAccFactor, cam.forward(tmp2));
+            //cam.linearAcc.fma(mainThrusterAccFactor, cam.forward(tmp2));
+            cam.rotation.rotateY(0.01f);// linearAcc.fma(mainThrusterAccFactor, cam.forward(tmp2));
         if (keyDown[GLFW_KEY_S])
-            cam.linearAcc.fma(-mainThrusterAccFactor, cam.forward(tmp2));
+            this.fovy = fovy + (float) Math.toRadians(1.0f);;
+            //cam.forward(tmp2);
+            //cam.linearAcc.fma(-mainThrusterAccFactor, cam.forward(tmp2));
         if (keyDown[GLFW_KEY_D])
             cam.linearAcc.fma(straveThrusterAccFactor, cam.right(tmp2));
         if (keyDown[GLFW_KEY_A])
@@ -541,7 +554,9 @@ public class SpaceGame {
         if (keyDown[GLFW_KEY_LEFT_CONTROL])
             cam.linearAcc.fma(-straveThrusterAccFactor, cam.up(tmp2));
         if (rightMouseDown)
-            cam.angularAcc.set(2.0f*mouseY*mouseY*mouseY, 2.0f*mouseX*mouseX*mouseX, rotZ);
+            cam.rotation.rotateXYZ(mouseY / 100, mouseX / 100, 0);
+            //cam.rotation.add(2.0f*mouseY*mouseY*mouseY, 2.0f*mouseX*mouseX*mouseX, rotZ, 0);
+            //cam.angularAcc.set(2.0f*mouseY*mouseY*mouseY, 2.0f*mouseX*mouseX*mouseX, rotZ);
         else if (!rightMouseDown)
             cam.angularAcc.set(0, 0, rotZ);
         double linearVelAbs = cam.linearVel.length();
@@ -767,9 +782,9 @@ public class SpaceGame {
     private void drawVelocityCompass() {
         glUseProgram(0);
         glEnable(GL_BLEND);
-        glVertexPointer(3, GL_FLOAT, 0, sphere.positions);
+        //glVertexPointer(3, GL_FLOAT, 0, sphere.positions);
         glEnableClientState(GL_NORMAL_ARRAY);
-        glNormalPointer(GL_FLOAT, 0, sphere.normals);
+        //glNormalPointer(GL_FLOAT, 0, sphere.normals);
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadMatrixf(projMatrix.get(matrixBuffer));
@@ -781,7 +796,7 @@ public class SpaceGame {
         glScalef(0.3f, 0.3f, 0.3f);
         glColor4f(0.1f, 0.1f, 0.1f, 0.2f);
         glDisable(GL_DEPTH_TEST);
-        glDrawArrays(GL_TRIANGLES, 0, sphere.numVertices);
+        //glDrawArrays(GL_TRIANGLES, 0, sphere.numVertices);
         glEnable(GL_DEPTH_TEST);
         glBegin(GL_LINES);
         glColor4f(1, 0, 0, 1);
@@ -795,7 +810,7 @@ public class SpaceGame {
         glVertex3f(0, 0, 1);
         glColor4f(1, 1, 1, 1);
         glVertex3f(0, 0, 0);
-        glVertex3f(cam.linearVel.x/maxLinearVel, cam.linearVel.y/maxLinearVel, cam.linearVel.z/maxLinearVel);
+        //glVertex3f(cam.linearVel.x/maxLinearVel, cam.linearVel.y/maxLinearVel, cam.linearVel.z/maxLinearVel);
         glEnd();
         glPopMatrix();
         glMatrixMode(GL_PROJECTION);
