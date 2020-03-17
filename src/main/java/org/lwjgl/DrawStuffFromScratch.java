@@ -25,6 +25,7 @@ import deep.learning.human.internal.DrawStuffApi;
 import org.joml.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Callback;
@@ -101,8 +102,76 @@ public class DrawStuffFromScratch implements DrawStuffApi {
     private float[] view_xyz = new float[3];    // position x,y,z
     private float[] view_hpr = new float[3];    // heading, pitch, roll (degrees)
 
+    private void setTransform(final float[] pos, final float[] R) {
+        float[] matrix = new float[16];
+        matrix[0] = R[0];
+        matrix[1] = R[4];
+        matrix[2] = R[8];
+        matrix[3] = 0;
+        matrix[4] = R[1];
+        matrix[5] = R[5];
+        matrix[6] = R[9];
+        matrix[7] = 0;
+        matrix[8] = R[2];
+        matrix[9] = R[6];
+        matrix[10] = R[10];
+        matrix[11] = 0;
+        matrix[12] = pos[0];
+        matrix[13] = pos[1];
+        matrix[14] = pos[2];
+        matrix[15] = 1;
+        //projMatrix.put(matrix);
+        //projMatrix.flip();
+        GL11.glPushMatrix();
+        //GL11.glMultMatrixf(projMatrix);
+    }
+
+    private void setProjectMatrix(float fovy, float zNear, float zFar) {
+        projMatrix.setPerspective(fovy, (float) width / height, zNear, zFar);
+        viewMatrix.set(camera.rotation).invert(invViewMatrix);
+        viewProjMatrix.set(projMatrix).mul(viewMatrix).invert(invViewProjMatrix);
+        frustumIntersection.set(viewProjMatrix);
+    }
+
     public void dsDrawBox(float[] pos, float[] R, float[] sides) {
-        // Nothing
+        float lx = sides[0] * 0.5f;
+        float ly = sides[1] * 0.5f;
+        float lz = sides[2] * 0.5f;
+
+        glUseProgram(1);
+        glEnable(GL_BLEND);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadMatrixf(projMatrix.get(matrixBuffer));
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+        glTranslatef(0, -1, -4);
+        glMultMatrixf(viewMatrix.get(matrixBuffer));
+        glScalef(0.3f, 0.3f, 0.3f);
+        glColor4f(0.1f, 0.1f, 0.1f, 0.2f);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
+        glBegin(GL_LINES);
+        glColor4f(1, 0, 0, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(1, 0, 0);
+        glColor4f(0, 1, 0, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(0, 1, 0);
+        glColor4f(0, 0, 1, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(0, 0, 1);
+        glColor4f(1, 1, 1, 1);
+        glVertex3f(0, 0, 0);
+        glEnd();
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisable(GL_BLEND);
     }
 
     public void dsDrawCapsule(float[] pos, float[] R, float length, float radius) {

@@ -699,6 +699,49 @@ public class SpaceGame {
         glDisableClientState(GL_NORMAL_ARRAY);
     }
 
+    //firstly implement it here
+    public void dsDrawBox(float[] pos, float[] R, float[] sides) {
+        float lx = sides[0] * 0.5f;
+        float ly = sides[1] * 0.5f;
+        float lz = sides[2] * 0.5f;
+
+        glUseProgram(1);
+        glEnable(GL_BLEND);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadMatrixf(projMatrix.get(matrixBuffer));
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+        glTranslatef(0, -1, -4);
+        glMultMatrixf(viewMatrix.get(matrixBuffer));
+        glScalef(0.3f, 0.3f, 0.3f);
+        glColor4f(0.1f, 0.1f, 0.1f, 0.2f);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
+        glBegin(GL_LINES);
+        glColor4f(1, 0, 0, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(1, 0, 0);
+        glColor4f(0, 1, 0, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(0, 1, 0);
+        glColor4f(0, 0, 1, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(0, 0, 1);
+        glColor4f(1, 1, 1, 1);
+        glVertex3f(0, 0, 0);
+        glEnd();
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisable(GL_BLEND);
+    }
+
+
     private void drawParticles() {
         particleVertices.clear();
         int num = 0;
